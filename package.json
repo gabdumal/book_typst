@@ -1,0 +1,43 @@
+{
+  "author": "Gabriel Malosto",
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.5",
+    "@expressive-code/plugin-line-numbers": "^0.44.2",
+    "@fontsource-variable/atkinson-hyperlegible-mono": "^5.3.0",
+    "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
+    "astro": "^7.3.6",
+    "sharp": "^0.35.5",
+    "starlight-kbd": "^0.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/parser": "^8.71.1",
+    "eslint": "^10.12.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-perfectionist": "^5.12.1",
+    "gh-pages": "^6.3.0",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.1.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1"
+  },
+  "engines": {
+    "node": ">=26.4.0"
+  },
+  "license": "CC-BY-SA-4.0",
+  "name": "book_typst",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "astro": "astro",
+    "build": "astro build",
+    "deploy": "gh-pages -d dist --nojekyll --cname typst.gabdumal.com",
+    "dev": "astro dev --host",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "astro preview"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

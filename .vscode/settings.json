@@ -1,0 +1,30 @@
+{
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": [
+    "astrojs",
+    "clangd",
+    "flathub",
+    "gabdumal",
+    "gabriel",
+    "openssh",
+    "ptyxis",
+    "rustup",
+    "tseslint",
+    "Typst",
+    "venv",
+    "winget",
+    "zoxide"
+  ],
+  "editor.tabSize": 2,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "astro", // Enable .astro
+    "typescript", // Enable .ts
+    "typescriptreact" // Enable .tsx
+  ],
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsserver.experimental.enableProjectDiagnostics": false
+}

@@ -1,0 +1,54 @@
+---
+title: Typst
+description: Guia de uso do Typst para compor documentos estilizados e conforme normas técnicas.
+author: Gabriel Malosto
+template: splash
+hero:
+  tagline: Vamos aprender a usar o Typst para criar documentos incríveis, e conforme as normas técnicas da ABNT!
+  image:
+    file: ../../assets/gabdumal_logo.webp
+  actions:
+    - text: Começar
+      link: /introduction
+      icon: right-arrow
+---
+
+import { Image } from "astro:assets";
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+import Link from "@components/Link.astro";
+
+import { authorGitHubPage, bookGitHubRepo } from "@constants";
+import qrCode from "/public/qr_code.png";
+
+## Autoria
+
+<CardGrid stagger>
+  <Card title="Autor" icon="pencil">
+    {
+      <p>
+        <span className="font-bold">Gabriel Malosto</span> é o autor deste
+        livro. Foi um prazer escrevê-lo para você! Pode me encontrar pela minha
+        página no <Link href={authorGitHubPage} title="GitHub" />.
+      </p>
+    }
+  </Card>
+  <Card title="Repositório" icon="github">
+    {
+      <p>
+        Encontre o código fonte deste projeto no{" "}
+        <Link
+          href={`https://github.com/${import.meta.env.PUBLIC_GITHUB_USERNAME}/${
+            import.meta.env.PUBLIC_BASE
+          }`}
+          title="GitHub"
+        />
+        {"."}
+      </p>
+    }
+  </Card>
+  <Card title="Compartilhe" icon="rocket">
+    Acesse este livro por outros aparelhos escaneando o QR Code!
+    <Image src={qrCode} alt="QR Code que carrega a URL deste site." />
+  </Card>
+</CardGrid>
