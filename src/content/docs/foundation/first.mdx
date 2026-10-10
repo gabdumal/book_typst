@@ -12,6 +12,10 @@ import dashboard from "@assets/content/docs/foundation/dashboard.png";
 import pop_up from "@assets/content/docs/foundation/pop_up.png";
 import writing_screen from "@assets/content/docs/foundation/writing_screen.png";
 import rendering_hello from "@assets/content/docs/foundation/rendering_hello.png";
+import rendering_line_break from "@assets/content/docs/foundation/rendering_line_break.png";
+import rendering_italics_and_bold from "@assets/content/docs/foundation/rendering_italics_and_bold.png";
+import rendering_strong from "@assets/content/docs/foundation/rendering_strong.png";
+import rendering_raw from "@assets/content/docs/foundation/rendering_raw.png";
 
 Inicialmente, [crie](http://typst.app/signup/) sua conta no web app do Typst ou [**acesse-a**](http://typst.app/signin/) se você já tiver criado.
 
@@ -86,7 +90,7 @@ As três primeiras linhas escritas no bloco ficaram em um parágrafo, mas a últ
   />
 </Figure>
 
-No Typst, um parágrafo é encerrado quando você deixa uma **linha em branco** logo após o texto.
+No Typst, um [parágrafo](https://typst.app/docs/reference/model/par/) é encerrado quando você deixa uma **linha em branco** logo após o texto.
 Dentro de um mesmo bloco, você pode quebrar linhas entre cada frase da forma como quiser.
 Cada quebra de linha simples vai ser interpretada apenas como um espaço.
 Já uma quebra de linha dupla formará um parágrafo novo.
@@ -103,6 +107,23 @@ Diferentemente do LaTeX, a língua portuguesa é suportada por padrão.
 Será que vou gostar?
 ```
 
+Como último detalhe, você pode **quebrar uma linha** na renderização sem que ela forme um parágrafo.
+Para isso, utilize o símbolo de contrabarra (`\`) no fim da frase.
+
+Cole o trecho abaixo no documento logo abaixo da última frase, deixando uma linha em branco após ela e antes do bloco novo.
+
+```typst title="main.typ" frame="code"
+Se eu quiser exibir uma quebra de linha na renderização sem formar um parágrafo, eu posso usar o símbolo de contrabarra (`\`). \
+Essa linha aparece na frase de baixo, mas não forma um parágrafo.
+```
+
+<Figure caption="Renderização do texto com quebra de linha.">
+  <Image
+    src={rendering_line_break}
+    alt={`Renderização do parágrafo escrito. Os trechos escrito após a contrabarra aparece na linha abaixo da anterior, mas sem o espaçamento de um parágrafo novo.`}
+  />
+</Figure>
+
 <Aside title="Você sabia?" type="tip" icon="question-circle">
   As normas de redação de trabalhos acadêmicos da ABNT **não exigem** que se
   utilize nenhuma **fonte** em específico. <br />
@@ -111,3 +132,118 @@ Será que vou gostar?
   aplicativos comerciais. <br />A ABNT apenas requer uma fonte "padrão e
   uniforme". Você pode escolher qualquer uma!
 </Aside>
+
+## Estilizando o texto
+
+E se quisermos dar destaque ao nosso texto?
+Caso tenha tido contato com Markdown, você sabe que podemos usar `_underscores_` para indicar que o texto deve ficar em _itálico_ ou ainda `**asteriscos duplos**` para indicar **negrito**.
+
+No Typst, podemos utilizar esses sinais gráficos de uma forma similar.
+Usamos `_underscores simples_` para deixar um trecho do texto em itálico, e usamos `*asteriscos simples*` para indicar o negrito.
+Cole o trecho abaixo no documento para ver.
+
+```typst title="main.typ" frame="code"
+Nesse trecho, _este texto_ deve ficar em itálico.
+Já *este texto aqui* deve ficar em negrito.
+Você ainda pode _*combinar ambos*_.
+```
+
+Esses símbolos representam apenas atalhos para **funções** do Typst.
+Assim como uma linguagem de programação, o Typst disponibiliza um conjunto de funções nativas e de palavras-chave, que formam a sua [sintaxe](https://typst.app/docs/reference/syntax/).
+
+O [itálico](https://typst.app/docs/reference/model/emph/) é definido por uma função chamada "emph", enquanto o [negrito](https://typst.app/docs/reference/model/strong/) utiliza a função "strong".
+
+Para chamar uma função do Typst, utilize o símbolo de cerquilha (`#`) e digite seu nome.
+Em seguida, abra colchetes (`[...]`) e digite o conteúdo a ser formatado dentro deles.
+
+Veja o exemplo no código abaixo.
+Cole-o no documento.
+
+```typst title="main.typ" frame="code"
+Também podemos obter os efeitos de #emph[itálico],
+de #strong[negrito], e de ambos #emph[#strong[juntos]]
+utilizando as funções do Typst.
+```
+
+<Figure caption="Renderização do texto com itálico e negrito.">
+  <Image
+    src={rendering_italics_and_bold}
+    alt={`Renderização do parágrafo escrito. Os trechos demarcados como tal são estilizados com itálico ou negrito.`}
+  />
+</Figure>
+
+## Funções e parâmetros
+
+Uma **função** no Typst pode receber vários **parâmetros**, e sempre retorna apenas um resultado.
+A função `#strong[Conteúdo a formatar]` recebe como parâmetro dentro dos colchetes o conteúdo que se deseja formatar.
+
+Todo o bloco dentro dos colchetes (`[...]`) conta como apenas **um parâmetro** recebido, independentemente da quantidade de palavras.
+Nós podemos, inclusive, chamar uma outra função dentro dos colchetes, como fizemos no exemplo em que se usa itálico e negrito juntos.
+
+```typst title="main.typ" frame="code"
+#strong[O conteúdo a seguir ficará em #emph[itálico] também.]
+```
+
+Nesse caso, já que o o conteúdo dentro dos colchetes é o **único parâmetro** passado, o Typst não requer que nós utilizemos parênteses (`(...)`).
+
+Mas, tecnicamente, a forma completa de chamar uma função é abrindo os **parênteses** primeiro, e abrindo os colchetes dentro deles, como no exemplo a seguir.
+Desse jeito, fica bem parecido com uma linguagem de programação, né?
+
+```typst title="main.typ" frame="code"
+#strong([Conteúdo a formatar])
+```
+
+Inclusive, se você ler a [referência](https://typst.app/docs/reference/model/strong/) técnica da função `#strong`, vai perceber que ela tem um **parâmetro opcional** chamado `delta`.
+Esse parâmetro controla o quão intenso será o realce do negrito.
+
+Para usar parâmetros opcionais, escreva o nome do parâmetro dentro dos parênteses (`(...)`), digite dois-pontos (`:`) e defina o valor desejado.
+Cole o exemplo abaixo no documento para entender como fazer isso.
+
+```typst title="main.typ" frame="code"
+#[Conteúdo a formatar]\
+#strong(delta: 200, [Conteúdo a formatar])\
+#strong(delta: 300, [Conteúdo a formatar])
+```
+
+<Figure caption="Renderização do texto com diferentes níveis de negrito.">
+  <Image
+    src={rendering_strong}
+    alt={`Renderização do parágrafo escrito. A primeira linha não apresenta negrito. A segunda linha apresenta pouco realce, enquanto a terceira apresenta realce maior.`}
+    width={"200px"}
+  />
+</Figure>
+
+Além disso, para melhorar a formatação, podemos deixar todos os parâmetros opcionais dentro dos parênteses (`(...)`), e colocar o bloco com os **colchetes** (`[...]`) **para fora**.
+
+O exemplo abaixo será renderizado exatamente da mesma forma como a última linha do exemplo anterior.
+As quebras de linha dentro dos colchetes serão ignoradas pelo Typst, porque são quebras de linha simples.
+
+```typst title="main.typ" frame="code"
+#strong(delta: 300)[
+  Conteúdo a formatar
+]
+```
+
+Esse tipo de estrutura será usado com frequência em seus documentos, porque permite que você defina os parâmetros de um bloco de texto, mas formate seu conteúdo em várias linhas, da forma como achar melhor.
+
+Outro destaque comum é realçar trechos de **código-fonte** utilizando uma fonte **monoespaçada**.
+Para fazer isso no Typst, utilize o atalho de `` `backticks` `` --- também chamado de acento grave em português (o que se usa na crase).
+
+A função equivalente é chamada `#raw`.
+Se você ler sua [referência](https://typst.app/docs/reference/text/raw/), perceberá que o parâmetro principal dela não pode ser um conteúdo arbitrário entre colchetes.
+Na verdade, ela exige que você escreva um texto simples entre aspas (`"..."`), ou seja, uma _string_.
+Veja o seu uso no exemplo a seguir.
+Cole-o no documento.
+
+```typst title="main.typ" frame="code"
+Aqui, coloca-se `este trecho` em monoespaçado.
+O #raw("mesmo resultado") pode ser obtido usando a função.
+```
+
+<Figure caption="Renderização do texto monoespaçado.">
+  <Image
+    src={rendering_raw}
+    alt={`Renderização do parágrafo escrito. Os trechos destacados aparecem em fonte monoespaçada.`}
+    width={"400px"}
+  />
+</Figure>
