@@ -1,6 +1,7 @@
 :root {
   --sl-font: "Atkinson Hyperlegible Next Variable", sans-serif;
   --sl-font-mono: "Atkinson Hyperlegible Mono Variable", monospace;
+  font-size: 1.125rem;
 }
 
 .flex {

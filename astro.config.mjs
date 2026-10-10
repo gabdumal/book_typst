@@ -45,6 +45,19 @@ export default defineConfig({
           label: "Introdução",
           slug: "introduction",
         },
+        {
+          items: [
+            {
+              label: "Introdução",
+              slug: "foundation",
+            },
+            {
+              label: "Primeiro documento",
+              slug: "foundation/first",
+            },
+          ],
+          label: "Fundamentação",
+        },
       ],
 
       social: [

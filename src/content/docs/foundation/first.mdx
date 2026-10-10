@@ -1,0 +1,54 @@
+---
+title: Primeiro documento
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import dashboard from "@assets/content/docs/foundation/dashboard.png";
+import pop_up from "@assets/content/docs/foundation/pop_up.png";
+import writing_screen from "@assets/content/docs/foundation/writing_screen.png";
+
+Inicialmente, [crie](http://typst.app/signup/) sua conta no web app do Typst ou [**acesse-a**](http://typst.app/signin/) se você já tiver criado.
+
+A primeira página é a do **painel inicial**, ou _dashboard_ em inglês.
+Ela lista os documentos já criados por você, e permite criar novos.
+Nesta imagem, alguns documentos que eu havia escrito previamente estão listados.
+
+<Figure caption="Painel inicial do Typst.">
+  <Image
+    src={dashboard}
+    alt={`Página do painel inicial do web app do Typst. Está conectada a conta de "Gabriel Malosto". Quatro documentos previamente criados por ele estão listados. Acima da lista, estão o botão de criar um documento vazio e o botão de criar um documento baseado em um modelo.`}
+  />
+</Figure>
+
+Na página, podemos ver dois botões principais:
+
+- o primeiro, chamado **_Empty document_**, é usado para criar um documento em branco, utilizando apenas as definições padrão do Typst;
+- o segundo, chamado **_Start from template_**, serve para criar um documento novo já configurado e preenchido conforme um modelo à sua escolha.
+
+**Crie** um novo documento **em branco** pelo primeiro botão.
+Um _pop-up_ será exibido pedindo para você escolher um nome para o novo documento e confirmar sua criação.
+Nomeie-o como "Meu primeiro documento".
+
+<Figure caption="Criação de um documento.">
+  <Image
+    src={pop_up}
+    alt={`Pop-up exibido no web app do Typst para confirmar a criação de um documento em branco. Há um campo de texto para escrever o nome do documento novo, em que está preenchido "Meu primeiro documento".`}
+  />
+</Figure>
+
+O web app vai abrir a página de edição de texto, com o documento vazio.
+Ela é dividida em duas seções principais:
+
+- o lado esquerdo da tela representa o **editor de texto**, em que você escreverá o documento;
+- o lado direito mostra a **renderização** do seu documento no formato PDF.
+
+<Figure caption="Tela de escrita do documento vazio.">
+  <Image
+    src={writing_screen}
+    alt={`Página de edição do documento no web app do Typst. As duas principais seções são a parte esquerda, que contém um bloco de texto vazio, e a direita, que contém a renderização em PDF do documento, também vazia. No topo da página, vê-se a barra de ferramentas, com botões de estilização do texto. No canto esquerdo, veem-se botões para exibir os painéis de funcionalidades.`}
+  />
+</Figure>

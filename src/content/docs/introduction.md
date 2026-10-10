@@ -4,7 +4,7 @@ author: Gabriel Malosto
 ---
 
 Este guia pretende auxiliar no uso do [**Typst**](https://typst.app/), a ferramenta de escrita de documentos moderna que surge como alternativa ao LaTeX.
-O conteúdo foi organizado nas seguintes seções:
+O conteúdo foi organizado nos seguintes tópicos:
 
 - **Para que usar o Typst?**: entendemos as vantagens de utilizar uma ferramenta de escrita de documentos por meio de linguagem de marcação;
 - **Montando um currículo do zero**: aprendemos as bases do Typst criando um documento simples, que será usado como seu próprio currículo;
