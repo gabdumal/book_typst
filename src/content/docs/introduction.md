@@ -15,3 +15,5 @@ O conteúdo foi organizado nos seguintes tópicos:
 :::note
 O conteúdo prático deste guia será realizado utilizado a plataforma on-line do Typst, então crie sua conta por meio [deste link](http://typst.app/signup/).
 :::
+
+A escrita deste guia foi atualizada conforme a versão `0.15.1` do compilador do Typst.

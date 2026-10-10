@@ -4,12 +4,14 @@ author: Gabriel Malosto
 ---
 
 import { Image } from "astro:assets";
+import { Aside } from "@astrojs/starlight/components";
 
 import Figure from "@components/Figure.astro";
 
 import dashboard from "@assets/content/docs/foundation/dashboard.png";
 import pop_up from "@assets/content/docs/foundation/pop_up.png";
 import writing_screen from "@assets/content/docs/foundation/writing_screen.png";
+import rendering_hello from "@assets/content/docs/foundation/rendering_hello.png";
 
 Inicialmente, [crie](http://typst.app/signup/) sua conta no web app do Typst ou [**acesse-a**](http://typst.app/signin/) se você já tiver criado.
 
@@ -28,6 +30,8 @@ Na página, podemos ver dois botões principais:
 
 - o primeiro, chamado **_Empty document_**, é usado para criar um documento em branco, utilizando apenas as definições padrão do Typst;
 - o segundo, chamado **_Start from template_**, serve para criar um documento novo já configurado e preenchido conforme um modelo à sua escolha.
+
+## Criando um documento
 
 **Crie** um novo documento **em branco** pelo primeiro botão.
 Um _pop-up_ será exibido pedindo para você escolher um nome para o novo documento e confirmar sua criação.
@@ -52,3 +56,58 @@ Ela é dividida em duas seções principais:
     alt={`Página de edição do documento no web app do Typst. As duas principais seções são a parte esquerda, que contém um bloco de texto vazio, e a direita, que contém a renderização em PDF do documento, também vazia. No topo da página, vê-se a barra de ferramentas, com botões de estilização do texto. No canto esquerdo, veem-se botões para exibir os painéis de funcionalidades.`}
   />
 </Figure>
+
+## Escrevendo parágrafos
+
+O Typst utiliza o padrão de caracteres [Unicode](https://pt.wikipedia.org/wiki/Unicode), que tem total suporte para acentos e caracteres especiais.
+Dessa forma, podemos escrever a maior parte do texto em português comum.
+
+**Escreva** o texto abaixo na seção de edição de texto.
+
+```typst title="main.typ" frame="code"
+Olá, mundo!
+Este é o meu primeiro documento escrito no Typst.
+Diferentemente do LaTeX, a língua portuguesa é suportada por padrão.
+
+Será que vou gostar?
+```
+
+A **renderização** deve ficar como abaixo.
+A fonte padrão do Typst é a "[Libertinus Serif](https://en.wikipedia.org/wiki/Libertinus)", no tamanho 11.
+Ela tem o objetivo de ser uma alternativa de código livre à "Times New Roman".
+
+Perceba que nosso bloco de texto foi renderizado como **dois parágrafos** sucessivos.
+As três primeiras linhas escritas no bloco ficaram em um parágrafo, mas a última linha ficou em outro.
+
+<Figure caption="Renderização da mensagem de olá.">
+  <Image
+    src={rendering_hello}
+    alt={`Renderização do parágrafo escrito. Os primeiros trechos estão diagramados na mesma linha. Já a frase "Será que vou gostar?" está disposta em um próximo parágrafo, separado por uma quebra de linha.`}
+  />
+</Figure>
+
+No Typst, um parágrafo é encerrado quando você deixa uma **linha em branco** logo após o texto.
+Dentro de um mesmo bloco, você pode quebrar linhas entre cada frase da forma como quiser.
+Cada quebra de linha simples vai ser interpretada apenas como um espaço.
+Já uma quebra de linha dupla formará um parágrafo novo.
+
+```typst title="main.typ" frame="code" mark={6}
+// Esse bloco forma o primeiro parágrafo,
+// mesmo que você tenha quebrado linhas entre cada frase.
+Olá, mundo!
+Este é o meu primeiro documento escrito no Typst.
+Diferentemente do LaTeX, a língua portuguesa é suportada por padrão.
+
+// Esse bloco forma o segundo parágrafo
+// porque você deixou uma linha em branco logo antes dele.
+Será que vou gostar?
+```
+
+<Aside title="Você sabia?" type="tip" icon="question-circle">
+  As normas de redação de trabalhos acadêmicos da ABNT **não exigem** que se
+  utilize nenhuma **fonte** em específico. <br />
+  Muitos manuais erroneamente requerem a fonte "Times New Roman" ou a "Arial",
+  mas essas são propriedade da Microsoft, e não podem ser usadas fora dos seus
+  aplicativos comerciais. <br />A ABNT apenas requer uma fonte "padrão e
+  uniforme". Você pode escolher qualquer uma!
+</Aside>
