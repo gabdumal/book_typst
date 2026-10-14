@@ -8,12 +8,12 @@ import { Kbd } from "starlight-kbd/components";
 
 import Figure from "@components/Figure.astro";
 
-import explore_files_button from "@assets/content/docs/foundation/recipe/explore_files_button.png";
-import explore_files_menu from "@assets/content/docs/foundation/recipe/explore_files_menu.png";
-import creating_file from "@assets/content/docs/foundation/recipe/creating_file.png";
-import preview_file from "@assets/content/docs/foundation/recipe/preview_file.png";
-import open_settings from "@assets/content/docs/foundation/recipe/open_settings.png";
-import change_default_file from "@assets/content/docs/foundation/recipe/change_default_file.png";
+import explore_files_button from "@assets/content/docs/recipe/explore_files_button.png";
+import explore_files_menu from "@assets/content/docs/recipe/explore_files_menu.png";
+import creating_file from "@assets/content/docs/recipe/creating_file.png";
+import preview_file from "@assets/content/docs/recipe/preview_file.png";
+import open_settings from "@assets/content/docs/recipe/open_settings.png";
+import change_default_file from "@assets/content/docs/recipe/change_default_file.png";
 
 Agora que sabemos o básico do Typst, vamos escrever um documento novo.
 Dessa vez, descreveremos uma receita de bolo de chocolate!
@@ -21,7 +21,7 @@ Dessa vez, descreveremos uma receita de bolo de chocolate!
 O Typst permite que um projeto tenha vários arquivos diferentes.
 Esses arquivos incluem imagens, anexos, e outras páginas do documento.
 
-## Criando um novo arquivo
+## Novo arquivo
 
 Neste capítulo, vamos criar outra página dentro do mesmo projeto em que estávamos trabalhando.
 
@@ -112,3 +112,48 @@ Então, **troque** o arquivo `main.typ` selecionado pelo recém-criado `recipe.t
 
 Agora, **abra** o arquivo `recipe.typ`.
 Vamos finalmente começar a escrever.
+
+## Título
+
+A primeira coisa de que uma receita precisa é de um **título**.
+No Typst, a forma de definir títulos é com o símbolo de **igual** (`=`).
+Escreva o conteúdo a seguir no documento.
+
+```typst title="main.typ" frame="code"
+= Bolo de chocolate
+```
+
+Se quisermos escrever um **subtítulo**, bastaria usar dois símbolos de igual (`=`) seguidos.
+Veja o exemplo.
+
+```typst title="main.typ" frame="code"
+= Bolo de chocolate
+== Ingredientes
+```
+
+Para mais níveis, você pode usar mais **repetições** de `=`.
+Você pode adicionar quantos níveis quiser.
+
+```typst title="main.typ" frame="code"
+= Nível 1
+== Nível 2
+=== Nível 3
+==== Nível 4
+===== Nível 5
+====== Nível 6
+```
+
+Além disso, o próprio símbolo de igual (`=`) é um atalho para a **função** `#heading`.
+Na [referência](https://typst.app/docs/reference/model/heading/) dessa função você pode conferir os vários parâmetros que ela possui.
+Por enquanto, o mais relevante é o `level`, que indica o nível.
+
+```typst title="main.typ" frame="code"
+#heading[Bolo de chocolate]
+#heading(level: 2)[Ingredientes]
+```
+
+Mas, por enquanto, vamos remover tudo isso do documento e manter **apenas** o seguinte.
+
+```typst title="main.typ" frame="code"
+= Bolo de chocolate
+```

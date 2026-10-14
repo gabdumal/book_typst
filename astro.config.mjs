@@ -96,21 +96,16 @@ export default defineConfig({
           slug: "introduction",
         },
         {
-          items: [
-            {
-              label: "Introdução",
-              slug: "foundation",
-            },
-            {
-              label: "Primeiro documento",
-              slug: "foundation/first",
-            },
-            {
-              label: "Receita de bolo",
-              slug: "foundation/recipe",
-            },
-          ],
           label: "Fundamentos",
+          slug: "foundation",
+        },
+        {
+          label: "Primeiro documento",
+          slug: "first",
+        },
+        {
+          label: "Receita de bolo",
+          slug: "recipe",
         },
       ],
 

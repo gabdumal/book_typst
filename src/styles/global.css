@@ -18,7 +18,7 @@ picture {
 }
 
 .image-rounded > img,
-.image-rounded > starlight-image-zoom-zoomable > img {
+.image-rounded > a[data-fancybox] > img {
   border-radius: 0.25rem;
 }
 
