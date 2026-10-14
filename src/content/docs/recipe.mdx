@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import { Kbd } from "starlight-kbd/components";
 
 import Figure from "@components/Figure.astro";
+import WithSource from "@components/WithSource.astro";
 
 import explore_files_button from "@assets/content/docs/recipe/explore_files_button.png";
 import explore_files_menu from "@assets/content/docs/recipe/explore_files_menu.png";
@@ -14,6 +15,10 @@ import creating_file from "@assets/content/docs/recipe/creating_file.png";
 import preview_file from "@assets/content/docs/recipe/preview_file.png";
 import open_settings from "@assets/content/docs/recipe/open_settings.png";
 import change_default_file from "@assets/content/docs/recipe/change_default_file.png";
+import creating_folder from "@assets/content/docs/recipe/creating_folder.png";
+import pick_file from "@assets/content/docs/recipe/pick_file.png";
+import list_with_image from "@assets/content/docs/recipe/list_with_image.png";
+import image_inside_folder from "@assets/content/docs/recipe/image_inside_folder.png";
 
 Agora que sabemos o básico do Typst, vamos escrever um documento novo.
 Dessa vez, descreveremos uma receita de bolo de chocolate!
@@ -42,7 +47,7 @@ Esse arquivo apresenta um ícone de **olho aberto**.
 <Figure caption="Menu de explorar arquivos.">
   <Image
     src={explore_files_menu}
-    alt={`Seção da interface do web app do Typst focando no menu na lateral esquerda, de explorar arquivos. Há apenas o arquivo main.typ listado, que apresenta um ícone de um olho aberto. Existem três botões no superior do menu: o primeiro tem o ícone de uma folha de papel, e representa a ação de criar um arquivo novo; o segundo tem o ícone de uma pasta de documentos, e representa a ação de criar uma pasta nova; o terceiro tem um ícone de uma seta para cima, e representa a ação de enviar um arquivo do computador para o projeto.`}
+    alt={`Seção da interface do web app do Typst focando no menu na lateral esquerda, de explorar arquivos. Há apenas o arquivo "main.typ" listado, que apresenta um ícone de um olho aberto. Existem três botões no superior do menu: o primeiro tem o ícone de uma folha de papel, e representa a ação de criar um arquivo novo; o segundo tem o ícone de uma pasta de documentos, e representa a ação de criar uma pasta nova; o terceiro tem um ícone de uma seta para cima, e representa a ação de enviar um arquivo do computador para o projeto.`}
   />
 </Figure>
 
@@ -54,7 +59,7 @@ Na parte superior do menu, existem três botões principais, representados pelos
 
 - folha de papel: criar um **arquivo** novo em branco;
 - pasta de documentos: criar uma nova **pasta** vazia; e
-- seta para cima: fazer **upload** de um arquivo do computador para o projeto.
+- seta para cima: fazer **_upload_** de um arquivo do computador para o projeto.
 
 Clique no botão de criar um **novo arquivo**.
 Isso criará mais uma entrada da lista de arquivos em que você pode escrever o nome do novo documento.
@@ -62,7 +67,7 @@ Isso criará mais uma entrada da lista de arquivos em que você pode escrever o 
 <Figure caption="Criação de arquivo novo.">
   <Image
     src={creating_file}
-    alt={`Interface de criação de arquivo. Na lista de arquivos, existem duas entradas: o arquivo main.typ já criado, e um campo de texto em que se escreve o nome do novo arquivo. Nesse, está preenchido recipe.typ.`}
+    alt={`Interface de criação de arquivo. Na lista de arquivos, existem duas entradas: o arquivo "main.typ" já criado, e um campo de texto em que se escreve o nome do novo arquivo. Nesse, está preenchido "recipe.typ".`}
   />
 </Figure>
 
@@ -74,7 +79,7 @@ Agora, o editor de texto mostrará o arquivo em branco.
 <Figure caption="Botão de selecionar arquivo.">
   <Image
     src={preview_file}
-    alt={`Lista de arquivos, em que existem: main.typ e recipe.typ. O primeiro tem um ícone de olho aberto, enquanto o segundo mostra um ícone de olho fechado. O ponteiro do mouse está posicionado sobre esse segundo ícone, de forma que a mensagem de auxílio diz "pre-visualizar este arquivo", em inglês.`}
+    alt={`Lista de arquivos, em que existem: "main.typ" e "recipe.typ". O primeiro tem um ícone de olho aberto, enquanto o segundo mostra um ícone de olho fechado. O ponteiro do mouse está posicionado sobre esse segundo ícone, de forma que a mensagem de auxílio diz "pre-visualizar este arquivo", em inglês.`}
   />
 </Figure>
 
@@ -100,13 +105,13 @@ Ele tem um ícone de **engrenagem**, e está localizado na parte inferior da tel
   />
 </Figure>
 
-Nesse menu, procure a configuração **"Export and preview"**.
+Nesse menu, procure a configuração **_"Export and preview"_**.
 Então, **troque** o arquivo `main.typ` selecionado pelo recém-criado `recipe.typ`.
 
 <Figure caption="Troca do arquivo exibido por padrão.">
   <Image
     src={change_default_file}
-    alt={`Seção de configuração do arquivo a ser pre-visualizado e exportado. Existe uma lista de arquivos a selecionar, em que o atualmente selecionado é o main.typ.`}
+    alt={`Seção de configuração do arquivo a ser pre-visualizado e exportado. Existe uma lista de arquivos a selecionar, em que o atualmente selecionado é o "main.typ".`}
   />
 </Figure>
 
@@ -152,8 +157,131 @@ Por enquanto, o mais relevante é o `level`, que indica o nível.
 #heading(level: 2)[Ingredientes]
 ```
 
-Mas, por enquanto, vamos remover tudo isso do documento e manter **apenas** o seguinte.
+Mas, por enquanto, vamos remover tudo isso do documento `recipe.typ` e manter **apenas** o seguinte.
 
 ```typst title="main.typ" frame="code"
 = Bolo de chocolate
+```
+
+## Imagem
+
+Vamos adicionar a seguinte imagem ao documento.
+**Baixe-a** com o nome `bolo.jpg`.
+
+<Figure caption="Bolo de chocolate.">
+  <WithSource>
+    <Image
+      src={"/bolo.jpg"}
+      alt={`Seção de configuração do arquivo a ser pre-visualizado e exportado. Existe uma lista de arquivos a selecionar, em que o atualmente selecionado é o "main.typ".`}
+      width={"320px"}
+      height={"213.33px"}
+    />
+    <div slot="source">
+      <a href="https://pixabay.com/pt/users/freestocks-photos-7014431/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=2940473">
+        <span>freestocks-photos</span>
+      </a>
+      <span> por </span>
+      <a href="https://pixabay.com/pt//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=2940473">
+        <span>Pixabay</span>
+      </a>
+      <span>.</span>
+    </div>
+  </WithSource>
+</Figure>
+
+É um costume **criar** uma pasta no projeto para colocar todas as imagens usadas.
+Abra o menu de explorar arquivos, e clique no botão de criar **nova pasta**.
+Então, nomeie-a como `assets`.
+
+<Figure caption="Criação de pasta nova.">
+  <Image
+    src={creating_folder}
+    alt={`Interface de criação de pasta. Na lista de arquivos, existem as entradas dos arquivos "main.typ" e "recipe.typ". Também aparece um campo de texto para escrever o nome da pasta criada.`}
+  />
+</Figure>
+
+Agora, vamos fazer **_upload_** da imagem do bolo para o projeto.
+Clique no botão de fazer _upload_, que tem o ícone de uma seta para cima.
+Isso abrirá um _pop-up_ para selecionar o arquivo.
+
+<Figure caption="Seleção de arquivo.">
+  <Image
+    src={pick_file}
+    alt={`Pop-up de seleção de arquivos para enviar para o projeto. Ele apresenta uma área para arrastar arquivos. Ele também tem um botão para escolher uma pasta do computador, e outro para escolher um arquivo.
+    Existe ainda um último botão para confirmar a lista de arquivos selecionados.`}
+  />
+</Figure>
+
+Clique no botão **_"Pick a file"_**, e selecione o arquivo `bolo.jpg` da sua pasta de _downloads_.
+Então, pressione o botão **_"Upload file"_** para confirmar o envio.
+
+<Figure caption="Lista de arquivos com a imagem enviada.">
+  <Image
+    src={list_with_image}
+    alt={`Lista de arquivos, em que se vê a pasta assets, e os arquivos: "bolo.jpg", "main.typ", e "recipe.typ".`}
+  />
+</Figure>
+
+Então, **arraste** com o mouse o arquivo `bolo.jpg` para dentro da pasta `assets`.
+
+<Figure caption={`Lista de arquivos com a imagem dentro da pasta "assets".`}>
+  <Image
+    src={image_inside_folder}
+    alt={`Lista de arquivos, em que se vê a pasta assets com o arquivo "bolo.jpg" dentro de si. Fora dela, veem-se os arquivos "main.typ" e "recipe.typ".`}
+  />
+</Figure>
+
+Agora, **abra** o arquivo `recipe.typ`.
+
+Para adicionar uma **imagem**, use a função `#image`.
+Ela recebe como parâmetro principal o **caminho** em que a imagem está.
+No nosso caso, ele é `/assets/bolo.jpg`.
+Adicione o seguinte ao documento.
+
+```typst title="main.typ" frame="code"
+#image("assets/bolo.jpg")
+```
+
+Essa função apresenta outros **parâmetros**, como descritos em sua [referência](https://typst.app/docs/reference/visualize/image/).
+Dois muito importantes são a altura (`height`) e a largura (`width`).
+Essa imagem tem 1920 &times; 1280 px, então ela fica muito grande na página.
+
+Vamos definir a **altura** como 6 centímetros, que é um tamanho mais razoável.
+Perceba que a largura foi automaticamente ajustada para ficar proporcional.
+
+```typst title="main.typ" frame="code"
+#image(
+  "assets/bolo.jpg",
+  height: 6cm
+)
+```
+
+Se quisermos fazer um banner, podemos fazer a imagem ocupar a **largura completa** da página, dentro das margens.
+Para isso, use um valor de porcentagem no parâmetro `width`.
+
+```typst title="main.typ" frame="code"
+#image(
+  "assets/bolo.jpg",
+  height: 6cm,
+  width: 100%
+)
+```
+
+Por padrão, a imagem é cortada para se **ajustar** às proporções customizadas.
+Se preferir que a imagem seja esticada em vez de cortada, você pode usar o parâmetro `fit` com o valor `stretch`.
+
+```typst title="main.typ" frame="code"
+#image(
+  "assets/bolo.jpg",
+  height: 6cm,
+  width: 100%,
+  fit: "stretch"
+)
+```
+
+Por enquanto, vamos manter apenas a forma mais **simples** de inclusão de imagem.
+Apague os experimentos que fizemos.
+
+```typst title="main.typ" frame="code"
+#image("assets/bolo.jpg")
 ```

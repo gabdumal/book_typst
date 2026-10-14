@@ -1,0 +1,27 @@
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .source-container {
+    font-size: 0.75rem;
+    background-color: var(--sl-color-accent-low);
+    padding-block: 0.25rem;
+    padding-inline: 0.75rem;
+    width: 100%;
+    border-inline-start: 0.25rem solid var(--sl-color-accent);
+  }
+
+  .source-container a {
+    color: var(--sl-color-accent-high);
+  }
+</style>
+
+<div class="container">
+  <slot />
+  <div aria-label="Fonte da imagem." class={`source-container`}>
+    <slot name="source" />
+  </div>
+</div>
