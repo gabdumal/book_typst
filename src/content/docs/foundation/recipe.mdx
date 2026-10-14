@@ -1,0 +1,114 @@
+---
+title: Receita de bolo
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+import { Kbd } from "starlight-kbd/components";
+
+import Figure from "@components/Figure.astro";
+
+import explore_files_button from "@assets/content/docs/foundation/recipe/explore_files_button.png";
+import explore_files_menu from "@assets/content/docs/foundation/recipe/explore_files_menu.png";
+import creating_file from "@assets/content/docs/foundation/recipe/creating_file.png";
+import preview_file from "@assets/content/docs/foundation/recipe/preview_file.png";
+import open_settings from "@assets/content/docs/foundation/recipe/open_settings.png";
+import change_default_file from "@assets/content/docs/foundation/recipe/change_default_file.png";
+
+Agora que sabemos o básico do Typst, vamos escrever um documento novo.
+Dessa vez, descreveremos uma receita de bolo de chocolate!
+
+O Typst permite que um projeto tenha vários arquivos diferentes.
+Esses arquivos incluem imagens, anexos, e outras páginas do documento.
+
+## Criando um novo arquivo
+
+Neste capítulo, vamos criar outra página dentro do mesmo projeto em que estávamos trabalhando.
+
+Clique no botão com ícone de **arquivo de documentos** no menu na lateral esquerda do Typst.
+Na imagem, ele está destacado com uma borda azul.
+
+<Figure caption="Botão de explorar arquivos.">
+  <Image
+    src={explore_files_button}
+    alt={`Seção da interface do web app do Typst focando no menu na lateral esquerda, em que está destacado o botão de explorar arquivos, que tem um ícone de um arquivo de documentos.`}
+  />
+</Figure>
+
+Ele abrirá o menu de **explorar arquivos**.
+Por enquanto, está listado apenas o arquivo atual, o `main.typ`.
+Esse arquivo apresenta um ícone de **olho aberto**.
+
+<Figure caption="Menu de explorar arquivos.">
+  <Image
+    src={explore_files_menu}
+    alt={`Seção da interface do web app do Typst focando no menu na lateral esquerda, de explorar arquivos. Há apenas o arquivo main.typ listado, que apresenta um ícone de um olho aberto. Existem três botões no superior do menu: o primeiro tem o ícone de uma folha de papel, e representa a ação de criar um arquivo novo; o segundo tem o ícone de uma pasta de documentos, e representa a ação de criar uma pasta nova; o terceiro tem um ícone de uma seta para cima, e representa a ação de enviar um arquivo do computador para o projeto.`}
+  />
+</Figure>
+
+Isso significa que ele está **selecionado** para exibição.
+Portanto, seu conteúdo será renderizado no formato PDF.
+Apenas um arquivo pode ser selecionado por vez.
+
+Na parte superior do menu, existem três botões principais, representados pelos seus ícones:
+
+- folha de papel: criar um **arquivo** novo em branco;
+- pasta de documentos: criar uma nova **pasta** vazia; e
+- seta para cima: fazer **upload** de um arquivo do computador para o projeto.
+
+Clique no botão de criar um **novo arquivo**.
+Isso criará mais uma entrada da lista de arquivos em que você pode escrever o nome do novo documento.
+
+<Figure caption="Criação de arquivo novo.">
+  <Image
+    src={creating_file}
+    alt={`Interface de criação de arquivo. Na lista de arquivos, existem duas entradas: o arquivo main.typ já criado, e um campo de texto em que se escreve o nome do novo arquivo. Nesse, está preenchido recipe.typ.`}
+  />
+</Figure>
+
+**Escreva** `recipe.typ` e pressione <Kbd linux={"Enter"} />.
+O novo arquivo será criado.
+Então, clique nele na lista.
+Agora, o editor de texto mostrará o arquivo em branco.
+
+<Figure caption="Botão de selecionar arquivo.">
+  <Image
+    src={preview_file}
+    alt={`Lista de arquivos, em que existem: main.typ e recipe.typ. O primeiro tem um ícone de olho aberto, enquanto o segundo mostra um ícone de olho fechado. O ponteiro do mouse está posicionado sobre esse segundo ícone, de forma que a mensagem de auxílio diz "pre-visualizar este arquivo", em inglês.`}
+  />
+</Figure>
+
+Contudo, esse novo arquivo ainda não está selecionado para a exibição.
+Sobre ele, pode-se ver um ícone de **olho fechado**.
+O PDF renderizado ainda é referente ao `main.typ`.
+
+Para selecionar o arquivo `recipe.typ` para a exibição, pressione o ícone do **olho fechado**.
+Você verá que o PDF renderizado mudou para ficar completamente em branco.
+
+Mas ainda tem um detalhe.
+Quando você seleciona um arquivo pelo ícone de **olho**, ele só se torna o arquivo exibido **temporariamente**.
+
+**Recarregue** a página, e você verá que o arquivo selecionado terá voltado a ser o `main.typ`.
+
+Para definir um arquivo como padrão, você precisa acessar o menu de **configurações** do projeto.
+Ele tem um ícone de **engrenagem**, e está localizado na parte inferior da tela na barra da lateral esquerda.
+
+<Figure caption="Botão de configurações do projeto.">
+  <Image
+    src={open_settings}
+    alt={`Seção da interface do web app do Typst focando no menu na lateral esquerda, em que está destacado o botão de abrir configurações do projeto, que tem um ícone de uma engrenagem.`}
+  />
+</Figure>
+
+Nesse menu, procure a configuração **"Export and preview"**.
+Então, **troque** o arquivo `main.typ` selecionado pelo recém-criado `recipe.typ`.
+
+<Figure caption="Troca do arquivo exibido por padrão.">
+  <Image
+    src={change_default_file}
+    alt={`Seção de configuração do arquivo a ser pre-visualizado e exportado. Existe uma lista de arquivos a selecionar, em que o atualmente selecionado é o main.typ.`}
+  />
+</Figure>
+
+Agora, **abra** o arquivo `recipe.typ`.
+Vamos finalmente começar a escrever.

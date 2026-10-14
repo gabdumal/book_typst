@@ -16,3 +16,12 @@ img,
 picture {
   margin-top: 0rem;
 }
+
+.image-rounded > img,
+.image-rounded > starlight-image-zoom-zoomable > img {
+  border-radius: 0.25rem;
+}
+
+.f-caption {
+  text-align: center;
+}

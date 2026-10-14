@@ -2,9 +2,16 @@
 interface Props {
   caption: string;
   horizontal?: boolean;
+  notRounded?: boolean;
+  notShadowed?: boolean;
 }
 
-const { caption, horizontal = false } = Astro.props;
+const {
+  caption,
+  horizontal = false,
+  notRounded = false,
+  notShadowed = false,
+} = Astro.props;
 ---
 
 <style>
@@ -37,10 +44,18 @@ const { caption, horizontal = false } = Astro.props;
   .images-container.vertical {
     flex-direction: column;
   }
+
+  .image-shadowed {
+    filter: drop-shadow(0rem 0rem 0.25rem);
+  }
 </style>
 
 <figure class="figure-container">
-  <div class={`images-container ${horizontal ? "horizontal" : "vertical"}`}>
+  <div
+    class={`images-container ${horizontal ? "horizontal" : "vertical"} ${
+      notRounded ? "" : "image-rounded"
+    } ${notShadowed ? "" : "image-shadowed"}`}
+  >
     <slot />
   </div>
   <figcaption class="figure-caption">{caption}</figcaption>

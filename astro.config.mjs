@@ -3,6 +3,56 @@ import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 import starlightKbd from "starlight-kbd";
 
+/** @type {import('astro').AstroIntegration} */
+const fancyboxIntegration = {
+  hooks: {
+    "astro:config:setup"({ injectScript }) {
+      injectScript(
+        "page",
+        `
+          import { Fancybox } from "@fancyapps/ui/dist/fancybox/";
+          import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
+          function enhanceImages() {
+            const images = document.querySelectorAll(
+              ".sl-markdown-content img"
+            );
+
+            images.forEach((img) => {
+              // Preserve existing image links.
+              if (img.closest("a")) return;
+
+              const link = document.createElement("a");
+
+              link.href = img.src;
+              link.dataset.fancybox = "book-images";
+
+              if (img.alt) {
+                link.dataset.caption = img.alt;
+              }
+
+              img.before(link);
+              link.append(img);
+            });
+          }
+
+          // Set up the current page and subsequent navigations.
+          document.addEventListener(
+            "astro:page-load",
+            enhanceImages
+          );
+
+          enhanceImages();
+
+          Fancybox.bind('[data-fancybox="book-images"]');
+        `,
+      );
+    },
+  },
+
+  name: "fancybox-for-starlight",
+};
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [
@@ -55,8 +105,12 @@ export default defineConfig({
               label: "Primeiro documento",
               slug: "foundation/first",
             },
+            {
+              label: "Receita de bolo",
+              slug: "foundation/recipe",
+            },
           ],
-          label: "Fundamentação",
+          label: "Fundamentos",
         },
       ],
 
@@ -70,5 +124,6 @@ export default defineConfig({
 
       title: "Typst",
     }),
+    fancyboxIntegration,
   ],
 });
