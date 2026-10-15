@@ -120,6 +120,10 @@ export default defineConfig({
               label: "Grades e tabelas",
               slug: "recipe/grids",
             },
+            {
+              label: "Customização",
+              slug: "recipe/customization",
+            },
           ],
           label: "Receita de bolo",
         },

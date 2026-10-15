@@ -1,0 +1,99 @@
+---
+title: Customização
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import code from "@assets/content/docs/recipe/customization/code.png";
+
+Agora que começamos a escrever as informações em texto da receita, podemos tratar sobre definições e customização do documento.
+
+## Texto
+
+O web app do Typst possui um **corretor ortográfico** integrado, que funciona em português.
+Contudo, para que ele funcione, é necessário definir o idioma do documento.
+
+Até agora, você provavelmente viu que várias das palavras em **português** que escrevemos são tratados como incorretas.
+Nesse caso, elas são marcadas por uma linha roxa ondulada.
+Isto ocorre porque o corretor é configurado por padrão para funcionar em inglês.
+
+<Figure caption="Seção de edição de texto com palavras marcadas pelo corretor ortográfico.">
+  <Image
+    src={code}
+    alt={`Seção de edição de texto da interface do web app do Typst. Várias palavras em português foram marcadas com uma linha ondulada da cor roxa.`}
+  />
+</Figure>
+
+Para definir as definições de **texto**, utilizamos a função `#text`.
+Ela recebe como parâmetro um bloco de texto delimitado por colchetes (`[...]`).
+Vamos fazer alguns testes com essa função.
+Copie o exemplo a seguir para o fim do documento.
+
+```typst title="main.typ" frame="code"
+#text[Restrições]
+```
+
+Conforme especificado na [referência](https://typst.app/docs/reference/text/text/) da função, existem muitos **parâmetros** opcionais
+
+Aquele que define o **idioma** é o `lang`.
+Ele recebe o código de duas letras do idioma desejado.
+No caso do português, o código é `"pt"`.
+
+Além disso, podemos especificar a **região** do idioma com o parâmetro `region`, que recebe outro código de duas letras para a variante da língua.
+No caso do português brasileiro, o código é `"br"`.
+
+**Substitua** o exemplo anterior pelo a seguir.
+
+```typst title="main.typ" frame="code"
+#text(
+  lang: "pt",
+  region: "br",
+)[
+  Restrições
+]
+```
+
+Veja que agora o corretor ortográfico **não** considera mais a palavra "Restrições" como **incorreta**.
+
+Outra customizações que queremos fazer no texto é estabelecer a **família tipográfica**, o que é feito por meio do atributo `font`.
+Ele recebe o nome da fonte desejada entre aspas (`"..."`).
+Vamos utilizar a fonte ["Atkinson Hyperlegible Next"](https://www.brailleinstitute.org/freefont/), que é desenvolvida pelo instituto Braille com foco em acessibilidade.
+
+Também utilizamos a função `#lorem` para criar texto de enchimento de espaço.
+**Teste** o exemplo a seguir.
+
+```typst title="main.typ" frame="code" ins={4,8}
+#text(
+  lang: "pt",
+  region: "br",
+  font: "Atkinson Hyperlegible Next"
+)[
+  Restrições
+
+  #lorem(50)
+]
+```
+
+Ademais, para definir o **tamanho** do texto, utilizamos o parâmetro `size`, que recebe o valor em alguma medida tipográfica.
+Vamos utilizar `14 pt`.
+
+```typst title="main.typ" frame="code" ins={5}
+#text(
+  lang: "pt",
+  region: "br",
+  font: "Atkinson Hyperlegible Next",
+  size: 14pt
+)[
+  Restrições
+
+  #lorem(50)
+]
+```
+
+## Definições padrão
+
+Nosso bloco de texto de exemplo está devidamente **configurado**.
+Mas como fazer com que todo o texto do documento use essas definições por **padrão**?
