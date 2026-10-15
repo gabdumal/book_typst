@@ -1,0 +1,329 @@
+---
+title: Grades e tabelas
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import rendering_default_grid from "@assets/content/docs/recipe/grids/rendering_default_grid.png";
+import rendering_grid_with_image from "@assets/content/docs/recipe/grids/rendering_grid_with_image.png";
+import rendering_default_table from "@assets/content/docs/recipe/grids/rendering_default_table.png";
+import rendering_simple_info_table from "@assets/content/docs/recipe/grids/rendering_simple_info_table.png";
+import rendering_grid_with_table from "@assets/content/docs/recipe/grids/rendering_grid_with_table.png";
+import rendering_grid_with_customized_table from "@assets/content/docs/recipe/grids/rendering_grid_with_customized_table.png";
+
+Tendo entendido como os arquivos funcionam no Typst, podemos partir para a escrita das informações da receita.
+Queremos apresentar os dados técnicos e os ingredientes de forma organizada e bonita.
+
+## Grade
+
+O cabeçalho de informações da nossa receita terá uma **grade** de informações, com a imagem posicionada ao lado.
+Para isso, utilizamos a função `#grid`.
+
+Conforme explicado em sua [referência](https://typst.app/docs/reference/layout/grid/), essa função não recebe apenas um parâmetro principal.
+
+Dentro dos **parênteses** (`(...)`), nós abrimos um bloco com colchetes (`[...]`) para cada **célula**.
+Cada bloco é separado por **vírgulas**.
+Copie o exemplo a seguir para o seu documento.
+
+```typst title="main.typ" frame="code"
+#grid(
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+)
+```
+
+Essa função [`#lorem`](https://typst.app/docs/reference/text/lorem/) serve para **preencher** um espaço com texto sem significado.
+O valor passado como parâmetro se refere à quantidade de palavras que queremos gerar.
+
+Perceba que todas as **células** ficaram uma embaixo da outra, e sem espaçamento entre si.
+
+<Figure caption="Renderização da grade com definições padrões.">
+  <Image
+    src={rendering_default_grid}
+    alt={`Renderização da grade com cinco células que contêm uma frase em texto sem significado. As células estão dispostas na vertical, e sem espaçamento, de forma que as letras encostam na linha de baixo.`}
+  />
+</Figure>
+
+Vamos primeiro adicionar um **espaçamento** entre as células da grade.
+Para isso, usamos o parâmetro `gutter` com o valor de `16 pt`.
+
+```typst title="main.typ" frame="code"
+#grid(
+  gutter: 16pt,
+
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+)
+```
+
+Já para definir o **formato** da grade, precisamos usar o atributo `columns`.
+
+Ele pode ser preenchido de duas formas diferentes.
+A primeira é simplesmente definir a **quantidade** esperada de colunas.
+Nesse caso, todas elas terão a mesma largura.
+
+```typst title="main.typ" frame="code"
+#grid(
+  gutter: 16pt,
+  columns: 3,
+
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+)
+```
+
+A outra forma é definir o **tamanho** de cada uma das colunas individualmente.
+Para fazer isso, definimos uma [**lista**](https://typst.app/docs/reference/foundations/array/) como o valor do atributo `columns`.
+Uma lista, ou _array_, é formada por valores separados por vírgulas dentro de parênteses (`(...)`).
+Vários tipos de medidas podem ser usados.
+
+A mais simples é definir o tamanho **absoluto** em centímetros.
+Também, se pode definir qual é a **porcentagem** da largura da grade que dada coluna vai ocupar.
+Caso deixe o valor como `auto`, o Typst **calculará** a melhor forma de distribuir o espaço restante.
+
+```typst title="main.typ" frame="code"
+#grid(
+  gutter: 16pt,
+  columns: (1fr, auto, 1fr, 20%, 3cm),
+
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+)
+```
+
+Já a medida `fr` se refere a **frações** iguais de largura.
+Por exemplo, se você definir duas colunas com `1fr` cada, ambas ocuparão a sua metade do espaço disponível.
+
+```typst title="main.typ" frame="code"
+#grid(
+  gutter: 16pt,
+  columns: (1fr, 1fr),
+
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+)
+```
+
+Podemos também definir **proporções** diferentes para as colunas.
+No nosso documento, vamos utilizar duas unidades para a primeira coluna, e uma para a segunda.
+
+```typst title="main.typ" frame="code"
+#grid(
+  gutter: 16pt,
+  columns: (2fr, 1fr),
+
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+)
+```
+
+Nosso objetivo é colocar as informações do lado esquerdo e a imagem do lado direito.
+Dessa forma, vamos **substituir** os conteúdos das células pelo código a seguir, movendo a imagem para dentro da segunda célula.
+
+```typst title="main.typ" frame="code"
+#grid(
+  gutter: 16pt,
+  columns: (2fr, 1fr),
+
+  [#lorem(50)],
+  [#image("assets/bolo.jpg")],
+)
+```
+
+Esse código gerará o documento a seguir.
+
+<Figure caption="Renderização da grade com imagem.">
+  <Image
+    src={rendering_grid_with_image}
+    alt={`Renderização da grade com duas células. A primeira contém texto e a segunda contém a imagem de um bolo.`}
+  />
+</Figure>
+
+## Tabelas
+
+Agora que temos o espaço reservado para a tabela de dados técnicos, vamos de fato à sua criação.
+**Tabelas** são criadas por meio da função `#table`.
+Elas são tão importantes, que a equipe do Typst escreveu não somente sua [referência](https://typst.app/docs/reference/model/table/), mas também um [guia prático](https://typst.app/docs/guides/tables/) de uso, que vale à pena ler.
+Muito da lógica aplicada às tabelas também é usada na customização das grades, então recomendo que você teste faça alguns experimentos com ambas.
+
+Similarmente às grades, nós definimos as **células** por meio de blocos de colchetes (`[...]`) separados por vírgulas.
+Para não misturar as coisas por enquanto, vamos deixar o código da grade em seu canto, e experimentar com as tabelas separadamente.
+
+```typst title="main.typ" frame="code" ins={9-15}
+#grid(
+  gutter: 16pt,
+  columns: (2fr, 1fr),
+
+  [#lorem(50)],
+  [#image("assets/bolo.jpg")],
+)
+
+#table(
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+  [#lorem(10)],
+)
+```
+
+Esse código gerará o documento a seguir.
+
+<Figure caption="Renderização da tabela com definições padrões.">
+  <Image
+    src={rendering_default_table}
+    alt={`Renderização da tabela com cinco células que contêm uma frase em texto sem significado. As células estão dispostas na vertical, e apresentam bordas em todas as laterais.`}
+  />
+</Figure>
+
+Por padrão, as tabelas apresentam **bordas** em todas as direções de cada célula.
+Elas também têm um maior espaçamento interno.
+
+**Substitua** a tabela de exemplo pela tabela a seguir, que contém as informações reais da nossa receita.
+Ela define simplesmente **duas colunas**.
+
+```typst title="main.typ" frame="code"
+#table(
+  columns: 2,
+
+  [Prato], [Sobremesa],
+  [Restrições], [Ovo, Glúten, Leite],
+  [Tempo], [60 minutos],
+  [Rendimento], [900 gramas],
+  [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+)
+```
+
+Como não determinamos uma largura específica para cada coluna, elas assumem a largura **necessária** para comportar o texto em sua célula mais longa.
+
+<Figure caption="Renderização da tabela com informações da receita.">
+  <Image
+    src={rendering_simple_info_table}
+    alt={`Renderização da tabela com informações da receita. Ela apresenta duas colunas. Ambas têm o comprimento da célula mais longa em si.`}
+  />
+</Figure>
+
+Se quisermos que a tabela ocupe a largura **completa** da página, precisamos definir suas dimensões da seguinte forma.
+Isso faz com que a primeira coluna ocupe apenas o espaço necessário, e a segunda se estenda pelo espaço disponível.
+
+```typst title="main.typ" frame="code" mark={2}
+#table(
+  columns: (auto, 1fr),
+
+  [Prato], [Sobremesa],
+  [Restrições], [Ovo, Glúten, Leite],
+  [Tempo], [60 minutos],
+  [Rendimento], [900 gramas],
+  [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+)
+```
+
+O espaço disponível é calculado em relação ao componente em que a tabela está.
+Vamos finalmente **mover** a tabela para dentro do espaço determinado na grade.
+
+```typst title="main.typ" frame="code" ins={6-14} mark={5,15}
+#grid(
+  gutter: 16pt,
+  columns: (2fr, 1fr),
+
+  [
+    #table(
+      columns: (auto, 1fr),
+
+      [Prato], [Sobremesa],
+      [Restrições], [Ovo, Glúten, Leite],
+      [Tempo], [60 minutos],
+      [Rendimento], [900 gramas],
+      [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+    )
+  ],
+  [#image("assets/bolo.jpg")],
+)
+```
+
+Isso faz com que a última célula da segunda coluna --- a fonte da receita --- não tenha mais espaço para que seu conteúdo caiba em apenas uma linha.
+Por isso, ela passa a ocupar **duas linhas**.
+
+<Figure caption="Renderização da grade com tabela e imagem.">
+  <Image
+    src={rendering_grid_with_table}
+    alt={`Renderização da grade com duas células. A primeira contém a tabela de informações da receita e a segunda contém a imagem de um bolo.`}
+  />
+</Figure>
+
+Podemos customizar o **alinhamento** do texto dentro das células por meio do parâmetro `align`.
+Ele permite determinar um alinhamento padrão para todas as células, ou permite ainda determiná-lo individualmente para cada uma.
+O [guia de uso de tabelas](https://typst.app/docs/guides/tables/#alignment) detalha como fazer isso.
+
+No nosso documento, vamos apenas determinar que o conteúdo das células seja **centralizado verticalmente**.
+Para isso, utilizamos o valor `horizon`, como mostrado a seguir.
+
+```typst title="main.typ" frame="code" ins={3}
+#table(
+  columns: (auto, 1fr),
+  align: horizon,
+
+  [Prato], [Sobremesa],
+  [Restrições], [Ovo, Glúten, Leite],
+  [Tempo], [60 minutos],
+  [Rendimento], [900 gramas],
+  [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+)
+```
+
+A última coisa que queremos customizar são as **bordas** das células.
+Elas são especificadas pelo parâmetro `stroke`, que também permite ampla configuração, como mostrado no [guia](https://typst.app/docs/guides/tables/#strokes).
+
+Nós queremos que as células **não tenham** bordas nas laterais.
+Já as bordas superiores e inferiores devem ter a cor **cinza**.
+
+Podemos atingir esse objetivo ao passar um [**dicionário**](https://typst.app/docs/reference/foundations/dictionary/) como valor do atributo `stroke`.
+Um dicionário é aberto por parênteses (`(...)`), e é composto por chaves e valores separados por dois-pontos (`:`).
+Cada entrada é separada por vírgulas.
+
+No caso, a configuração das bordas laterais é definida pela chave `x`, que terá o valor `none`.
+Já as bordas superiores e inferiores são definidas pela chave `y`, que receberá o valor `color.gray`.
+
+```typst title="main.typ" frame="code" ins={4}
+#table(
+  columns: (auto, 1fr),
+  align: horizon,
+  stroke: (x: none, y: color.gray),
+
+  [Prato], [Sobremesa],
+  [Restrições], [Ovo, Glúten, Leite],
+  [Tempo], [60 minutos],
+  [Rendimento], [900 gramas],
+  [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+)
+```
+
+Esse código gerará o documento a seguir.
+
+<Figure caption="Renderização da grade com tabela customizada e imagem.">
+  <Image
+    src={rendering_grid_with_customized_table}
+    alt={`Renderização da grade com duas células. A primeira contém a tabela de informações da receita customizada conforme as especificações, e a segunda contém a imagem de um bolo.`}
+  />
+</Figure>

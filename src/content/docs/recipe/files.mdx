@@ -1,5 +1,5 @@
 ---
-title: Receita de bolo
+title: Arquivos
 author: Gabriel Malosto
 ---
 
@@ -9,17 +9,16 @@ import { Kbd } from "starlight-kbd/components";
 import Figure from "@components/Figure.astro";
 import WithSource from "@components/WithSource.astro";
 
-import explore_files_button from "@assets/content/docs/recipe/explore_files_button.png";
-import explore_files_menu from "@assets/content/docs/recipe/explore_files_menu.png";
-import creating_file from "@assets/content/docs/recipe/creating_file.png";
-import preview_file from "@assets/content/docs/recipe/preview_file.png";
-import open_settings from "@assets/content/docs/recipe/open_settings.png";
-import change_default_file from "@assets/content/docs/recipe/change_default_file.png";
-import creating_folder from "@assets/content/docs/recipe/creating_folder.png";
-import pick_file from "@assets/content/docs/recipe/pick_file.png";
-import list_with_image from "@assets/content/docs/recipe/list_with_image.png";
-import image_inside_folder from "@assets/content/docs/recipe/image_inside_folder.png";
-import rendering_default_grid from "@assets/content/docs/recipe/rendering_default_grid.png";
+import explore_files_button from "@assets/content/docs/recipe/files/explore_files_button.png";
+import explore_files_menu from "@assets/content/docs/recipe/files/explore_files_menu.png";
+import creating_file from "@assets/content/docs/recipe/files/creating_file.png";
+import preview_file from "@assets/content/docs/recipe/files/preview_file.png";
+import open_settings from "@assets/content/docs/recipe/files/open_settings.png";
+import change_default_file from "@assets/content/docs/recipe/files/change_default_file.png";
+import creating_folder from "@assets/content/docs/recipe/files/creating_folder.png";
+import pick_file from "@assets/content/docs/recipe/files/pick_file.png";
+import list_with_image from "@assets/content/docs/recipe/files/list_with_image.png";
+import image_inside_folder from "@assets/content/docs/recipe/files/image_inside_folder.png";
 
 Agora que sabemos o básico do Typst, vamos escrever um documento novo.
 Dessa vez, descreveremos uma receita de bolo de chocolate!
@@ -285,137 +284,4 @@ Apague os experimentos que fizemos.
 
 ```typst title="main.typ" frame="code"
 #image("assets/bolo.jpg")
-```
-
-## Grades
-
-O cabeçalho de informações da nossa receita terá uma **grade** de informações, com a imagem posicionada ao lado.
-Para isso, utilizamos a função `#grid`.
-
-Conforme explicado em sua [referência](https://typst.app/docs/reference/layout/grid/), essa função não recebe apenas um parâmetro principal.
-
-Dentro dos **parênteses** (`(...)`), nós abrimos um bloco com colchetes (`[...]`) para cada **célula**.
-Cada bloco é separado por **vírgulas**.
-Copie o exemplo a seguir para o seu documento.
-
-```typst title="main.typ" frame="code"
-#grid(
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-)
-```
-
-Essa função [`#lorem`](https://typst.app/docs/reference/text/lorem/) serve para **preencher** um espaço com texto sem significado.
-O valor passado como parâmetro se refere à quantidade de palavras que queremos gerar.
-
-Perceba que todas as **células** ficaram uma embaixo da outra, e sem espaçamento entre si.
-
-<Figure caption="Renderização da grade com definições padrões.">
-  <Image
-    src={rendering_default_grid}
-    alt={`Renderização da grade com cinco células que contêm uma frase em texto sem significado. As células estão dispostas na vertical, e sem espaçamento, de forma que as letras encostam na linha de baixo.`}
-  />
-</Figure>
-
-Vamos primeiro adicionar um **espaçamento** entre as células da grade.
-Para isso, usamos o parâmetro `gutter` com o valor de 16 pt.
-
-```typst title="main.typ" frame="code"
-#grid(
-  gutter: 16pt,
-
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-)
-```
-
-Já para definir o **formato** da grade, precisamos usar o atributo `columns`.
-
-Ele pode ser preenchido de duas formas diferentes.
-A primeira é simplesmente definir a **quantidade** esperada de colunas.
-Nesse caso, todas elas terão a mesma largura.
-
-```typst title="main.typ" frame="code"
-#grid(
-  gutter: 16pt,
-  columns: 3,
-
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-)
-```
-
-A outra forma é definir o **tamanho** de cada uma das colunas individualmente.
-Para fazer isso, definimos como valor do atributo `columns` uma lista dentro de parênteses (`(...)`).
-Vários tipos de medidas podem ser usados.
-
-A mais simples é definir o tamanho **absoluto** em centímetros.
-Também, se pode definir qual é a **porcentagem** da largura da grade que dada coluna vai ocupar.
-Caso deixe o valor como `auto`, o Typst **calculará** a melhor forma de distribuir o espaço restante.
-
-```typst title="main.typ" frame="code"
-#grid(
-  gutter: 16pt,
-  columns: (1fr, auto, 1fr, 20%, 3cm),
-
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-)
-```
-
-Já a medida `fr` se refere a **frações** iguais de largura.
-Por exemplo, se você definir duas colunas com `1fr` cada, ambas ocuparão a sua metade do espaço disponível.
-
-```typst title="main.typ" frame="code"
-#grid(
-  gutter: 16pt,
-  columns: (1fr, 1fr),
-
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-)
-```
-
-Podemos também definir **proporções** diferentes para as colunas.
-No nosso documento, vamos utilizar duas unidades para a primeira coluna, e uma para a segunda.
-
-```typst title="main.typ" frame="code"
-#grid(
-  gutter: 16pt,
-  columns: (2fr, 1fr),
-
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-  [#lorem(10)],
-)
-```
-
-Nosso objetivo é colocar as informações do lado esquerdo e a imagem do lado direito.
-Dessa forma, vamos **substituir** os conteúdos das células pelo código a seguir, movendo a imagem para dentro da segunda célula.
-
-```typst title="main.typ" frame="code"
-#grid(
-  gutter: 16pt,
-  columns: (2fr, 1fr),
-
-  [#lorem(10)],
-  [#image("assets/bolo.jpg")],
-)
 ```

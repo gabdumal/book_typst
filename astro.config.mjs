@@ -74,11 +74,18 @@ export default defineConfig({
         },
       },
 
+      favicon: "/public/logo_light.svg",
+
       locales: {
         root: {
           label: "Português",
           lang: "pt",
         },
+      },
+
+      logo: {
+        dark: "/public/logo_dark.svg",
+        light: "/public/logo_light.svg",
       },
 
       plugins: [
@@ -104,8 +111,17 @@ export default defineConfig({
           slug: "first",
         },
         {
+          items: [
+            {
+              label: "Arquivos",
+              slug: "recipe/files",
+            },
+            {
+              label: "Grades e tabelas",
+              slug: "recipe/grids",
+            },
+          ],
           label: "Receita de bolo",
-          slug: "recipe",
         },
       ],
 
