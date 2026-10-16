@@ -1,0 +1,47 @@
+---
+title: Currículo
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+import quati_curriculum from "@assets/content/docs/curriculum/quati_curriculum.png";
+import select_template from "@assets/content/docs/curriculum/select_template.png";
+import icons_message from "@assets/content/docs/curriculum/icons_message.png";
+
+Construímos um documento inteiro do zero, e customizamos seu estilo da maneira como quisemos.
+
+Mas um dos pontos-chave do Typst é sua capacidade de usar **modelos** de documentos prontos, que já carregam toda a formatação necessária.
+Acesse a página [Typst Universe](https://typst.app/universe/).
+Ela lista todos os pacotes e modelos disponíveis para o Typst.
+
+Neste capítulo, criaremos um documento baseado em um modelo de **currículo**, e editaremos seus campos.
+Esse modelo é chamado `quati-curriculum`, e sua página pode ser acessada por [este link](https://typst.app/universe/package/quati-curriculum).
+
+<Figure caption="Página do modelo quati-curriculum.">
+  <Image
+    src={quati_curriculum}
+    alt={`Página do modelo "quati-curriculum" no Typst Universe. Ela mostra o nome do modelo, sua versão mais recente, uma página de exemplo, instruções de uso, e um botão para criar um documento usando esse modelo.`}
+  />
+</Figure>
+
+Acesse a página do modelo.
+Na lateral direita, você verá o botão "Create project in app".
+Clique nele para **criar** um documento que utiliza esse modelo.
+
+Isso abrirá uma nova página para que você **confirme** a criação do documento.
+Na lateral direita, existe um campo de texto, em que você deve escrever o **nome** "Meu currículo".
+Então, pressione o botão "Create".
+
+<Figure caption="Página do seleção do modelo para criar documento.">
+  <Image
+    src={select_template}
+    alt={`Página do web app Typst em que se escolhe um modelo para criar um documento. Ela mostra uma grade de modelos disponíveis, dos quais o "quati-curriculum" está selecionado. Na direita, veem-se detalhes sobre o modelo e um campo para escrever o nome do documento a ser criado. Está escrito "Meu currículo". Abaixo, vê-se o botão de criar o documento.`}
+  />
+</Figure>
+
+Então, o Typst criará o documento e **abrirá** sua página de edição e de renderização.
+
+Esse modelo requer uma configuração a mais para funcionar devidamente.
+O conjunto de ícones

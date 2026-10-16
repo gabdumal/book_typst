@@ -135,6 +135,10 @@ export default defineConfig({
           ],
           label: "Receita de bolo",
         },
+        {
+          label: "Currículo",
+          slug: "curriculum",
+        },
       ],
 
       social: [
