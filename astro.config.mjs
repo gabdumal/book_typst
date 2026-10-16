@@ -128,6 +128,10 @@ export default defineConfig({
               label: "Funções",
               slug: "recipe/functions",
             },
+            {
+              label: "Listas",
+              slug: "recipe/lists",
+            },
           ],
           label: "Receita de bolo",
         },

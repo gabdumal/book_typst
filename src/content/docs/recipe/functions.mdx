@@ -326,3 +326,94 @@ Por fim, em vez de retornarmos diretamente o `it` no cabeçalho, vamos encapsul�
     alt={`Renderização da seção de ingredientes. Agora, a tabela apresenta as mudanças anteriores, mas o cabeçalho tem a cor do texto branca e usa negrito.`}
   />
 </Figure>
+
+Para garantir o acompanhamento, o **código** do documento inteiro até então está disposto a seguir.
+
+```typst title="recipe.typ" frame="code"
+#set page(
+  margin: 32pt,
+)
+
+#set text(
+  lang: "pt",
+  region: "br",
+  font: "Atkinson Hyperlegible Next",
+  size: 14pt
+)
+
+#let primary_color = color.red.darken(30%)
+#let secondary_color = color.red.saturate(80%).lighten(85%)
+#let tertiary_color = color.rgb("FCF5E8").saturate(5%).lighten(60%)
+
+#show heading: set text(fill: primary_color)
+#show heading.where(level: 1): set block(below: 16pt)
+
+= Bolo de chocolate
+
+#grid(
+  gutter: 16pt,
+  columns: (2fr, 1fr),
+
+  [
+    #table(
+      columns: (auto, 1fr),
+      align: horizon,
+      stroke: (x: none, y: color.gray),
+
+      [Prato], [Sobremesa],
+      [Restrições], [Ovo, Glúten, Leite],
+      [Tempo], [60 minutos],
+      [Rendimento], [900 gramas],
+      [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+    )
+  ],
+  [#image("assets/bolo.jpg")],
+)
+
+#line(length: 100%, stroke: primary_color)
+
+== Ingredientes
+
+#let format_lines = (x, y) => {
+  if y == 0 {
+    primary_color
+  }
+  else {
+    if calc.rem(y, 2) == 0 {
+      secondary_color
+    } else {
+      tertiary_color
+    }
+  }
+}
+
+#show table.cell: (it) => {
+  if it.y == 0 {
+    set text(fill: white)
+    strong(it)
+  }
+  else {
+    it
+  }
+}
+
+#table(
+  columns: (2fr, 1fr, 2fr, 1fr),
+  stroke: none,
+  inset: 8pt,
+  fill: format_lines,
+
+  table.header([Ingrediente], [Qtd.], [Unidade], [Notas]),
+
+  [Cacau em pó], [$frac(1, 2, style:"skewed")$], [xícara], [alcalino],
+  [Açúcar], [$1$ e $frac(1, 2, style:"skewed")$], [xícara], [],
+  [Farinha de trigo], [$1$ e $frac(3, 4, style:"skewed")$], [xícara], [],
+  [Sal], [$1$], [colher de chá], [],
+  [Fermento químico], [$2$], [colheres de chá], [],
+  [Essência de baunilha], [$2$], [colheres de chá], [],
+  [Óleo vegetal], [$frac(1, 2, style:"skewed")$], [xícara], [],
+  [Café (líquido)], [$1$ e $frac(1, 2, style:"skewed")$], [xícara], [fervente],
+  [Ovo], [$2$], [], [],
+  [Chantili], [$2$], [xícaras], [],
+)
+```

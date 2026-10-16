@@ -1,0 +1,170 @@
+---
+title: Listas
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import rendering_first_steps from "@assets/content/docs/recipe/lists/rendering_first_steps.png";
+import rendering_bullet_list from "@assets/content/docs/recipe/lists/rendering_bullet_list.png";
+import rendering_first_page from "@assets/content/docs/recipe/lists/rendering_first_page.png";
+
+A última seção da receita é o seu modo de preparo.
+Vamos usar listas numeradas e não-numeradas para apresentar os passos.
+Também vamos criar componentes customizados para cada tipo de instrução.
+
+## Componentes customizados
+
+Adicione uma linha de **separação** no final do documento e abra uma nova seção chamada `== Modo de preparo`.
+
+```typst title="recipe.typ" frame="code"
+// ...
+
+#line(length: 100%, stroke: primary_color)
+
+== Modo de preparo
+```
+
+Nós queremos **estilizar** algumas palavras-chave da receita com cores pastéis, como se fossem destacadas por marcadores de texto.
+Para isso, podemos utilizar a função `#box`, e definir o seu preenchimento por meio do atributo `fill`.
+
+Para não termos que chamar a função `#box` e passar todos os parâmetros que ela requer o tempo todo, podemos criar uma **função** customizada que aplicará a cor que desejamos.
+**Copie** o código abaixo para o fim do documento.
+
+```typst title="recipe.typ" frame="code"
+#let inset = 2pt
+#let temperature = it => box(
+  fill: color.yellow.lighten(70%),
+  inset: inset,
+  it
+)
+```
+
+Da mesma forma como fizemos anteriormente, nós recebemos o **parâmetro padrão** `it` e o encapsulamos por uma função.
+Nesse caso, é a função `#box`, em que definimos os atributos de cor de preenchimento e de espaçamento interno.
+
+Todas os outros componentes customizados que usaremos funcionam de forma similar, então apenas **substitua** o código copiado anteriormente pelo disposto a seguir, que contém todos eles.
+
+```typst title="recipe.typ" frame="code"
+#let inset = 2pt
+#let temperature = it => box(fill: color.yellow.lighten(70%), inset: inset, it)
+#let time = it => box(fill: color.green.lighten(75%), inset: inset, it)
+#let tool = it => box(fill: color.purple.lighten(85%), inset: inset, it)
+#let ingredient = it => box(fill: color.blue.lighten(85%), inset: inset, it)
+#let description = it => box(fill: color.orange.lighten(75%), inset: inset, it)
+#let amount = it => box(fill: color.rgb("#FFD4E5"), inset: inset, it)
+```
+
+## Listas
+
+Crie uma **subseção** chamada `=== Preparação` no fim do documento.
+
+```typst title="recipe.typ" frame="code"
+=== Preparação
+```
+
+Vamos começar a listar os passos da receita usando uma lista **numerada**.
+Conforme sua [referência](https://typst.app/docs/reference/model/enum/), ela pode ser iniciada pela função `#enum`.
+Contudo, a forma mais simples de elencar os passos é utilizar o atalho do símbolo de mais (`+`), seguido do texto do item.
+Você pode definir um subitem simplesmente ao digitar dois espaços antes do símbolo `+`.
+
+```typst frame="code"
++ Primeiro item.
++ Segundo item.
+  + Primeiro subitem do segundo item.
++ Terceiro item.
+```
+
+Os primeiros passos da receita são dispostos a seguir.
+**Copie-os** para o fim do documento.
+
+```typst title="recipe.typ" frame="code"
++ *Preaqueça* o #tool[forno] em #temperature[$200$ ℃].
++ *Unte* duas #tool[assadeiras] redondas iguais de $20$ cm.
++ Em uma #tool[tigela], *misture* com o #tool[batedor globo] os seguintes ingredientes #description[secos]: o #ingredient[cacau em pó], o #ingredient[sal], e a #ingredient[farinha de trigo].
+```
+
+<Figure caption="Renderização da seção de modo de preparo.">
+  <Image
+    src={rendering_first_steps}
+    alt={`Renderização da seção de modo de preparo. Ela se inicia com uma linha de separação, então dispõe o título "Modo de preparo". Depois, exibe-se o subtítulo "Preparação". Em seguida, são listados três passos em uma lista numerada. As palavras-chave de cada passo são destacadas com cores conforme suas categorias.`}
+  />
+</Figure>
+
+Esse último passo cita três ingredientes que devem ser misturados, mas não apresenta uma ordem específica entre eles.
+Esse é um exemplo de contexto em que uma lista **não-numerada** é útil.
+Como detalhado em sua [referência](https://typst.app/docs/reference/model/list/), ela é iniciada pela função `#list`, ou pelo atalho do símbolo de traço (`-`).
+**Substitua** os passos anteriores pelo código a seguir.
+
+```typst title="recipe.typ" frame="code"
++ *Preaqueça* o #tool[forno] em #temperature[$200$ ℃].
++ *Unte* duas #tool[assadeiras] redondas iguais de $20$ cm.
++ Em uma #tool[tigela], *misture* com o #tool[batedor globo] os seguintes ingredientes #description[secos]:
+  - o #ingredient[cacau em pó],
+  - o #ingredient[sal], e
+  - a #ingredient[farinha de trigo].
+```
+
+Essa atualização do código gera a seguinte renderização.
+
+<Figure caption="Renderização da subseção de preparação.">
+  <Image
+    src={rendering_bullet_list}
+    alt={`Renderização da subseção de preparação. Ela lista três passos de preparo em uma lista numerada. O último passo apresenta três subitens dispostos em uma lista não-numerada.`}
+  />
+</Figure>
+
+Agora que sabemos como criar listas com itens e subitens, podemos copiar o **restante** dos passos do modo de preparo.
+A seguir está disposto o código de todas as subseções do modo de preparo.
+**Substitua** o código atual da subseção `=== Preparação` pelo disposto a seguir.
+
+```typst title="recipe.typ" frame="code"
+=== Preparação
+
++ *Preaqueça* o #tool[forno] em #temperature[$200$ ℃].
++ *Unte* duas #tool[assadeiras] redondas iguais de $20$ cm.
++ Em uma #tool[tigela], *misture* com o #tool[batedor globo] os seguintes ingredientes #description[secos]:
+  - o #ingredient[cacau em pó],
+  - o #ingredient[sal], e
+  - a #ingredient[farinha de trigo].
++ *Peneire* esses #ingredient[ingredientes] #description[secos] para a #tool[tigela] da #tool[batedeira].
++ Na mesma #tool[tigela], adicione o #ingredient[açúcar] e *misture* com o #tool[batedor globo].
++ Em outra #tool[tigela], misture os seguintes ingredientes #description[úmidos]:
+  - o #ingredient[óleo vegetal],
+  - a #ingredient[essência de baunilha], e
+  - o #ingredient[café] #description[quente].
+
+=== Feitura principal
+
++ *Encaixe* na #tool[batedeira] a #tool[tigela] com os #ingredient[ingredientes] #description[secos].
++ *Ligue* a #tool[batedeira] na #description[velocidade baixa] e *adicione* aos poucos os #ingredient[ingredientes] #description[úmidos].
++ *Adicione* à #tool[tigela] os #ingredient[ovos].
++ Leve a #tool[batedeira] para a #description[velocidade média] e deixe *misturar* até que a massa esteja #description[lisa e fina] (cerca de #time[3 minutos]).
++ *Acrescente* e misture o #ingredient[fermento químico].
+
+=== Assamento
+
++ *Divida* a massa igualmente entre as duas #tool[assadeiras] #description[untadas].
++ *Coloque* as #tool[assadeiras] no #tool[forno] aquecido a #temperature[200 ℃].
++ Deixe *assar* por #time[40 minutos], até que a massa tenha #description[resistência] quando pressionada.
+
+=== Finalização
+
++ Deixe o #ingredient[bolo] assado *esfriar* em uma superfície de #tool[grelha].
++ *Desenforme* uma das #tool[assadeiras] em um #tool[prato] próprio para apresentação.
++ *Espalhe* #amount[1 xícara] de #ingredient[chantili] sobre o bolo.
++ *Desenforme* a outra #tool[assadeira] e posicione essa camada sobre a outra.
++ *Espalhe* mais #amount[1 xícara] de #ingredient[chantili] sobre a segunda camada.
++ *Leve* o #ingredient[bolo] recheado à #tool[geladeira] por #time[2 horas].
+```
+
+O código completo da receita gera a seguinte primeira página do documento.
+
+<Figure caption="Renderização da primeira página da receita.">
+  <Image
+    src={rendering_first_page}
+    alt={`Renderização da primeira página da receita. Ela apresenta o título da receita no todo, seguido de uma grade de informações técnicas e uma imagem do resultado. Em seguida, uma seção de ingrediente os lista por meio de uma tabela. Ao final, uma seção de modo de preparo é dividida em subseções, das quais se vê apenas a preparação, porque as demais são dispostas na segunda página.`}
+  />
+</Figure>
