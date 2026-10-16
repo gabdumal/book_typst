@@ -8,6 +8,9 @@ import { Image } from "astro:assets";
 import Figure from "@components/Figure.astro";
 
 import code from "@assets/content/docs/recipe/customization/code.png";
+import rendering_font_and_size from "@assets/content/docs/recipe/customization/rendering_font_and_size.png";
+import rendering_red_color from "@assets/content/docs/recipe/customization/rendering_red_color.png";
+import rendering_complete from "@assets/content/docs/recipe/customization/rendering_complete.png";
 
 Agora que começamos a escrever as informações em texto da receita, podemos tratar sobre definições e customização do documento.
 
@@ -97,3 +100,284 @@ Vamos utilizar `14 pt`.
 
 Nosso bloco de texto de exemplo está devidamente **configurado**.
 Mas como fazer com que todo o texto do documento use essas definições por **padrão**?
+
+Para isso, o Typst disponibiliza as regras de **`#set`**.
+Conforme explicado em sua [referência](https://typst.app/docs/reference/styling/#set-rules), elas são usadas para definir os **parâmetros** padrão de funções.
+
+Vamos definir os **atributos** da função `#text`.
+Primeiro, tire os colchetes (`[...]`) da função.
+Então, adicione o termo `set` logo após a cerquilha (`#`).
+Modifique o documento para ficar como o exemplo a seguir.
+
+```typst title="main.typ" frame="code" mark={1,6}
+#set text(
+  lang: "pt",
+  region: "br",
+  font: "Atkinson Hyperlegible Next",
+  size: 14pt
+)
+
+Restrições
+
+#lorem(50)
+```
+
+A renderização do documento deve **continuar igual**.
+Afinal, não fizemos nenhuma mudança nos parâmetros, apenas os definimos como padrão.
+
+Uma regra `#set` modifica os parâmetros de todo o texto quem vem **depois** dela.
+Todo o texto anterior não é afetado.
+Por isso, é importante **mover** essa regra para o topo do documento.
+Leve-a para antes do título `= Bolo de chocolate`.
+Mantenha restante do documento sem mudanças.
+
+```typst title="main.typ" frame="code" ins={1-6} del={29}
+#set text(
+  lang: "pt",
+  region: "br",
+  font: "Atkinson Hyperlegible Next",
+  size: 14pt
+)
+
+= Bolo de chocolate
+
+#grid(
+  gutter: 16pt,
+  columns: (2fr, 1fr),
+
+  [
+    #table(
+      columns: (auto, 1fr),
+      align: horizon,
+      stroke: (x: none, y: color.gray),
+
+      [Prato], [Sobremesa],
+      [Restrições], [Ovo, Glúten, Leite],
+      [Tempo], [60 minutos],
+      [Rendimento], [900 gramas],
+      [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+    )
+  ],
+  [#image("assets/bolo.jpg")],
+)
+
+Restrições
+
+#lorem(50)
+```
+
+A renderização do documento deve ficar como a seguir.
+
+<Figure caption="Renderização do documento com fonte customizada.">
+  <Image
+    src={rendering_font_and_size}
+    alt={`Renderização do documento completo. Ele é composto: pelo título; pela grade com a tabela de informações e a imagem do bolo; e pelo bloco de texto de preenchimento de espaço ao final.`}
+  />
+</Figure>
+
+Também queremos customizar a própria **página** do documento.
+Fazemos isso definindo uma regra `#set` sobre a função `#page`.
+Por padrão, ela tem os tamanhos de uma folha A4, e tem `2,5 cm` de margem em todas as bordas.
+
+Vamos alterar o parâmetro **`margin`** para ter o valor `32 pt`.
+Vários outros atributos podem ser customizados, conforme a [referência](https://typst.app/docs/reference/layout/page/).
+Adicione o código abaixo no **topo** do documento, para que ele seja aplicado sobre todo o conteúdo.
+
+```typst title="main.typ" frame="code"
+#set page(
+  margin: 32pt,
+)
+```
+
+## Customização profunda
+
+Vamos adicionar um pouco de cor ao documento!
+O Typst permite definir **variáveis** com valores arbitrários.
+Para isso, usamos o termo `#let` e especificamos o nome da variável.
+Então, usamos o símbolo de igual (`=`) e definimos seu valor.
+
+### Cores
+
+Vamos criar três variáveis para guardar as **cores** temáticas do nosso documento.
+Comecemos com a cor principal, que vai ser vermelho.
+O Typst define algumas cores mais comuns, como pode ser visto em sua [referência](https://typst.app/docs/reference/visualize/color/).
+
+Adicione o código abaixo logo **antes** do título `= Bolo de chocolate`.
+
+```typst title="main.typ" frame="code"
+#let primary_color = color.red
+```
+
+Agora, queremos usar essa cor para pintar o título do documento.
+Para customizar todos os títulos por padrão, podemos usar uma outra regra do Typst, a **`#show`**.
+Esse tipo de regra permite maior customização, como visto em sua [referência](https://typst.app/docs/reference/styling/#show-rules).
+
+Lembre-se de que os **títulos** são definidos pela função `#heading`, mesmo que nós estejamos usando o atalho do símbolo de igual (`=`).
+Dessa forma, para editá-los, podemos aplicar uma regra `#show` sobre a função `#heading`.
+
+```typst title="main.typ" frame="code"
+#show heading: // ...
+```
+
+Depois do símbolo de dois-pontos (`:`), nós definimos qual é a **customização** que queremos fazer sobre todos os títulos.
+No caso, queremos que o texto fique da cor que definimos.
+Para isso, usamos uma regra `#set` sobre a função `#text`, o que define seus atributos **padrão**.
+O uso da cerquilha (`#`) somente é necessário para introduzir a regra `#show`.
+
+```typst title="main.typ" frame="code"
+#show heading: set text()
+```
+
+O parâmetro que define a **cor** do texto é o `fill`.
+Defina-o como a variável `primary_color`.
+
+```typst title="main.typ" frame="code"
+#show heading: set text(fill: primary_color)
+```
+
+O **código** modificado fica como a seguir.
+Antes estão as definições da página e do texto, e depois estão as tabelas de informações da receita e a imagem.
+
+```typst title="main.typ" frame="code"
+// ...
+
+#let primary_color = color.red
+
+#show heading: set text(fill: primary_color)
+
+= Bolo de chocolate
+// ...
+```
+
+Essa cor de vermelho é muito brilhante.
+Vamos modificá-la para chegar a um tom mais confortável.
+Na [referência](https://typst.app/docs/reference/visualize/color) de cores, podemos ver que existem métodos para **ajustar** uma cor.
+Vamos usar o método `darken` para escurecer o tom em `30%`.
+Modifique a definição da cor principal como o exemplo a seguir.
+
+```typst title="main.typ" frame="code"
+#let primary_color = color.red.darken(30%)
+```
+
+Isso gera o seguinte documento.
+
+<Figure caption="Renderização do documento com cor de título customizada.">
+  <Image
+    src={rendering_red_color}
+    alt={`Renderização do documento completo. Agora, a cor do título é vermelha.`}
+  />
+</Figure>
+
+Agora, vamos criar as **outras** cores temáticas.
+Adicione-as logo após a cor principal.
+Pesquise na referência como funcionam os ajustes definidos.
+
+```typst title="main.typ" frame="code" ins={2,3}
+#let primary_color = color.red.darken(30%)
+#let secondary_color = color.red.saturate(80%).lighten(85%)
+#let tertiary_color = color.rgb("FCF5E8").saturate(5%).lighten(60%)
+```
+
+### Detalhes
+
+Vamos customizar alguns **detalhes** antes de prosseguir para a próxima sessão.
+
+Modifique o bloco de **texto** sem significado no fim do documento para ficar da seguinte forma.
+Trocamos a palavra "Restrições" pelo título secundário `= Ingredientes`.
+
+```typst title="main.typ" frame="code" mark={3}
+// ...
+
+== Ingredientes
+
+#lorem(50)
+```
+
+Tenho a impressão de que o **título principal** (`= Bolo de chocolate`) está muito colado na grade de informações.
+Podemos adicionar um espaçamento maior para títulos do nível principal, mas não afetar os títulos secundários.
+
+Para fazer isso, usamos a funcionalidade da **seleção** da regra `#show`.
+Como especificado na [referência](https://typst.app/docs/reference/foundations/function/#definitions-where), você pode usar o método `.where(...)` para aplicar a customização somente aos componentes que se encaixarem na seleção.
+
+**Adicione** a seguinte regra adicional logo após a customização dos títulos.
+
+```typst title="main.typ" frame="code" ins={2}
+#show heading: set text(fill: primary_color)
+#show heading.where(level: 1): set block(below: 16pt)
+```
+
+Essa regra **seleciona** apenas os títulos de nível 1.
+Então, ela aplica um espaçamento de `16 pt` abaixo do título.
+
+Outra coisa que queremos fazer é adicionar uma **linha** de separação após a grade de informações, apenas para melhorar a estética.
+Logo após a grade, e logo antes do título `== Ingredientes`, adicione o seguinte código.
+
+```typst title="main.typ" frame="code" ins={3}
+// ...
+
+#line(length: 100%, stroke: primary_color)
+
+== Ingredientes
+// ...
+```
+
+Você pode consultar a [referência](https://typst.app/docs/reference/visualize/line/) da função `#line` para entender seus parâmetros.
+
+O código **completo** do documento deve ficar como a seguir.
+
+```typst title="main.typ" frame="code"
+#set page(
+  margin: 32pt,
+)
+
+#set text(
+  lang: "pt",
+  region: "br",
+  font: "Atkinson Hyperlegible Next",
+  size: 14pt
+)
+
+#let primary_color = color.red.darken(30%)
+#let secondary_color = color.red.saturate(80%).lighten(85%)
+#let tertiary_color = color.rgb("FCF5E8").saturate(5%).lighten(60%)
+
+#show heading: set text(fill: primary_color)
+#show heading.where(level: 1): set block(below: 16pt)
+
+= Bolo de chocolate
+
+#grid(
+  gutter: 16pt,
+  columns: (2fr, 1fr),
+
+  [
+    #table(
+      columns: (auto, 1fr),
+      align: horizon,
+      stroke: (x: none, y: color.gray),
+
+      [Prato], [Sobremesa],
+      [Restrições], [Ovo, Glúten, Leite],
+      [Tempo], [60 minutos],
+      [Rendimento], [900 gramas],
+      [Fonte], [Sal, gordura, ácido, calor: Os elementos da boa cozinha],
+    )
+  ],
+  [#image("assets/bolo.jpg")],
+)
+
+#line(length: 100%, stroke: primary_color)
+
+== Ingredientes
+
+#lorem(50)
+```
+
+Já o documento renderizado deve ser como o seguinte.
+
+<Figure caption="Renderização do documento completo.">
+  <Image
+    src={rendering_complete}
+    alt={`Renderização do documento completo. Agora, existe um título secundário para os ingredientes, e uma linha que o separa da grade de informações.`}
+  />
+</Figure>

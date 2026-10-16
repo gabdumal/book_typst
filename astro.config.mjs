@@ -141,4 +141,5 @@ export default defineConfig({
     }),
     fancyboxIntegration,
   ],
+  site: "https://typst.gabdumal.com",
 });
