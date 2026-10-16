@@ -1,0 +1,328 @@
+---
+title: Funções
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import rendering_unstyled_table from "@assets/content/docs/recipe/functions/rendering_unstyled_table.png";
+import rendering_zebra_table from "@assets/content/docs/recipe/functions/rendering_zebra_table.png";
+import rendering_styled_table from "@assets/content/docs/recipe/functions/rendering_styled_table.png";
+
+Da mesma forma como criamos variáveis arbitrárias, o Typst permite criar **funções** customizadas para organizar melhor o seu texto.
+Neste capítulo, vamos criar a tabela de ingredientes e a lista de instruções do modo de preparo, e usaremos funções nesse processo.
+
+## Tabela
+
+Vamos começar a montar a **tabela** de ingredientes.
+Como vimos, devemos usar a função `#table`, e definir o tamanho das colunas.
+Nossa tabela apresentará o nome do ingrediente, a quantidade necessária, a unidade de medida, e eventuais observações.
+
+Já deixei **configurado** no código abaixo o tamanho das colunas e o espaçamento interno de cada célula.
+Também desativei as bordas, porque vamos fazer a estilização apenas por meio de cores.
+
+```typst title="recipe.typ" frame="code"
+#table(
+  columns: (2fr, 1fr, 2fr, 1fr),
+  stroke: none,
+  inset: 8pt,
+)
+```
+
+A primeira linha a adicionar é o **cabeçalho**.
+Para incluí-lo, utilizamos um componente de tabela chamado `table.header(...)`.
+Inclua-o dentro da chamada da função `#table`, e defina os nomes de cada coluna como mostrado a seguir.
+
+```typst title="recipe.typ" frame="code" ins={6}
+#table(
+  columns: (2fr, 1fr, 2fr, 1fr),
+  stroke: none,
+  inset: 8pt,
+
+  table.header([Ingrediente], [Qtd.], [Unidade], [Notas]),
+)
+```
+
+Agora vamos criar a linha do primeiro ingrediente, o "Cacau em pó".
+Por enquanto, deixei sem preencher a quantidade de cacau.
+
+```typst title="recipe.typ" frame="code" ins={8}
+#table(
+  columns: (2fr, 1fr, 2fr, 1fr),
+  stroke: none,
+  inset: 8pt,
+
+  table.header([Ingrediente], [Qtd.], [Unidade], [Notas]),
+
+  [Cacau em pó], [...], [xícara], [alcalino],
+)
+```
+
+O Typst dispõe de um modo específico para descrever equações e outros esquemas **matemáticos**.
+Você pode consultar todos os detalhes dele em sua [referência](https://typst.app/docs/reference/math/).
+Nesse guia, vamos aprender apenas alguns conceitos básicos.
+
+O modo de matemática é aberto por símbolos de **cifrão** (`$...$`).
+Dentro dele, os números e símbolos são formatados utilizando uma fonte específica, que melhora a visualização dos esquemas.
+
+**Modifique** a linha do "Cacau em pó" da seguinte forma.
+Na segunda célula, abrimos um ambiente de matemática e simplesmente definimos o número `1`.
+
+```typst title="recipe.typ" frame="code"
+[Cacau em pó], [$1$], [xícara], [alcalino],
+```
+
+Dentro desse ambiente, uma série de **funções** especiais ficam disponíveis.
+Vamos usar a função `frac`, que define uma fração.
+Ela recebe dois parâmetros obrigatórios, que são o numerador e o denominador, respectivamente.
+
+```typst title="recipe.typ" frame="code"
+[Cacau em pó], [$frac(1, 2)$], [xícara], [alcalino],
+```
+
+Por padrão, a fração usa duas linhas, colocando o numerador em cima, e o denominador embaixo.
+Contudo, para receitas, é mais comum colocar os dois números na mesma linha, usando uma barra diagonal.
+Para usar esse **estilo**, definimos o parâmetro opcional `style` com o valor `"skewed"`.
+
+```typst title="recipe.typ" frame="code"
+[Cacau em pó], [$frac(1, 2, style: "skewed")$], [xícara], [alcalino],
+```
+
+Os demais ingredientes seguem a mesma lógica.
+**Copie** o código da tabela completa a seguir.
+
+```typst title="recipe.typ" frame="code"
+#table(
+  columns: (2fr, 1fr, 2fr, 1fr),
+  stroke: none,
+  inset: 8pt,
+
+  table.header([Ingrediente], [Qtd.], [Unidade], [Notas]),
+
+  [Cacau em pó], [$frac(1, 2, style:"skewed")$], [xícara], [alcalino],
+  [Açúcar], [$1$ e $frac(1, 2, style:"skewed")$], [xícara], [],
+  [Farinha de trigo], [$1$ e $frac(3, 4, style:"skewed")$], [xícara], [],
+  [Sal], [$1$], [colher de chá], [],
+  [Fermento químico], [$2$], [colheres de chá], [],
+  [Essência de baunilha], [$2$], [colheres de chá], [],
+  [Óleo vegetal], [$frac(1, 2, style:"skewed")$], [xícara], [],
+  [Café (líquido)], [$1$ e $frac(1, 2, style:"skewed")$], [xícara], [fervente],
+  [Ovo], [$2$], [], [],
+  [Chantili], [$2$], [xícaras], [],
+)
+```
+
+A seção de ingredientes com sua tabela deve ficar como a seguir.
+Ainda não adicionamos nenhuma estilização.
+
+<Figure caption="Renderização da seção de ingredientes.">
+  <Image
+    src={rendering_unstyled_table}
+    alt={`Renderização da seção de ingredientes. Ela se inicia pelo título "Ingredientes" em vermelho. Então, é exibida a tabela de ingredientes. Ela apresenta um cabeçalho e uma linha para cada ingrediente. Todas as células usam o mesmo tamanho de texto e a mesma fonte que o texto comum, exceto as células de quantidade, que usam uma fonte estilizada para matemática. A tabela não apresenta bordas, nem cores.`}
+  />
+</Figure>
+
+## Estilização
+
+Primeiramente, vamos adicionar um estilo de **zebra** à tabela.
+As linhas pares terão a cor de fundo rosa, e as ímpares terão a cor bege.
+Lembrando que, em linguagens de programação, a contagem começa em `0`.
+
+A função `#table` tem um parâmetro opcional chamado `fill`, que permite que definamos a cor de **preenchimento** das células.
+Se quiséssemos usar uma mesma cor para todas as células, bastaria passar uma única cor como o seu valor.
+
+Contudo, precisamos aplicar uma formatação **diferente** dependendo da posição da célula na tabela.
+Para isso, precisamos criar uma **função**.
+Ela deve receber dois parâmetros: `x`, que representa a coluna em que a célula está; e `y`, que representa a linha.
+
+Para definirmos a função, usamos o termo **`#let`** da mesma forma como fizemos para criar uma variável.
+Então, usamos o símbolo de igual (`=`) para introduzir a definição da função.
+
+```typst frame="code"
+#let format_lines = // ...
+```
+
+Em seguida, definimos os **parâmetros** entre parênteses (`(...)`).
+Depois deles, usamos os símbolos `=>` para introduzir o **corpo** da função.
+E, por fim, abrimos chaves (`{...}`) para escrevermos seu conteúdo.
+
+```typst frame="code"
+#let format_lines = (x, y) => {
+  // ...
+}
+```
+
+**Inclua** essa função no documento logo após o título `== Ingredientes`.
+Também defina o parâmetro `fill` da tabela com o nome da função que criamos.
+
+```typst title="recipe.typ" frame="code" ins={3-5, 11}
+== Ingredientes
+
+#let format_lines = (x, y) => {
+  // ...
+}
+
+#table(
+  columns: (2fr, 1fr, 2fr, 1fr),
+  stroke: none,
+  inset: 8pt,
+  fill: format_lines,
+// ...
+```
+
+Agora, vamos começar a escrever o **corpo** da função.
+A primeira formatação que queremos fazer é pintar o **cabeçalho** de uma cor forte, para diferenciá-lo das demais linhas.
+A ideia é que, caso a linha seja a primeira (número `0`), retornaremos a cor `primary_color`.
+
+Essa lógica de **condicionais** é implementada pelas expressões `if`, `else if` e `else`.
+Além disso, usaremos alguns dos operadores descritos na [referência](https://typst.app/docs/reference/scripting/) de _scripting_ do Typst.
+
+No Typst, não é necessário usar o termo `return`.
+A última linha com conteúdo será automaticamente retornada.
+**Atualize** o corpo da função para incluir essa primeira condição.
+
+```typst title="recipe.typ" frame="code" ins={2-4}
+#let format_lines = (x, y) => {
+  if y == 0 {
+    primary_color
+  }
+}
+```
+
+Agora, para criar o padrão de **zebra** nas linhas restantes, abriremos um bloco com a expressão `else`.
+
+```typst title="recipe.typ" frame="code" ins={5-7}
+#let format_lines = (x, y) => {
+  if y == 0 {
+    primary_color
+  }
+  else {
+    // ...
+  }
+}
+```
+
+Para verificar se uma linha é **par**, temos que dividir seu número por `2` e verificar se a sobra da divisão `0`.
+O Typst disponibiliza a função `calc.rem` justamente para fazer isso.
+No caso de ser verdadeiro, retornamos a cor `secondary_color`.
+Já quando a linha for ímpar, retornamos `tertiary_color`.
+**Atualize** a função conforme o código a seguir.
+
+```typst title="recipe.typ" frame="code" ins={6-10}
+#let format_lines = (x, y) => {
+  if y == 0 {
+    primary_color
+  }
+  else {
+    if calc.rem(y, 2) == 0 {
+      secondary_color
+    } else {
+      tertiary_color
+    }
+  }
+}
+```
+
+O código deve produzir a seguinte renderização.
+
+<Figure caption="Renderização da seção de ingredientes com a tabela em estilo de zebra.">
+  <Image
+    src={rendering_zebra_table}
+    alt={`Renderização da seção de ingredientes. Agora, a tabela apresenta o cabeçalho na cor de preenchimento vermelho escuro. Cada linha subsequente se alterna entre as cores bege e rosa.`}
+  />
+</Figure>
+
+Com o fundo vermelho escuro, o texto do **cabeçalho** deixou de se destacar.
+Podemos definir customizações para ele usando uma regra `#show`.
+Nesse caso, o componente que queremos modificar é o `#table.cell`.
+
+Dessa vez, não vamos apenas mudar a cor do texto, como fizemos para os títulos.
+Nós vamos também definir que o cabeçalho deve ficar em **negrito**.
+Por isso, é necessário estruturar a regra de forma similar a como fizemos para a função.
+
+**Adicione** ao documento a regra `#show` a seguir.
+Ela deve ficar entre a função `#let format_lines` e a abertura a tabela.
+
+```typst title="recipe.typ" frame="code" ins={5-7}
+#let format_lines = (x, y) => {
+  // ...
+}
+
+#show table.cell: (it) => {
+  it
+}
+
+#table(
+  // ...
+)
+```
+
+A regra define, logo após o símbolo de dois-pontos (`:`), os **parâmetros** esperados.
+O único parâmetro necessário é o próprio **conteúdo** dentro de cada célula.
+Chamamos esse parâmetro padrão de `it`.
+Então, dentro do corpo da função retornamos o próprio `it`.
+
+Por enquanto, isso não modifica em nada o estilo.
+Nós queremos customizar uma célula apenas de ela estiver no **cabeçalho**.
+Ou seja, se ela estiver na primeira linha da tabela (linha `0`).
+Para isso, usamos novamente a expressão `if`.
+
+Dessa vez, não estamos recebendo o número da linha como parâmetro.
+Mas isso não é um problema, porque o parâmetro `it` guarda dentro de si todos os **atributos** da célula.
+Logo, podemos obter o número da linha com a expressão `it.y`.
+
+**Edite** a regra `#show` para ficar conforme abaixo.
+Nós usamos uma condicional para verificar se a linha é igual a `0`, e retornamos o `it` caso positivo.
+No caso de ser negativo, também retornamos o `it`, mas dentro da cláusula `else`.
+Isso ainda não gera nenhuma mudança de estilização.
+
+```typst title="recipe.typ" frame="code"
+#show table.cell: (it) => {
+  if it.y == 0 {
+    it
+  }
+  else {
+    it
+  }
+}
+```
+
+Agora sim, vamos **customizar** a célula.
+A primeira coisa a se fazer é definir uma cor de texto mais clara, dado que o fundo do cabeçalho é vermelho escuro.
+Use a regra **`#set`** para fazer isso.
+E se lembre de que não é necessário usar a cerquilha (`#`) dentro do corpo da função.
+
+```typst title="recipe.typ" frame="code" ins={3}
+#show table.cell: (it) => {
+  if it.y == 0 {
+    set text(fill: white)
+    it
+  }
+  else {
+    it
+  }
+}
+```
+
+Por fim, em vez de retornarmos diretamente o `it` no cabeçalho, vamos encapsulá-lo na função `#strong`, que define o **negrito**.
+
+```typst title="recipe.typ" frame="code" mark={4}
+#show table.cell: (it) => {
+  if it.y == 0 {
+    set text(fill: white)
+    strong(it)
+  }
+  else {
+    it
+  }
+}
+```
+
+<Figure caption="Renderização da seção de ingredientes com a tabela estilizada.">
+  <Image
+    src={rendering_styled_table}
+    alt={`Renderização da seção de ingredientes. Agora, a tabela apresenta as mudanças anteriores, mas o cabeçalho tem a cor do texto branca e usa negrito.`}
+  />
+</Figure>

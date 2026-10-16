@@ -124,14 +124,14 @@ A primeira coisa de que uma receita precisa é de um **título**.
 No Typst, a forma de definir títulos é com o símbolo de **igual** (`=`).
 Escreva o conteúdo a seguir no documento.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 = Bolo de chocolate
 ```
 
 Se quisermos escrever um **subtítulo**, bastaria usar dois símbolos de igual (`=`) seguidos.
 Veja o exemplo.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 = Bolo de chocolate
 == Ingredientes
 ```
@@ -139,7 +139,7 @@ Veja o exemplo.
 Para mais níveis, você pode usar mais **repetições** de `=`.
 Você pode adicionar quantos níveis quiser.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 = Nível 1
 == Nível 2
 === Nível 3
@@ -152,14 +152,14 @@ Além disso, o próprio símbolo de igual (`=`) é um atalho para a **função**
 Na [referência](https://typst.app/docs/reference/model/heading/) dessa função você pode conferir os vários parâmetros que ela possui.
 Por enquanto, o mais relevante é o `level`, que indica o nível.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #heading[Bolo de chocolate]
 #heading(level: 2)[Ingredientes]
 ```
 
 Mas, por enquanto, vamos remover tudo isso do documento `recipe.typ` e manter **apenas** o seguinte.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 = Bolo de chocolate
 ```
 
@@ -238,7 +238,7 @@ Ela recebe como parâmetro principal o **caminho** em que a imagem está.
 No nosso caso, ele é `/assets/bolo.jpg`.
 Adicione o seguinte ao documento.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #image("assets/bolo.jpg")
 ```
 
@@ -249,7 +249,7 @@ Essa imagem tem 1920 &times; 1280 px, então ela fica muito grande na página.
 Vamos definir a **altura** como 6 centímetros, que é um tamanho mais razoável.
 Perceba que a largura foi automaticamente ajustada para ficar proporcional.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #image(
   "assets/bolo.jpg",
   height: 6cm
@@ -259,7 +259,7 @@ Perceba que a largura foi automaticamente ajustada para ficar proporcional.
 Se quisermos fazer um banner, podemos fazer a imagem ocupar a **largura completa** da página, dentro das margens.
 Para isso, use um valor de porcentagem no parâmetro `width`.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #image(
   "assets/bolo.jpg",
   height: 6cm,
@@ -270,7 +270,7 @@ Para isso, use um valor de porcentagem no parâmetro `width`.
 Por padrão, a imagem é cortada para se **ajustar** às proporções customizadas.
 Se preferir que a imagem seja esticada em vez de cortada, você pode usar o parâmetro `fit` com o valor `stretch`.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #image(
   "assets/bolo.jpg",
   height: 6cm,
@@ -282,6 +282,6 @@ Se preferir que a imagem seja esticada em vez de cortada, você pode usar o par�
 Por enquanto, vamos manter apenas a forma mais **simples** de inclusão de imagem.
 Apague os experimentos que fizemos.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #image("assets/bolo.jpg")
 ```

@@ -124,6 +124,10 @@ export default defineConfig({
               label: "Customização",
               slug: "recipe/customization",
             },
+            {
+              label: "Funções",
+              slug: "recipe/functions",
+            },
           ],
           label: "Receita de bolo",
         },

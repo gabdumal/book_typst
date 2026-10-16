@@ -35,7 +35,7 @@ Ela recebe como parâmetro um bloco de texto delimitado por colchetes (`[...]`).
 Vamos fazer alguns testes com essa função.
 Copie o exemplo a seguir para o fim do documento.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #text[Restrições]
 ```
 
@@ -50,7 +50,7 @@ No caso do português brasileiro, o código é `"br"`.
 
 **Substitua** o exemplo anterior pelo a seguir.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #text(
   lang: "pt",
   region: "br",
@@ -68,7 +68,7 @@ Vamos utilizar a fonte ["Atkinson Hyperlegible Next"](https://www.brailleinstitu
 Também utilizamos a função `#lorem` para criar texto de enchimento de espaço.
 **Teste** o exemplo a seguir.
 
-```typst title="main.typ" frame="code" ins={4,8}
+```typst title="recipe.typ" frame="code" ins={4,8}
 #text(
   lang: "pt",
   region: "br",
@@ -83,7 +83,7 @@ Também utilizamos a função `#lorem` para criar texto de enchimento de espaço
 Ademais, para definir o **tamanho** do texto, utilizamos o parâmetro `size`, que recebe o valor em alguma medida tipográfica.
 Vamos utilizar `14 pt`.
 
-```typst title="main.typ" frame="code" ins={5}
+```typst title="recipe.typ" frame="code" ins={5}
 #text(
   lang: "pt",
   region: "br",
@@ -109,7 +109,7 @@ Primeiro, tire os colchetes (`[...]`) da função.
 Então, adicione o termo `set` logo após a cerquilha (`#`).
 Modifique o documento para ficar como o exemplo a seguir.
 
-```typst title="main.typ" frame="code" mark={1,6}
+```typst title="recipe.typ" frame="code" mark={1,6}
 #set text(
   lang: "pt",
   region: "br",
@@ -131,7 +131,7 @@ Por isso, é importante **mover** essa regra para o topo do documento.
 Leve-a para antes do título `= Bolo de chocolate`.
 Mantenha restante do documento sem mudanças.
 
-```typst title="main.typ" frame="code" ins={1-6} del={29}
+```typst title="recipe.typ" frame="code" ins={1-6} del={29}
 #set text(
   lang: "pt",
   region: "br",
@@ -183,7 +183,7 @@ Vamos alterar o parâmetro **`margin`** para ter o valor `32 pt`.
 Vários outros atributos podem ser customizados, conforme a [referência](https://typst.app/docs/reference/layout/page/).
 Adicione o código abaixo no **topo** do documento, para que ele seja aplicado sobre todo o conteúdo.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #set page(
   margin: 32pt,
 )
@@ -204,7 +204,7 @@ O Typst define algumas cores mais comuns, como pode ser visto em sua [referênci
 
 Adicione o código abaixo logo **antes** do título `= Bolo de chocolate`.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #let primary_color = color.red
 ```
 
@@ -215,7 +215,7 @@ Esse tipo de regra permite maior customização, como visto em sua [referência]
 Lembre-se de que os **títulos** são definidos pela função `#heading`, mesmo que nós estejamos usando o atalho do símbolo de igual (`=`).
 Dessa forma, para editá-los, podemos aplicar uma regra `#show` sobre a função `#heading`.
 
-```typst title="main.typ" frame="code"
+```typst frame="code"
 #show heading: // ...
 ```
 
@@ -224,21 +224,21 @@ No caso, queremos que o texto fique da cor que definimos.
 Para isso, usamos uma regra `#set` sobre a função `#text`, o que define seus atributos **padrão**.
 O uso da cerquilha (`#`) somente é necessário para introduzir a regra `#show`.
 
-```typst title="main.typ" frame="code"
+```typst frame="code"
 #show heading: set text()
 ```
 
 O parâmetro que define a **cor** do texto é o `fill`.
 Defina-o como a variável `primary_color`.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #show heading: set text(fill: primary_color)
 ```
 
 O **código** modificado fica como a seguir.
 Antes estão as definições da página e do texto, e depois estão as tabelas de informações da receita e a imagem.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 // ...
 
 #let primary_color = color.red
@@ -255,7 +255,7 @@ Na [referência](https://typst.app/docs/reference/visualize/color) de cores, pod
 Vamos usar o método `darken` para escurecer o tom em `30%`.
 Modifique a definição da cor principal como o exemplo a seguir.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #let primary_color = color.red.darken(30%)
 ```
 
@@ -272,7 +272,7 @@ Agora, vamos criar as **outras** cores temáticas.
 Adicione-as logo após a cor principal.
 Pesquise na referência como funcionam os ajustes definidos.
 
-```typst title="main.typ" frame="code" ins={2,3}
+```typst title="recipe.typ" frame="code" ins={2,3}
 #let primary_color = color.red.darken(30%)
 #let secondary_color = color.red.saturate(80%).lighten(85%)
 #let tertiary_color = color.rgb("FCF5E8").saturate(5%).lighten(60%)
@@ -285,7 +285,7 @@ Vamos customizar alguns **detalhes** antes de prosseguir para a próxima sessão
 Modifique o bloco de **texto** sem significado no fim do documento para ficar da seguinte forma.
 Trocamos a palavra "Restrições" pelo título secundário `= Ingredientes`.
 
-```typst title="main.typ" frame="code" mark={3}
+```typst title="recipe.typ" frame="code" mark={3}
 // ...
 
 == Ingredientes
@@ -301,7 +301,7 @@ Como especificado na [referência](https://typst.app/docs/reference/foundations/
 
 **Adicione** a seguinte regra adicional logo após a customização dos títulos.
 
-```typst title="main.typ" frame="code" ins={2}
+```typst title="recipe.typ" frame="code" ins={2}
 #show heading: set text(fill: primary_color)
 #show heading.where(level: 1): set block(below: 16pt)
 ```
@@ -312,7 +312,7 @@ Então, ela aplica um espaçamento de `16 pt` abaixo do título.
 Outra coisa que queremos fazer é adicionar uma **linha** de separação após a grade de informações, apenas para melhorar a estética.
 Logo após a grade, e logo antes do título `== Ingredientes`, adicione o seguinte código.
 
-```typst title="main.typ" frame="code" ins={3}
+```typst title="recipe.typ" frame="code" ins={3}
 // ...
 
 #line(length: 100%, stroke: primary_color)
@@ -325,7 +325,7 @@ Você pode consultar a [referência](https://typst.app/docs/reference/visualize/
 
 O código **completo** do documento deve ficar como a seguir.
 
-```typst title="main.typ" frame="code"
+```typst title="recipe.typ" frame="code"
 #set page(
   margin: 32pt,
 )
