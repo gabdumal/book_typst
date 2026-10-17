@@ -138,8 +138,21 @@ export default defineConfig({
         {
           items: [
             {
+              items: [
+                {
+                  label: "Introdução",
+                  slug: "scholar/article",
+                },
+                {
+                  label: "Configuração",
+                  slug: "scholar/article/configuration",
+                },
+                {
+                  label: "Conteúdo",
+                  slug: "scholar/article/content",
+                },
+              ],
               label: "Artigo científico",
-              slug: "scholar/article",
             },
           ],
           label: "Trabalhos acadêmicos",

@@ -1,5 +1,5 @@
 ---
-title: Artigo científico
+title: Configuração
 author: Gabriel Malosto
 ---
 
@@ -7,32 +7,9 @@ import { Image } from "astro:assets";
 
 import Figure from "@components/Figure.astro";
 
-import writing_screen from "@assets/content/docs/scholar/article/writing_screen.png";
 import editor_notes from "@assets/content/docs/scholar/article/editor_notes.png";
 
-Um dos usos mais comuns para ferramentas como o Typst é escrever **trabalhos acadêmicos**.
-No Brasil, existem normas que determinam a forma de redigir esses documentos.
-As mais conhecidas são mantidas pela [Associação Brasileira de Normas Técnicas (ABNT)](https://abnt.org.br/).
-
-Vamos usar o modelo **`quati-abnt`**.
-Ele pode ser usado para escrever artigos científicos e trabalhos acadêmicos (TCCs, dissertações, e teses).
-Você pode acessar sua página por [este link](https://typst.app/universe/package/quati-abnt/).
-
-**Acesse** a página do modelo `quati-abnt` e **clique** no botão "Create project in app".
-Isso vai abrir a tela de confirmação de criação.
-Dê ao documento o nome `Meu trabalho`, e **confirme**.
-
-O projeto criado pelo modelo contém duas **pastas**: `academic_work` e `article`.
-
-- `academic_work` guarda os arquivos necessários para criar um trabalho acadêmico, seja ele um TCC, uma dissertação ou uma tese.
-- `article` guarda os arquivos necessários para criar um artigo científico.
-
-<Figure caption="Tela de escrita do documento.">
-  <Image
-    src={writing_screen}
-    alt={`Página de edição do documento no web app do Typst. As duas principais seções são a parte esquerda, que contém um bloco de texto, e a direita, que contém a renderização em PDF do documento. O documento selecionado é o "main.typ" da pasta "article", que representa um artigo científico.`}
-  />
-</Figure>
+Agora que criamos o documento com base do modelo, precisamos **configurá-lo** conforme nossas necessidades.
 
 ## Importações
 
@@ -111,7 +88,7 @@ Por enquanto, basta saber que a lista de todos esses termos é definida com o no
 )
 ```
 
-## Configurações
+## Inicialização
 
 Voltando ao arquivo `main.typ`, essas próximas linhas inicializam o **glossário** com os termos definidos previamente no arquivo `data/glossary.typ`.
 Veja que elas estão usando a variável `glossaries_entries`, que foi importada no topo do arquivo.
@@ -275,4 +252,69 @@ Finalmente, inserimos os elementos **pós-textuais**, que estão no arquivo `pos
 
 ```typst title="main.typ" frame="code"
 #include "./content/post_textual.typ"
+```
+
+## Dados
+
+O primeiro passo para **configurar** o modelo conforme as suas necessidades é editar o arquivo `data.typ`, que fica dentro da pasta `data`.
+Ele guarda os **dados** do artigo e de seus autores.
+
+Sua primeira variável é chamada `title`, e define o **título** do trabalho.
+Edite o conteúdo dentro dos colchetes (`[...]`) conforme o título do seu artigo.
+
+```typst title="data/data.typ" frame="code" mark={4}
+// Title — required.
+// Título — obrigatório.
+#let title = {
+  [Guia de redação]
+}
+```
+
+A próxima variável é a `subtitle`, que define um **subtítulo** para o trabalho.
+Essa variável é opcional.
+Se você escrever um subtítulo, ele aparecerá separado do título pelo símbolo de dois-pontos (`:`).
+Além disso, o título principal ganha um destaque em negrito, enquanto o subtítulo permanece como texto comum.
+Caso você não queira especificar um subtítulo, apenas remova o bloco de texto cercado por colchetes (`[...]`).
+
+```typst title="data/data.typ" frame="code" del={4}
+// Subtitle — optional.
+// Subtítulo — opcional.
+#let subtitle = {
+  [artigo científico]
+}
+```
+
+A última variável de dados é a lista de **autores**, denominada `authors`.
+
+```typst title="data/data.typ" frame="code"
+// Authors — required.
+// Autores — obrigatório.
+#let authors = (
+  // ...
+)
+```
+
+Cada item da lista é um **dicionário**, que define as seguintes informações.
+
+- O **primeiro nome** é definido pelo atributo `first_name`.
+  - Caso o autor tenha um nome composto --- como Ana Maria ---, ambos os nomes devem ser registrados aqui.
+- O atributo `last_name` especifica o **último sobrenome** do autor.
+  - Este é o sobrenome destacado em caixa-alta nas referências. Portanto, apenas um deve ser fornecido.
+- Então, os **demais sobrenomes** devem ser especificados pelo atributo `middle_name`.
+  - Caso não haja mais sobrenomes, use o valor `none`.
+- O **gênero** do autor pode ser especificado pelo atributo `gender`.
+  - Ele aceita o valor `"f"` para feminino e `"m"` para masculino.
+- O atributo `curriculum` define a **instituição** do autor, e seu e-mail de **contato**.
+
+```typst title="data/data.typ" frame="code"
+(
+  first_name: [Gabriel],
+  middle_name: none,
+  last_name: [Malosto],
+  gender: "m",
+  curriculum: [
+    Universidade Federal de Juiz de Fora, Mestrando em Ciência da Computação, PPGCC.
+    E-mail: #link("mailto:professional@gabdumal.com").
+  ],
+),
 ```

@@ -1,0 +1,34 @@
+---
+title: Artigo científico
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import writing_screen from "@assets/content/docs/scholar/article/writing_screen.png";
+
+Um dos usos mais comuns para ferramentas como o Typst é escrever **trabalhos acadêmicos**.
+No Brasil, existem normas que determinam a forma de redigir esses documentos.
+As mais conhecidas são mantidas pela [Associação Brasileira de Normas Técnicas (ABNT)](https://abnt.org.br/).
+
+Vamos usar o modelo **`quati-abnt`**.
+Ele pode ser usado para escrever artigos científicos e trabalhos acadêmicos (TCCs, dissertações, e teses).
+Você pode acessar sua página por [este link](https://typst.app/universe/package/quati-abnt/).
+
+**Acesse** a página do modelo `quati-abnt` e **clique** no botão "Create project in app".
+Isso vai abrir a tela de confirmação de criação.
+Dê ao documento o nome `Meu trabalho`, e **confirme**.
+
+O projeto criado pelo modelo contém duas **pastas**: `academic_work` e `article`.
+
+- `academic_work` guarda os arquivos necessários para criar um trabalho acadêmico, seja ele um TCC, uma dissertação ou uma tese.
+- `article` guarda os arquivos necessários para criar um artigo científico.
+
+<Figure caption="Tela de escrita do documento.">
+  <Image
+    src={writing_screen}
+    alt={`Página de edição do documento no web app do Typst. As duas principais seções são a parte esquerda, que contém um bloco de texto, e a direita, que contém a renderização em PDF do documento. O documento selecionado é o "main.typ" da pasta "article", que representa um artigo científico.`}
+  />
+</Figure>
