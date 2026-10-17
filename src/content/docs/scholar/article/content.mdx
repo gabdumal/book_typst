@@ -125,3 +125,112 @@ Finalmente, o código a seguir **posiciona** os elementos nos lugares corretos.
 ```
 
 ## Glossário
+
+No texto dos resumos, utilizamos termos que estavam registrados no **glossário**.
+Nós estamos usando o pacote `glossarium`.
+Você pode ler sobre esse pacote em sua [página](https://typst.app/universe/package/glossarium/).
+
+**Abra** o arquivo `glossary.typ` dentro da pasta `data`.
+A primeira variável definida nele se refere às **abreviações** e siglas registradas.
+Ela é uma lista, em que cada item é um dicionário.
+O atributo principal de cada um é o `key`, que define o **rótulo** de uma entrada.
+
+```typst title="data/glossary.typ" frame="code" mark={3,9}
+#let abbreviations_entries = (
+  (
+    key: "abnt",
+    short: "ABNT",
+    long: "Associação Brasileira de Normas Técnicas",
+    group: "Normatização",
+  ),
+  (
+    key: "nbr",
+    short: "NBR",
+    plural: "NBRs",
+    long: "Norma Brasileira",
+    longplural: "Normas Brasileiras",
+    group: "Normatização",
+  ),
+)
+```
+
+Então, você pode definir a **sigla** por meio do atributo `short`.
+Caso a sigla no **plural** seja diferente, você pode usar o atributo `plural`.
+Em seguida, defina o **termo completo** com o atributo `long`.
+Ele também possui sua versão para o plural, que é o `longplural`.
+Finalmente, você pode definir que dado termo pertence a um **grupo** temático com o atributo `group`; ele é completamente opcional.
+
+Já para definições de **termos específicos**, você pode utilizar a variável `glossary_entries`.
+Seus itens apresentam os mesmos atributos que aqueles da lista anterior.
+Mas, neste caso, você não usa os atributos `long` e `longplural`.
+Em vez deles, é usado o `description`, que especifica o texto de descrição do verbete.
+
+```typst title="data/glossary.typ" frame="code" mark={7}
+#let glossary_entries = (
+  (
+    key: "rn",
+    short: "rede neural",
+    plural: "redes neurais",
+    custom: foreign_text[neural network],
+    description: [Em inglês, #foreign_text[neural network]. Modelo computacional composto por camadas de unidades interligadas que aprendem padrões em dados por meio de ajustes de pesos @li:2022:survey_convolutional_neural_networks.],
+    group: "Computação",
+  ),
+)
+```
+
+Aqui, eu também usei o atributo `custom` para salvar o termo em **inglês**, dado que é muito comum se referir a certos termos de computação diretamente nessa língua.
+
+**Volte** para o arquivo `pre_textual.typ` dentro da pasta `content`.
+No texto do **resumo** em português, usamos as abreviações "NBR" e "ABNT".
+
+```typst title="content/pre_textual.typ" frame="code"
+Este exemplo apresenta o uso do `quati-abnt`,
+modelo de artigo para o Typst segundo as @nbr:pl da @abnt.
+```
+
+O pacote `glossarium` gera um **atalho** para os termos do glossário por meio do símbolo de arroba (`@`).
+Para incluir uma abreviação, basta usar esse símbolo seguido do **rótulo** que havia sido definido pelo atributo `key`.
+Se quiser chamar a versão em **plural** do texto, adicione o símbolo de dois-pontos (`:`) ao final, e digite "pl".
+
+```typst frame="code"
+@abnt
+@nbr:pl
+```
+
+Na primeira vez em que uma **abreviação** aparece no texto, ela é renderizada com o seu significado dentro de parênteses (`(...)`) logo após.
+Além disso, todo termo do glossário usado gera um **link** para a sua entrada no glossário automaticamente montado no final do documento.
+
+O atalho do símbolo de arroba (`@`) efetivamente usa a **função** `#gls` do pacote `glossarium`.
+Você pode substituir o texto do resumo pelo disposto as seguir, sem que nenhuma mudança ocorra na renderização.
+
+```typst title="content/pre_textual.typ" frame="code"
+Este exemplo apresenta o uso do `quati-abnt`,
+modelo de artigo para o Typst segundo as
+#glossarium.gls("nbr", plural: true) da #glossarium.gls("abnt").
+```
+
+As diferenças que ocorrem ao utilizar diretamente a **função** é que o rótulo deve ser informado entre aspas (`"..."`).
+Além disso, para que um termo use o plural, não é aceito o atalho `:pl`.
+Agora, você deve definir o parâmetro `plural` como `true`.
+
+```typst frame="code"
+#glossarium.gls("nbr", plural: true)
+#glossarium.gls("abnt")
+```
+
+Outros atributos estão disponíveis para a função `#gls`.
+Por exemplo, o parâmetro `display` permite que você **sobrescreva** completamente qual será o texto exibido para aquela entrada.
+Isso foi usado no resumo em inglês.
+
+```typst title="content/pre_textual.typ" frame="code"
+This example presents the use of the `quati-abnt`,
+a paper template for Typst according to the
+#glossarium.gls("nbr", plural: true, display: "Brazilian Norms (NBRs)") from the
+#glossarium.gls("abnt", display: "Brazilian Association of Technical Norms (ABNT)").
+```
+
+E caso você não queira que uma entrada gere um **link** para o glossário no final do documento, basta definir o parâmetro `link` como `false`.
+
+```typst frame="code"
+#glossarium.gls("nbr", plural: true, link: false)
+```
