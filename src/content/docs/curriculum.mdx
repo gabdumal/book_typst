@@ -6,18 +6,30 @@ author: Gabriel Malosto
 import { Image } from "astro:assets";
 
 import Figure from "@components/Figure.astro";
+
 import quati_curriculum from "@assets/content/docs/curriculum/quati_curriculum.png";
 import select_template from "@assets/content/docs/curriculum/select_template.png";
-import icons_message from "@assets/content/docs/curriculum/icons_message.png";
+import rendering_icons_message from "@assets/content/docs/curriculum/rendering_icons_message.png";
+import writing_screen from "@assets/content/docs/curriculum/writing_screen.png";
+import download_options from "@assets/content/docs/curriculum/download_options.png";
+import placeholder from "@assets/content/docs/curriculum/placeholder.png";
+import tabler from "@assets/content/docs/curriculum/tabler.png";
+import editor_icons_message from "@assets/content/docs/curriculum/editor_icons_message.png";
+import rendering_section_template from "@assets/content/docs/curriculum/rendering_section_template.png";
+import rendering_section_colors from "@assets/content/docs/curriculum/rendering_section_colors.png";
 
 Construímos um documento inteiro do zero, e customizamos seu estilo da maneira como quisemos.
 
 Mas um dos pontos-chave do Typst é sua capacidade de usar **modelos** de documentos prontos, que já carregam toda a formatação necessária.
-Acesse a página [Typst Universe](https://typst.app/universe/).
-Ela lista todos os pacotes e modelos disponíveis para o Typst.
+
+## Modelo
 
 Neste capítulo, criaremos um documento baseado em um modelo de **currículo**, e editaremos seus campos.
-Esse modelo é chamado `quati-curriculum`, e sua página pode ser acessada por [este link](https://typst.app/universe/package/quati-curriculum).
+**Acesse** a página [Typst Universe](https://typst.app/universe/).
+Ela lista todos os pacotes e modelos disponíveis.
+
+O modelo que usaremos é chamado `quati-curriculum`, e sua página pode ser **acessada** por [este link](https://typst.app/universe/package/quati-curriculum).
+Ele permite customizar a fonte, as cores, e os ícones usados.
 
 <Figure caption="Página do modelo quati-curriculum.">
   <Image
@@ -43,5 +55,163 @@ Então, pressione o botão "Create".
 
 Então, o Typst criará o documento e **abrirá** sua página de edição e de renderização.
 
-Esse modelo requer uma configuração a mais para funcionar devidamente.
-O conjunto de ícones
+<Figure caption="Tela de escrita do documento.">
+  <Image
+    src={writing_screen}
+    alt={`Página de edição do documento no web app do Typst. As duas principais seções são a parte esquerda, que contém um bloco de texto, e a direita, que contém a renderização em PDF do documento. A página exibe uma mensagem sobre ter que baixar o pacote de ícones para que o modelo funcione corretamente.`}
+  />
+</Figure>
+
+## Ícones
+
+Esse modelo requer uma **configuração** a mais para funcionar devidamente, como descrito pela mensagem no documento.
+Devido à licença de propriedade intelectual, o conjunto de **ícones** não pode ser distribuído junto com o modelo.
+
+<Figure caption="Mensagem de configuração do pacote de ícones.">
+  <Image
+    src={rendering_icons_message}
+    alt={`Renderização do documento, em que se vê uma mensagem instruindo como baixar e configurar o conjunto de ícones.`}
+  />
+</Figure>
+
+Portanto, **acesse** [este link](https://ecstrema.github.io/iconify-typst/) para escolher o pacote de ícones.
+Esse site fornece várias opções de estilos de arte.
+O que vamos usar se chama `tabler`.
+Pesquise por ele na página e clique no botão de **download**.
+Isso vai baixar o arquivo `tabler.json`.
+
+<Figure caption="Opções de download de ícones.">
+  <Image
+    src={download_options}
+    alt={`Página de download de pacotes de ícones. Nove opções são exibidas na tela, dentre as quais o conjunto "Tabler" está destacado. Ela apresenta o botão de download.`}
+  />
+</Figure>
+
+Abra o menu de **explorar arquivos** do web app do Typst.
+Dentro da pasta `assets`, você verá que já existe um arquivo `tabler.json`.
+Ele é apenas um exemplo vazio, que não carrega os ícones reais.
+
+<Figure caption="Arquivo de ícones de exemplo.">
+  <Image
+    src={placeholder}
+    alt={`Menu de explorar arquivos do web app do Typst. Veem-se os arquivos "main.typ" e a pasta "assets". Dentro da pasta "assets", estão os arquivos "person.jpg", "pension.license.md", e "tabler.json". Na seção de edição de texto, vê-se que o conteúdo do arquivo "tabler.json" é só um exemplo.`}
+  />
+</Figure>
+
+**Apague** todo o conteúdo desse arquivo `assets/tabler.json`.
+
+Então, **copie** o conteúdo do arquivo `tabler.json` que baixamos, e **cole** no arquivo `assets/tabler.json` que está no Typst.
+
+<Figure caption="Arquivo de ícones real.">
+  <Image
+    src={tabler}
+    alt={`Menu de explorar arquivos do web app do Typst. Veem-se os arquivos "main.typ" e a pasta "assets". Dentro da pasta "assets", estão os arquivos "person.jpg", "pension.license.md", e "tabler.json". Na seção de edição de texto, vê-se que o conteúdo do arquivo "tabler.json" agora de fato representa o conjunto de ícones real.`}
+  />
+</Figure>
+
+Agora, **abra** novamente o arquivo `main.typ` no menu de explorar arquivos.
+Selecione todo o bloco de texto declarado pelo componente `#block`, que instrui como configurar o pacote de ícones, e então **apague-o**.
+
+<Figure caption="Editor de texto com mensagem de configuração do pacote de ícones.">
+  <Image
+    src={editor_icons_message}
+    alt={`Seção de edição de texto do documento, aberto no arquivo "main.typ", em que está destacada uma mensagem instruindo como baixar e configurar o conjunto de ícones.`}
+  />
+</Figure>
+
+Isso fará com que o currículo seja efetivamente **renderizado** como primeira página do documento.
+
+<Figure caption="Renderização de parte do documento.">
+  <Image
+    src={rendering_section_template}
+    alt={`Renderização da parte inicial do documento, configurado conforme as definições iniciais do modelo. Ele se inicia apresentando: o nome da pessoa, sua foto, seus dados básicos e de contato. Então, mostra uma seção dos dados de educação, em que se veem duas entradas.`}
+  />
+</Figure>
+
+## Módulos
+
+Veja a linha no topo do documento.
+Ela usa o comando `#import` para importar um **módulo** do Typst.
+No caso, estamos importando o pacote `quati-curriculum` na versão `0.1.0`.
+Ele está disponível no Typst Universe, portanto usamos o atalho `@preview` para localizá-lo.
+
+```typst title="main.typ" frame="code"
+#import "@preview/quati-curriculum:0.1.0": (
+  components.header, components.heading_icon, components.section, packages.icons.icon, packages.icons.provide-icons,
+  style.theme_colors, template,
+)
+```
+
+O comando `#import` pode importar pacotes do typst Universe, ou outros **arquivos** locais do seu projeto.
+Para entender melhor, acesse sua [referência](https://typst.app/docs/reference/foundations/module/).
+
+Depois do símbolo de dois-pontos (`:`), descrevemos quais **componentes** queremos importar do pacote.
+Todos eles são simplesmente variáveis ou **funções** customizadas do Typst, que foram escritas pelo autor do pacote.
+
+Por exemplo, o componente `components.header` é uma função **customizada** cuja implementação pode ser vista [nesta página](https://github.com/gabdumal/quati_curriculum/blob/main/src/components/header.typ) do seu repositório.
+Outra função importada é a **`template`**, cujo código está disposto [nesta página](https://github.com/gabdumal/quati_curriculum/blob/main/src/template.typ).
+
+Um modelo do Typst --- ou **_template_**, em inglês --- é simplesmente uma função customizada que aplicamos sobre todo o conteúdo do documento.
+Para fazer isso, usamos a expressão `#show`, como visto anteriormente.
+
+Então, fornecemos a função `template` depois da expressão `#show`.
+Para **customizarmos** as suas definições iniciais, usamos a funcionalidade **`with`**.
+No exemplo inicial, deixamos desativadas todas as linhas, então o modelo está seguindo as definições **padrão**.
+Sinta-se livre para modificá-las como desejar.
+
+```typst title="main.typ" frame="code"
+#show: template.with(
+  // You can customize the color palette.
+  colors: (
+    // primary: blue,
+    // secondary: white,
+    // dark: black,
+  ),
+  // You can customize the icon that is displayed at the bottom of the page.
+  //   background_detail: icon(
+  //     width: 20em,
+  //     "tabler:trees",
+  //   ),
+  // If you do not want to display any icon, use this definition instead.
+  //   background_detail: none
+)
+```
+
+Por exemplo, experimente ativar as customizações de **cores** como a seguir.
+
+```typst title="main.typ" frame="code"
+#show: template.with(
+  colors: (
+    primary: blue,
+    secondary: white,
+    dark: black,
+  ),
+)
+```
+
+Isso gerará um documento como o seguinte.
+
+<Figure caption="Renderização de parte do documento com cores customizadas.">
+  <Image
+    src={rendering_section_colors}
+    alt={`Renderização da parte inicial do documento, configurado com a cor de títulos e detalhes azul, com a cor do texto preta, e com a cor de fundo branca.`}
+  />
+</Figure>
+
+A outra opção de customização é o **ícone** decorativo que fica no canto inferior direito da página.
+Por padrão, é usado um ícone de duas árvores.
+Experimente esse código, que usa um ícone de uma CPU.
+Você pode usar qualquer ícone disponível no projeto [**Tabler icons**](https://tabler.io/icons).
+
+```typst title="main.typ" frame="code"
+#show: template.with(
+  background_detail: icon(
+    width: 20em,
+    "tabler:cpu",
+  ),
+)
+```
+
+Para as próximas etapas, vamos manter as configurações **padrão** mesmo.
+
+## Componentes
