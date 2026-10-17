@@ -215,3 +215,115 @@ Você pode usar qualquer ícone disponível no projeto [**Tabler icons**](https:
 Para as próximas etapas, vamos manter as configurações **padrão** mesmo.
 
 ## Componentes
+
+O primeiro componente que usamos nesse modelo é o **cabeçalho** do currículo.
+Ele é definido pela função `#header`.
+Para definir o seu primeiro **nome**, use o parâmetro `first_name`; já para definir seu sobrenome, use o `last_name`.
+
+```typst title="main.typ" frame="code" mark={2,3}
+#header(
+  first_name: "Gabriel",
+  last_name: "Gonçalves",
+  picture: image("assets/person.jpg"),
+  contact_information: (
+    // ...
+  )
+```
+
+Definir uma **imagem** é opcional.
+Se você não quiser usar uma imagem, **defina** o atributo `picture` com o valor `none`.
+
+```typst title="main.typ" frame="code" mark={4}
+#header(
+  first_name: "Gabriel",
+  last_name: "Gonçalves",
+  picture: none,
+  contact_information: (
+    // ...
+  )
+```
+
+Já se você quiser, **delete** o arquivo `person.jpg` dentro da pasta `assets`.
+Escolha a foto que você quer usar, e faça **upload** dela para dentro da pasta `assets`.
+Finalmente, **edite** o código do cabeçalho para usar o nome da sua imagem.
+
+```typst title="main.typ" frame="code" mark={4}
+#header(
+  first_name: "Gabriel",
+  last_name: "Gonçalves",
+  picture: image("assets/minha_imagem.png"),
+  contact_information: (
+    // ...
+  )
+```
+
+O último parâmetro é a lista de **informações** básicas e de contato, `contact_information`.
+Cada entrada na lista é um dicionário composto por três atributos.
+
+1. `icon`: é o **ícone** decorativo, que pode ser escolhido do conjunto [Tabler Icons](https://tabler.io/icons).
+1. `info`: é o **texto** que será exibido de fato ao lado do ícone.
+1. `url`: é um parâmetro opcional; quando informado, ele faz com que o texto seja um **link** que aponta para este endereço.
+
+```typst title="main.typ" frame="code"
+(
+  icon: "tabler:brand-linkedin",
+  info: "gabrielgoncalves",
+  url: "https://www.linkedin.com/in/gabrielgoncalves",
+),
+```
+
+Depois de configurar o cabeçalho, podemos iniciar as **seções** de informações.
+Para abrir uma seção no Typst, utilizamos o atalho do símbolo de igual (`=`), que serve para registrar um título.
+
+Então, usamos uma função customizada chamada `#heading_icon` para incluir um **ícone** decorativo.
+Por fim, podemos escrever o **nome** da seção.
+O título da seção de educação fica como a seguir.
+
+```typst title="main.typ" frame="code"
+= #heading_icon("tabler:books") Educação
+```
+
+Agora, para incluir um bloco de **atividades**, usamos o componente customizado `#section`.
+Ele funciona como uma **grade**, que tem duas colunas e três linhas, sendo que a célula da terceira linha ocupa ambas as colunas.
+
+A primeira célula, nas primeira linha, é definida pelo parâmetro `r1c1`, e serve para escrever o **nome** da atividade.
+No fim dessa mesma linha, a célula `r1c2` é usada para registrar o **período** de experiência.
+Na linha de baixo, `r2c1` lista a **instituição**, e `r2c2` mostra a **localidade**.
+Finalmente, `r3` permite descrever em mais **detalhes**.
+Todos os parâmetros são opcionais.
+
+```typst title="main.typ" frame="code"
+#section(
+  r1c1: "Mestrado em Ciência da Computação",
+  r1c2: [2017 #sym.dash.en 2019],
+  r2c1: "Universidade Estadual de Campinas (Unicamp)",
+  r2c2: "Campinas, SP",
+  r3: [
+    - Pesquisa em algoritmos de aprendizado de máquina.
+    - Desenvolvimento de projetos de software para análise de dados.
+  ],
+)
+```
+
+As demais seções seguem com a mesma lógica.
+Você ainda pode colocar as informações diretamente no **texto**, caso ache componente `#section` complexo demais.
+Por exemplo, a seção de habilidades utiliza subseções e listas.
+
+```typst title="main.typ" frame="code"
+= #heading_icon("tabler:sparkles") Habilidades
+
+== #heading_icon("tabler:device-desktop-code") Programação
+
+- *Linguagens de Programação:* Python, JavaScript, Java, C#sym.hash
+- *Frameworks:* React, Node.js, Django, Spring Boot
+
+== #heading_icon("tabler:tools") Ferramentas
+
+- *Controle de Versão:* Git, GitHub, GitLab
+- *Plataformas de Nuvem:* AWS, Azure, Google Cloud
+- *Outras:* Docker, Kubernetes, Jenkins
+
+== #heading_icon("tabler:language") Idiomas
+
+- *Inglês:* Fluente. Curso #link("https://www.gov.br/mec/pt-br/mec-idiomas", "MEC Idiomas").
+```
