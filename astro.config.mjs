@@ -103,10 +103,6 @@ export default defineConfig({
           slug: "introduction",
         },
         {
-          label: "Fundamentos",
-          slug: "foundation",
-        },
-        {
           label: "Primeiro documento",
           slug: "first",
         },
@@ -138,6 +134,15 @@ export default defineConfig({
         {
           label: "Currículo",
           slug: "curriculum",
+        },
+        {
+          items: [
+            {
+              label: "Artigo científico",
+              slug: "scholar/article",
+            },
+          ],
+          label: "Trabalhos acadêmicos",
         },
       ],
 

@@ -1,0 +1,278 @@
+---
+title: Artigo científico
+author: Gabriel Malosto
+---
+
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import writing_screen from "@assets/content/docs/scholar/article/writing_screen.png";
+import editor_notes from "@assets/content/docs/scholar/article/editor_notes.png";
+
+Um dos usos mais comuns para ferramentas como o Typst é escrever **trabalhos acadêmicos**.
+No Brasil, existem normas que determinam a forma de redigir esses documentos.
+As mais conhecidas são mantidas pela [Associação Brasileira de Normas Técnicas (ABNT)](https://abnt.org.br/).
+
+Vamos usar o modelo **`quati-abnt`**.
+Ele pode ser usado para escrever artigos científicos e trabalhos acadêmicos (TCCs, dissertações, e teses).
+Você pode acessar sua página por [este link](https://typst.app/universe/package/quati-abnt/).
+
+**Acesse** a página do modelo `quati-abnt` e **clique** no botão "Create project in app".
+Isso vai abrir a tela de confirmação de criação.
+Dê ao documento o nome `Meu trabalho`, e **confirme**.
+
+O projeto criado pelo modelo contém duas **pastas**: `academic_work` e `article`.
+
+- `academic_work` guarda os arquivos necessários para criar um trabalho acadêmico, seja ele um TCC, uma dissertação ou uma tese.
+- `article` guarda os arquivos necessários para criar um artigo científico.
+
+<Figure caption="Tela de escrita do documento.">
+  <Image
+    src={writing_screen}
+    alt={`Página de edição do documento no web app do Typst. As duas principais seções são a parte esquerda, que contém um bloco de texto, e a direita, que contém a renderização em PDF do documento. O documento selecionado é o "main.typ" da pasta "article", que representa um artigo científico.`}
+  />
+</Figure>
+
+## Importações
+
+O **arquivo** selecionado para exibição por padrão é o `article/main.typ`.
+As primeiras linhas dele usam o comando `#import` para **importar** outros arquivos localizados na mesma pasta `assets`.
+Você pode consultar mais detalhes sobre esse comando em sua [referência](https://typst.app/docs/reference/foundations/module/).
+
+```typst title="main.typ" frame="code"
+#import "./components.typ": *
+#import "./data/glossary.typ": glossaries_entries
+#import "./packages.typ": *
+```
+
+O primeiro arquivo listado é o `components.typ`.
+Ele é usado para organizar os **componentes** importados do **modelo**.
+Não precisa se preocupar com essa grande quantidade de linhas, nós entenderemos as funções pouco a pouco, conforme forem usadas.
+
+```typst title="components.typ" frame="code"
+#import "./packages.typ": (
+  quati-abnt.article.components.print_people, quati-abnt.article.components.print_person,
+  quati-abnt.bibliography.cite_prose, quati-abnt.common.components.describe_figure,
+  quati-abnt.common.components.equation, quati-abnt.common.components.foreign_text,
+  quati-abnt.common.components.format_table, quati-abnt.common.components.source_for_content_created_by_authors,
+  quati-abnt.note.closed_discussion_note, quati-abnt.note.create_status_note, quati-abnt.note.done_note,
+  quati-abnt.note.editor_note, quati-abnt.note.open_discussion_note, quati-abnt.note.progress_note,
+  quati-abnt.note.todo_note,
+)
+```
+
+Ainda nesse arquivo `components.typ`, você pode definir seus próprios componentes **customizados** para usar por todo o documento.
+Deixei alguns exemplos de componentes já prontos para a customização.
+
+O componente a seguir define uma **nota de editor** customizada para o autor Gabriel.
+Veremos mais tarde como essas notas funcionam.
+Você pode customizar com seu próprio nome, e criar outras notas para os demais autores do artigo, e atribuir cores específicas para as notas de cada um.
+
+```typst title="components.typ" frame="code"
+#let note_from_gabriel = (
+  note: editor_note,
+  it,
+) => {
+  let color = oklch(80.43%, 0.1, 278.25deg)
+  note(
+    prefixes: (
+      (
+        fill: color,
+        body: "Gabriel",
+        stroke: color.saturate(25%),
+      ),
+    ),
+    it,
+  )
+}
+```
+
+Outro arquivo importado pelo `main.typ` é o `packages.typ`.
+Ele simplesmente separa a importação dos **pacotes** auxiliares que usamos no projeto.
+Nós usamos o pacote `quati-abnt`, e o pacote `glossarium`, que gerencia um glossário para nosso documento.
+
+```typst title="packages.typ" frame="code"
+#import "@preview/quati-abnt:0.2.0" as quati-abnt
+#let glossarium = quati-abnt.common.packages.glossarium
+```
+
+Finalmente, é importado o arquivo `data/glossary.typ`.
+A pasta `data` contém um conjunto de arquivos úteis para definir **dados** e **termos comuns** para todo o projeto.
+Esse arquivo em específico serve para definir abreviações, termos técnicos, e símbolos que devem aparecer em um **glossário**.
+Voltaremos a ele mais tarde.
+Por enquanto, basta saber que a lista de todos esses termos é definida com o nome `glossaries_entries`.
+
+```typst title="data/glossary.typ" frame="code"
+#let glossaries_entries = (
+  ..abbreviations_entries,
+  ..glossary_entries,
+  ..symbols_entries,
+)
+```
+
+## Configurações
+
+Voltando ao arquivo `main.typ`, essas próximas linhas inicializam o **glossário** com os termos definidos previamente no arquivo `data/glossary.typ`.
+Veja que elas estão usando a variável `glossaries_entries`, que foi importada no topo do arquivo.
+
+```typst title="main.typ" frame="code"
+// ## Glossary. Glossário.
+#show: glossarium.make-glossary
+#glossarium.register-glossary(glossaries_entries)
+```
+
+Em seguida, estão as configurações do **modelo** por meio das funções `template`.
+O pacote `quati-abnt` é modular.
+Ele permite utilizar e configurar separadamente as funcionalidades de: links, referências bibliográficas, notas de editor, e do artigo científico em si.
+
+A primeira configuração é do módulo de **links**.
+O seu único parâmetro é a **cor** dos links pelo texto.
+O valor definido pela variável `color_of_links` é um azul escuro.
+Se você quiser que os links sejam da mesma cor que o texto comum, você pode definir o atributo como `none`.
+Ou, ainda, pode escolher qualquer outra cor que mais lhe agrade.
+
+```typst title="main.typ" frame="code"
+#show: it => quati-abnt.link.template(
+  it,
+  // Define the color of links and cross-references.
+  // Defina a cor dos links e das referências cruzadas.
+  color_of_links: quati-abnt.link.color_of_links,
+)
+```
+
+Em seguida, o documento ativa o módulo de **referências bibliográficas**.
+Esse módulo não recebe nenhuma opção de customização.
+Ainda assim, essa linha é importante, pois ela faz com que as referências no fim do texto sejam formatadas conforme as normas da ABNT.
+
+```typst title="main.typ" frame="code"
+#show: it => quati-abnt.bibliography.template(it)
+```
+
+Então, está disposta a inicialização do módulo de **notas de editor**.
+Elas são esses blocos de texto coloridos, que você pode usar para indicar o estado de andamento de alguma seção, ou para deixar comentários para a sua equipe.
+
+<Figure caption="Notas de editor.">
+  <Image
+    src={editor_notes}
+    alt={`Renderização de notas de editor. Ambas são retângulos com cantos arredondados. A primeira mostra o nome "Alice" no canto superior esquerdo destacado em rosa; já o restante está em um fundo branco, em que se lê "Nota da Alice". Já a segunda tem o nome "Gabriel" destacado em roxo; ao lado, também há o destaque da palavra "AFAZER" em amarelo; o fundo do restante da nota é amarelo, e lê-se "Nota de afazeres do Gabriel".`}
+  />
+</Figure>
+
+Na inicialização, você pode customizar a família tipográfica da **fonte** utilizada nas notas por meio do parâmetro `font_family_for_notes`.
+Além disso, é importante que as notas não estejam **visíveis** na exportação do documento final.
+Para **escondê-las**, defina o atributo `should_display_notes` como `false`.
+
+```typst title="main.typ" frame="code"
+#show: it => quati-abnt.note.template(
+  it,
+  // Define the font family.
+  // Defina a família tipográfica.
+  font_family_for_notes: quati-abnt.common.style.font_family_sans,
+  // Define whether to display editor notes.
+  // Defina se deve exibir as notas de editor.
+  should_display_notes: true,
+)
+```
+
+Finalmente, chegamos à inicialização do modelo de **artigo científico** em si.
+A primeira definição disponível é referente ao **tamanho da fonte** usada no texto.
+A ABNT não determina um tamanho específico, mas é usual definir como `12 pt`.
+Por isso, a variável `base_font_size` já apresenta esse valor.
+
+```typst title="main.typ" frame="code"
+#show: it => quati-abnt.article.template(
+  it,
+
+  // Define the font size for common text.
+  // Defina o tamanho de fonte para o texto comum.
+  base_font_size: quati-abnt.common.style.base_font_size,
+
+  // ...
+)
+```
+
+Em seguida, apresentam-se uma série de parâmetros que permitem mudar as **famílias tipográficas** usadas no texto em diferentes contextos.
+A ABNT não determina uma fonte específica a ser usada.
+Ela apenas recomenda que se use uma fonte "padrão e uniforme".
+Nesse sentido, organizamos os seguintes contextos.
+
+- O texto **comum** --- dos parágrafos, ilustrações, tabelas, e etc. --- usa uma fonte com serifa. Por padrão, usamos a "Liberation Serif", que busca se assemelhar à "Times New Roman".
+- O texto de **destaque** --- usado nos títulos --- tem uma fonte sem serifa. Por padrão, usamos a "Liberation Sans", que busca se assemelhar à "Arial".
+- Os caracteres em ambientes de **matemática** usam uma fonte específica do domínio. Por padrão, usamos a "New Computer Modern Math".
+- O texto em ambientes de **código** usa uma fonte monoespaçada. Por padrão usamos a "Liberation Mono".
+
+```typst title="main.typ" frame="code"
+// Define the font family to be used on each context.
+// Defina a família tipográfica a ser utilizada em cada contexto.
+font_family_for_common_text: quati-abnt.common.style.font_family_serif,
+font_family_for_highlighted_text: quati-abnt.common.style.font_family_sans,
+font_family_for_math_text: quati-abnt.common.style.font_family_math,
+font_family_for_monospaced_text: quati-abnt.common.style.font_family_mono,
+```
+
+Para respeitar a recomendação da ABNT de um tamanho uniforme de fonte, o modelo faz o **realce** dos títulos usando caixa-alta, negrito, e itálico, a depender do nível.
+Caso você prefira usar um tamanho maior de fonte nos títulos em vez de usar caixa-alta, mude o seguinte parâmetro para `true`.
+
+```typst title="main.typ" frame="code"
+// Define whether to use larger text as typographic highlight instead of uppercase.
+// Defina se deve ser utilizada uma fonte maior como destaque tipográfico em vez de caixa-alta.
+should_use_larger_text_instead_of_uppercase_to_highlight: false,
+```
+
+Por último, o parâmetro `should_number_pages` permite a você decidir se quer que o modelo adicione o **número da página** atual ao cabeçalho.
+Caso você esteja escrevendo um trabalho independente, é bom deixar essa opção ativa.
+Contudo, quando você publica um artigo para uma revista, é comum que você não numere as páginas, e deixe o editor da revista encaixar seu trabalho na melhor posição.
+Nesse caso, defina a opção como `false`.
+
+```typst title="main.typ" frame="code"
+// Define whether to count pages and place its numbers at the headers.
+// Defina se deve contar as páginas e exibir seus números nos cabeçalhos.
+should_number_pages: true,
+```
+
+E, para concluir a configuração do modelo, o módulo `footnote` formata a exibição de **notas de rodapé**.
+Ele não requer nenhum parâmetro.
+
+```typst title="main.typ" frame="code"
+#show: it => quati-abnt.footnote.template(it)
+```
+
+## Composição
+
+As demais linhas do arquivo `main.typ` organizam onde cada **parte** do documento será **posicionada**.
+
+A parte inicial do documento contém os **elementos pré-textuais**, como o título, a lista de autores e o resumo.
+Para melhorar a organização, nós escrevemos o conteúdo dessas seções no arquivo `pre_textual.typ`, que está dentro da pasta `content`.
+
+Então, para **encaixá-las** no texto, utilizamos o comando `#include`.
+Ele simplesmente **copia** todo o conteúdo do arquivo incluído para onde o comando foi colocado.
+
+```typst title="main.typ" frame="code"
+// ## Content. Conteúdo.
+
+// ### Pre-textual elements. Elementos pré-textuais.
+#include "./content/pre_textual.typ"
+```
+
+Inserimos, em seguida, os elementos **textuais**, que estão no arquivo `main.typ`, dentro da pasta `textual`, que, por sua vez, está dentro da pasta `content`.
+
+```typst title="main.typ" frame="code"
+// ### Textual elements. Elementos textuais.
+#include "./content/textual/main.typ"
+```
+
+Então, inserimos a seção que lista as **referências bibliográficas** usadas no documento.
+Isso é feito por meio da função `#bibliography`.
+Ela recebe como parâmetro a localização do arquivo onde estão os dados de bibliografia no formato [BibTeX](https://www.bibtex.org/).
+
+```typst title="main.typ" frame="code"
+// ### Bibliography. Referências.
+#bibliography("./data/bibliography.bib")
+```
+
+Finalmente, inserimos os elementos **pós-textuais**, que estão no arquivo `post_textual.typ` dentro da pasta `content`.
+
+```typst title="main.typ" frame="code"
+#include "./content/post_textual.typ"
+```
