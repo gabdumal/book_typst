@@ -60,4 +60,158 @@ Inclusive, lá é explicado como mudar o estilo da referência e customizá-la.
 Esta é a #ref(<seção:introdução>), de introdução.
 ```
 
-## Citação
+## Citações
+
+Sempre que incluímos no artigo algum texto ou alguma tese de autoria de outra pessoa, precisamos **citar** a origem do conteúdo.
+
+Vamos começar pensando no caso de uma **citação direta**, tirada de um livro.
+Citaremos um trecho da página 15 do livro "O que eu vi, o que nós veremos", escrito em 1918 por Santos Dumont.
+
+```typst frame="code"
+--- Quero um balão de cem metros cúbicos.
+
+Grande espanto!
+Creio mesmo que pensaram que eu era doido.
+Alguns meses depois, o "Brasil", com grande espanto de todos os entendidos, atravessava Paris, lindo na sua transparência, como uma grande bola de sabão
+```
+
+A ABNT determina que frases que ocupam **mais de três linhas** devem estar destacadas e alinhadas à direita com um tamanho de fonte menor.
+
+Para garantir que essa **formatação** esteja sempre correta, utilizamos a função **`#quote`**.
+Consulte sua [referência](https://typst.app/docs/reference/model/quote/) para entender diferentes formas de uso.
+Especificamente, devemos utilizar seu parâmetro `block` com o valor `true`, para que a formatação específica seja ativada.
+
+```typst title="content/textual/main.typ" frame="code"
+#quote(
+  block: true,
+)[
+  --- Quero um balão de cem metros cúbicos.
+
+  Grande espanto!
+  Creio mesmo que pensaram que eu era doido.
+  Alguns meses depois, o "Brasil", com grande espanto de todos os entendidos, atravessava Paris, lindo na sua transparência, como uma grande bola de sabão
+]
+```
+
+A formatação está correta, mas ainda não fizemos a **atribuição** da autoria do trecho.
+Para fazermos isso, precisamos falar sobre o arquivo `bibliography.bib`, que fica dentro da pasta `data`.
+Ele é responsável por guardar os dados **bibliográficos**.
+Abra-o, e veja que a primeira entrada é justamente referente ao livro que citamos.
+
+```bibtex title="data/bibliography.bib" frame="code"
+@book{dumont:1918:o_que_eu_vi_o_que_nos_veremos,
+  address   = {São Paulo},
+  author    = {Dumont, Alberto Santos},
+  edition   = {1},
+  publisher = {Wikisource},
+  title     = {O que eu vi, o que nós veremos},
+  url       = {https://pt.wikisource.org/wiki/O_que_eu_vi,_o_que_n%C3%B3s_veremos},
+  urldate   = {2025-08-02},
+  year      = {1918},
+}
+```
+
+Essa entrada é definida no formato [**BibTeX**](https://www.bibtex.org/), que é um padrão de referências bastante usado no ecossistema LaTeX.
+A primeira definição da entrada é o seu tipo, que deve ser um dos presentes na [referência](https://www.bibtex.org/EntryTypes/).
+No caso, usamos o `@book`.
+
+Em seguida, abrimos chaves (`{...}`) e escrevemos um **nome** qualquer para a entrada.
+Eu gosto de usar o padrão `autor:ano:nome`, porque ajuda a entender como aquela entrada vai ser citada no texto.
+A ABNT determina que uma referência seja identificada pelo último sobrenome do primeiro autor, e pelo ano de publicação.
+
+Então, você deve preencher os **campos** da entrada de acordo com as informações necessárias para o tipo da publicação.
+A [referência](https://www.bibtex.org/Format/) determina os atributos mais comuns.
+Um destaque nessa entrada é que o livro em questão está disponível remotamente pela Wikisource.
+Portanto, incluímos os campos `url` e `urldate` --- este segundo representa a data em que nós acessamos o link pela última vez.
+
+A outra entrada no arquivo se trata de um artigo publicado numa revista periódica.
+Destacamos nela o campo `author`, que lista os autores.
+Para cada **autor**, você deve escrever o último sobrenome na frente, separar por vírgula (`,`), e escrever o restante do nome normalmente.
+Para separar um autor do outro, utilize a palavra `and`.
+Além disso, sempre que possível, preencha o campo DOI do artigo.
+
+```bibtex title="data/bibliography.bib" frame="code"
+@article{li:2022:survey_convolutional_neural_networks,
+  author   = {Li, Zewen and Liu, Fan and Yang, Wenjie and Peng, Shouheng and Zhou, Jun},
+  doi      = {10.1109/TNNLS.2021.3084827},
+  journal  = {IEEE Transactions on Neural Networks and Learning Systems},
+  keywords = {Convolutional neural networks;Feature extraction;Neurons;Deep learning;Computer vision;Computer vision;convolutional neural networks (CNNs);deep learning;deep neural networks},
+  number   = {12},
+  pages    = {6999-7019},
+  title    = {A Survey of Convolutional Neural Networks: Analysis, Applications, and Prospects},
+  url      = {https://doi.org/10.1109/TNNLS.2021.3084827},
+  urldate  = {2025-01-31},
+  volume   = {33},
+  year     = {2022},
+}
+```
+
+Agora que entendemos como a bibliografia funciona, podemos modificar a **citação** do trecho para incluir a autoria.
+Para isso, utilizamos o parâmetro `attribution` da função `#quote` e abrimos um bloco com colchetes (`[...]`).
+
+```typst title="content/textual/main.typ" frame="code"
+#quote(
+  attribution: [
+    @dumont:1918:o_que_eu_vi_o_que_nos_veremos[p. 15].
+  ],
+  block: true,
+)[
+  --- Quero um balão de cem metros cúbicos.
+
+  Grande espanto!
+  Creio mesmo que pensaram que eu era doido.
+  Alguns meses depois, o "Brasil", com grande espanto de todos os entendidos, atravessava Paris, lindo na sua transparência, como uma grande bola de sabão
+]
+```
+
+Da mesma forma que fizemos para referenciar um rótulo, utilizamos o símbolo de arroba (`@`) para **incluir** uma entrada da bibliografia.
+Então, escrevemos o nome que havíamos dado para a entrada.
+Sabemos que o trecho citado está na página 15 do livro.
+Portanto, podemos abrir colchetes (`[...]`) logo depois do nome para adicionar esse detalhe (`p. 15`).
+
+```typst frame="code"
+@dumont:1918:o_que_eu_vi_o_que_nos_veremos[p. 15]
+```
+
+Você também pode usar a função **`#cite`**, que tem a mesma funcionalidade.
+Para citar a entrada, cerque-a pelos símbolos `<...>`.
+Já para incluir o detalhe no final use o parâmetro `supplement`.
+Você pode ler mais detalhes na [referência](https://typst.app/docs/reference/model/cite/).
+
+```typst frame="code"
+#cite(<dumont:1918:o_que_eu_vi_o_que_nos_veremos>, supplement: [p. 15])
+```
+
+Se quisermos fazer uma citação direta com **menos de três linhas**, basta cercá-la de aspas (`"..."`) e adicionar a referência para a entrada no final.
+Adicione o trecho a seguir no documento para ver a sua renderização.
+
+```typst title="content/textual/main.typ" frame="code"
+Então, ele disse:
+"Quero um balão de cem metros cúbicos" @dumont:1918:o_que_eu_vi_o_que_nos_veremos[p. 15].
+```
+
+Nós também podemos incluir a autoria diretamente no **texto**, em vez de adicioná-la entre parênteses ao final da frase.
+Isso é chamado de forma de **prosa**, enquanto a forma que usa os parênteses é chamada de forma **parentética**.
+
+A ABNT especifica uma formatação diferente para as duas.
+Como é mais comum usarmos a forma parentética, o modelo faz dessa a formatação padrão.
+Caso queiramos usar a forma de **prosa**, podemos utilizar uma função customizada chamada **`#cite_prose`**.
+Ela funciona com os mesmos atributos da função `#cite`.
+Adicione o exemplo a seguir no documento.
+
+```typst title="content/textual/main.typ" frame="code"
+Então, #cite_prose(<dumont:1918:o_que_eu_vi_o_que_nos_veremos>, supplement: [p. 15]) disse:
+"Quero um balão de cem metros cúbicos".
+```
+
+Finalmente, uma **citação indireta** não requer nem um destaque de formatação, nem o uso de aspas.
+Basta escrever sobre a tese, e citar a autoria pela forma parentética ou de prosa.
+Adicione os exemplos abaixo ao documento.
+
+```typst title="content/textual/main.typ" frame="code"
+O inventor requereu um balão de cem metros cúbicos, mas seus colegas ficaram espantados com o pedido.
+Mesmo assim, em alguns meses, ele havia criado o balão "Brasil", que executou um voo sobre Paris @dumont:1918:o_que_eu_vi_o_que_nos_veremos.
+
+#cite_prose(<dumont:1918:o_que_eu_vi_o_que_nos_veremos>) requereu um balão de cem metros cúbicos, mas seus colegas ficaram espantados com o pedido.
+Mesmo assim, em alguns meses, ele havia criado o balão "Brasil", que executou um voo sobre Paris.
+```
