@@ -138,14 +138,18 @@ export default defineConfig({
         {
           items: [
             {
+              label: "Introdução",
+              slug: "scholar",
+            },
+            {
               items: [
-                {
-                  label: "Introdução",
-                  slug: "scholar/article",
-                },
                 {
                   label: "Configuração",
                   slug: "scholar/article/configuration",
+                },
+                {
+                  label: "Pré-textual",
+                  slug: "scholar/article/pre_textual",
                 },
                 {
                   label: "Conteúdo",

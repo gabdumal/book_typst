@@ -1,0 +1,236 @@
+---
+title: Pré-textual
+author: Gabriel Malosto
+---
+
+Vamos escrever os **elementos pré-textuais** do artigo.
+Acesse o arquivo `pre_textual.typ` dentro da pasta `content`.
+
+## Língua estrangeira
+
+Sua primeira definição é o **título** do trabalho em **língua estrangeira**.
+Caso você não precise localizar seu trabalho para uma outra língua, remova todo o conteúdo dentro das chaves (`{...}`), e substitua o valor da variável por `none`.
+
+```typst title="content/pre_textual.typ" frame="code"
+// ## Title in foreign language. Título em língua estrangeira.
+#let title_in_foreign_language = {
+  print_title(
+    title: {
+      foreign_text[Writing guide]
+    },
+    subtitle: {
+      foreign_text[scientific paper]
+    },
+  )
+}
+```
+
+Essa função `#foreign_text` é uma função customizada por mim, que define o texto dentro dos colchetes (`[...]`) para uma outra **língua**, e aplica itálico.
+Por padrão, a língua secundária é inglês dos Estados Unidos.
+Mas você pode mudar a língua utilizando os parâmetros `lang` e `region`.
+
+```typst frame="code"
+#foreign_text(lang: "es", region: "mx")[Guía de redacción]
+```
+
+Além disso, caso a lingua estrangeira que você mais vai usar não seja o inglês, você pode customizar os **parâmetros padrão** dessa função.
+Para isso, adicione o seguinte código no final do arquivo `components.typ`.
+Edite os valores do idioma e da região conforme quiser.
+
+```typst title="components.typ" frame="code"
+#let foreign_text = it => foreign_text(lang: "es", region: "mx", it)
+```
+
+## Resumo
+
+A próxima definição dos elementos pré-textuais é o **resumo**.
+O atributo `keywords` espera uma lista das **palavras-chave** do artigo.
+É recomendado citar entre 3 e 5, as quais devem iniciar em letra minúscula, exceto se forem nomes próprios.
+Então, você pode escrever o texto do resumo dentro dos colchetes (`[...]`) após o atributo `body`.
+
+```typst title="content/pre_textual.typ" frame="code"
+// ## Abstract. Resumo.
+
+// ### Abstract in main language. Resumo em língua principal.
+#let abstract_in_main_language = {
+  (
+    keywords_title: "Palavras-chave",
+    keywords: (
+      "modelo",
+      "artigo",
+      "ABNT",
+      "Typst",
+    ),
+    title: "Resumo",
+    body: [
+      Este exemplo apresenta o uso do `quati-abnt`, modelo de artigo para o Typst segundo as @nbr:pl da @abnt.
+    ],
+  )
+}
+```
+
+Caso você queira incluir **resumos em língua estrangeira**, crie variáveis para eles usando os mesmos campos.
+Já deixei um exemplo de resumo que usa a língua inglesa na região dos Estados Unidos.
+Se preferir outra língua, edite os parâmetros `keywords_title` e `title`, e modifique os parâmetros `lang` e `region` da função `#text`.
+
+```typst title="content/pre_textual.typ" frame="code"
+// ### Abstract in foreign language. Resumo em língua estrangeira.
+#let first_abstract_in_foreign_language = {
+  (
+    keywords_title: "Keywords",
+    keywords: (
+      "template",
+      "paper",
+      "ABNT",
+      "Typst",
+    ),
+    title: "Abstract",
+    body: [
+      #text(
+        lang: "en",
+        region: "us",
+      )[
+        This example presents the use of the `quati-abnt`, a paper template for Typst according to the #glossarium.gls("nbr", plural: true, display: "Brazilian Norms (NBRs)") from the #glossarium.gls("abnt", display: "Brazilian Association of Technical Norms (ABNT)").
+      ]
+    ],
+  )
+}
+```
+
+Então, **adicione** todos os resumos na lista `abstracts`.
+
+```typst title="content/pre_textual.typ" frame="code"
+// ## List of abstracts. Lista de resumos.
+// Include in this list all abstracts in the order they should appear.
+// Inclua nessa lista todos os resumos da ordem em que eles devem aparecer.
+#let abstracts = (
+  abstract_in_main_language,
+  first_abstract_in_foreign_language,
+)
+```
+
+Finalmente, o código a seguir **posiciona** os elementos nos lugares corretos.
+
+```typst title="content/pre_textual.typ" frame="code"
+// ## Display. Exibição.
+
+#include_opening(
+  authors: authors,
+  subtitle: subtitle,
+  title_in_foreign_language: title_in_foreign_language,
+  title: title,
+)
+
+#include_abstracts(abstracts: abstracts)
+```
+
+## Glossário
+
+No texto dos resumos, utilizamos termos que estavam registrados no **glossário**.
+Nós estamos usando o pacote `glossarium`.
+Você pode ler sobre esse pacote em sua [página](https://typst.app/universe/package/glossarium/).
+
+**Abra** o arquivo `glossary.typ` dentro da pasta `data`.
+A primeira variável definida nele se refere às **abreviações** e siglas registradas.
+Ela é uma lista, em que cada item é um dicionário.
+O atributo principal de cada um é o `key`, que define o **rótulo** de uma entrada.
+
+```typst title="data/glossary.typ" frame="code" mark={3,9}
+#let abbreviations_entries = (
+  (
+    key: "abnt",
+    short: "ABNT",
+    long: "Associação Brasileira de Normas Técnicas",
+    group: "Normatização",
+  ),
+  (
+    key: "nbr",
+    short: "NBR",
+    plural: "NBRs",
+    long: "Norma Brasileira",
+    longplural: "Normas Brasileiras",
+    group: "Normatização",
+  ),
+)
+```
+
+Então, você pode definir a **sigla** por meio do atributo `short`.
+Caso a sigla no **plural** seja diferente, você pode usar o atributo `plural`.
+Em seguida, defina o **termo completo** com o atributo `long`.
+Ele também possui sua versão para o plural, que é o `longplural`.
+Finalmente, você pode definir que dado termo pertence a um **grupo** temático com o atributo `group`; ele é completamente opcional.
+
+Já para definições de **termos específicos**, você pode utilizar a variável `glossary_entries`.
+Seus itens apresentam os mesmos atributos que aqueles da lista anterior.
+Mas, neste caso, você não usa os atributos `long` e `longplural`.
+Em vez deles, é usado o `description`, que especifica o texto de descrição do verbete.
+
+```typst title="data/glossary.typ" frame="code" mark={7}
+#let glossary_entries = (
+  (
+    key: "rn",
+    short: "rede neural",
+    plural: "redes neurais",
+    custom: foreign_text[neural network],
+    description: [Em inglês, #foreign_text[neural network]. Modelo computacional composto por camadas de unidades interligadas que aprendem padrões em dados por meio de ajustes de pesos @li:2022:survey_convolutional_neural_networks.],
+    group: "Computação",
+  ),
+)
+```
+
+Aqui, eu também usei o atributo `custom` para salvar o termo em **inglês**, dado que é muito comum se referir a certos termos de computação diretamente nessa língua.
+
+**Volte** para o arquivo `pre_textual.typ` dentro da pasta `content`.
+No texto do **resumo** em português, usamos as abreviações "NBR" e "ABNT".
+
+```typst title="content/pre_textual.typ" frame="code"
+Este exemplo apresenta o uso do `quati-abnt`,
+modelo de artigo para o Typst segundo as @nbr:pl da @abnt.
+```
+
+O pacote `glossarium` gera um **atalho** para os termos do glossário por meio do símbolo de arroba (`@`).
+Para incluir uma abreviação, basta usar esse símbolo seguido do **rótulo** que havia sido definido pelo atributo `key`.
+Se quiser chamar a versão em **plural** do texto, adicione o símbolo de dois-pontos (`:`) ao final, e digite "pl".
+
+```typst frame="code"
+@abnt
+@nbr:pl
+```
+
+Na primeira vez em que uma **abreviação** aparece no texto, ela é renderizada com o seu significado dentro de parênteses (`(...)`) logo após.
+Além disso, todo termo do glossário usado gera um **link** para a sua entrada no glossário automaticamente montado no final do documento.
+
+O atalho do símbolo de arroba (`@`) efetivamente usa a **função** `#gls` do pacote `glossarium`.
+Você pode substituir o texto do resumo pelo disposto as seguir, sem que nenhuma mudança ocorra na renderização.
+
+```typst title="content/pre_textual.typ" frame="code"
+Este exemplo apresenta o uso do `quati-abnt`,
+modelo de artigo para o Typst segundo as
+#glossarium.gls("nbr", plural: true) da #glossarium.gls("abnt").
+```
+
+As diferenças que ocorrem ao utilizar diretamente a **função** é que o rótulo deve ser informado entre aspas (`"..."`).
+Além disso, para que um termo use o plural, não é aceito o atalho `:pl`.
+Agora, você deve definir o parâmetro `plural` como `true`.
+
+```typst frame="code"
+#glossarium.gls("nbr", plural: true)
+#glossarium.gls("abnt")
+```
+
+Outros atributos estão disponíveis para a função `#gls`.
+Por exemplo, o parâmetro `display` permite que você **sobrescreva** completamente qual será o texto exibido para aquela entrada.
+Isso foi usado no resumo em inglês.
+
+```typst title="content/pre_textual.typ" frame="code"
+This example presents the use of the `quati-abnt`,
+a paper template for Typst according to the
+#glossarium.gls("nbr", plural: true, display: "Brazilian Norms (NBRs)") from the
+#glossarium.gls("abnt", display: "Brazilian Association of Technical Norms (ABNT)").
+```
+
+E caso você não queira que uma entrada gere um **link** para o glossário no final do documento, basta definir o parâmetro `link` como `false`.
+
+```typst frame="code"
+#glossarium.gls("nbr", plural: true, link: false)
+```
