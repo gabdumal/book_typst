@@ -3,8 +3,238 @@ title: Componentes
 author: Gabriel Malosto
 ---
 
+import { Image } from "astro:assets";
+
+import Figure from "@components/Figure.astro";
+
+import broken_figure from "@assets/content/docs/scholar/article/components/broken_figure.png";
+
 Vamos continuar trabalhando no arquivo `main.typ`, que se encontra na pasta `textual` dentro de `content.`
 Agora, podemos entender como adicionar **componentes**, como ilustrações, código-fonte e equações.
+
+## Figuras
+
+Como já vimos [anteriormente](../../../recipe/files), utilizamos a função `#image` para adicionar **imagens** a um documento.
+Contudo, a ABNT requer que uma imagem seja acompanhada por uma **legenda**.
+Para complementar uma imagem, envolvemos-na em uma **figura** usando o componente `#figure`.
+
+No arquivo `main.typ` já está criada uma figura de exemplo com todas as configurações.
+Nós vamos recriar a mesma figura enquanto entendemos seu uso.
+Portanto, **apague** a figura já criada.
+
+No modelo, já deixei criada a pasta `assets` e, dentro dela, coloquei uma imagem de exemplo, que é apenas um quadrado preto.
+O nome do seu arquivo é `black_square.png`, e ela está dentro da subpasta `images`.
+**Importe** essa imagem com o comando `#image`, e defina uma largura para ela.
+
+```typst title="content/textual/main.typ" frame="code"
+#image(
+  width: 5cm,
+  "./../../assets/images/black_square.png",
+)
+```
+
+Agora, utilize o comando `#figure` para envolver essa imagem.
+Ele requer que passemos a imagem como um de seus **parâmetros**.
+Por isso, vamos remover o símbolo de cerquilha (`#`) do comando `#image`.
+Por padrão, a figura é posicionada de forma centralizada na horizontal.
+Consulte a [referência](https://typst.app/docs/reference/model/figure/) para entender mais sobre as opções de customização de uma figura.
+
+```typst title="content/textual/main.typ" frame="code"
+#figure(
+  image(
+    width: 5cm,
+    "./../../assets/images/black_square.png",
+  ),
+)
+```
+
+Uma figura também pode ter um **rótulo** associado.
+Isso é útil para fazermos uma referência a ela no texto.
+Defina-o com os símbolos `<...>` logo após o fechamento dos parênteses da figura.
+
+```typst title="content/textual/main.typ" frame="code"
+#figure(
+  image(
+    width: 5cm,
+    "./../../assets/images/black_square.png",
+  ),
+) <figura:quadrado_preto>
+```
+
+Então, nós podemos fazer uma **referência** a ela usando o símbolo `@` ou a função `#ref`.
+As referências podem estar antes ou depois da posição da figura.
+
+```typst title="content/textual/main.typ" frame="code"
+Esta é a @figura:quadrado_preto.
+
+#figure(
+  image(
+    width: 5cm,
+    "./../../assets/images/black_square.png",
+  ),
+) <figura:quadrado_preto>
+
+Esta é outra referência para a @figura:quadrado_preto.
+```
+
+Agora, vamos finalmente adicionar uma **legenda**.
+Isso é feito por meio do parâmetro `caption`.
+O Typst faz a contagem das figuras automaticamente e coloca seu número na legenda.
+
+```typst title="content/textual/main.typ" frame="code"
+#figure(
+  caption: [
+    Quadrado preto
+  ],
+  image(
+    width: 5cm,
+    "./../../assets/images/black_square.png",
+  ),
+) <figura:quadrado_preto>
+```
+
+A ABNT faz algumas outras exigências sobre como uma figura deve aparecer no texto.
+Uma delas é que é necessário citar sua **fonte**, mesmo que os próprios autores tenham-na elaborado.
+Para respeitar essas determinações, o modelo fornece a função customizada **`#describe_figure`**, que deve envolver o componente `#figure`.
+Dessa vez, precisamos cercar o componente `#figure` com colchetes (`[...]`), porque o rótulo deve estar dentro do mesmo bloco que a figura.
+
+```typst title="content/textual/main.typ" frame="code"
+#describe_figure()[
+  #figure(
+    caption: [
+      Quadrado preto
+    ],
+    image(
+      width: 5cm,
+      "./../../assets/images/black_square.png",
+    ),
+  ) <figura:quadrado_preto>
+]
+```
+
+Por padrão, a **fonte** da figura é especificada como "elaboração própria".
+Caso você queira citar outro autor como responsável pela figura, utilize o parâmetro `source` da função `#describe_figure`.
+Nesse caso, faça a citação por meio da forma em **prosa**.
+
+```typst title="content/textual/main.typ" frame="code"
+#describe_figure(
+  source: [
+    #cite_prose(<dumont:1918:o_que_eu_vi_o_que_nos_veremos>).
+  ]
+)[
+  #figure(
+    caption: [
+      Quadrado preto
+    ],
+    image(
+      width: 5cm,
+      "./../../assets/images/black_square.png",
+    ),
+  ) <figura:quadrado_preto>
+]
+```
+
+Você ainda pode adicionar uma **nota** abaixo da imagem para explicar algum detalhe sobre ela, usando o atributo `note`.
+
+```typst title="content/textual/main.typ" frame="code"
+#describe_figure(
+  source: [
+    #cite_prose(<dumont:1918:o_que_eu_vi_o_que_nos_veremos>).
+  ],
+  note: [
+    Nota opcional.
+  ]
+)[
+  #figure(
+    caption: [
+      Quadrado preto
+    ],
+    image(
+      width: 5cm,
+      "./../../assets/images/black_square.png",
+    ),
+  ) <figura:quadrado_preto>
+]
+```
+
+Nesse sentido, o atributo `note` também aceita como valor uma **lista** de notas.
+Nesse caso, a figura dispõe cada uma numerada e em ordem.
+
+```typst frame="code"
+#describe_figure(
+  note: (
+    [
+    Primeira nota opcional.
+    ],
+    [
+    Segunda nota opcional.
+    ],
+  )
+)
+```
+
+Quando você insere uma imagem depois de um bloco de texto que está muito próximo do fim da página, é possível que essa imagem não caiba no **espaço** restante.
+Nesse caso, a imagem vai ter que ser posicionada na página seguinte, e vai sobrar um espaço vazio grande na atual.
+
+O Typst permite realizar o **posicionamento** de uma figura de forma dinâmica, para que o texto que vem depois dela seja adiantado para a página anterior, de forma a preencher o espaço vazio.
+Para fazer isso, utilize o parâmetro `placement` da função `#describe_figure`.
+Ele permite os valores: `top`, que coloca a imagem no topo da próxima página; `bottom`, que coloca no final; ou `auto`, que tenta escolher a melhor opção.
+
+```typst frame="code"
+#describe_figure(
+  placement: auto
+)
+```
+
+Agora, imagine uma situação em que a imagem em si cabe no final da página, mas a sua fonte ou suas notas na parte **inferior** não cabem.
+Nesse caso, elas são posicionadas na próxima página.
+Em geral, esse comportamento não é desejável.
+
+<Figure caption="Figura em que as notas não couberam na primeira página.">
+  <Image
+    src={broken_figure}
+    alt={`Renderização de uma figura em que as notas não couberam na primeira página. Sua legenda é "Figura 1 — Quadrado preto", e sua fonte é "Dumont (1918), enquanto a nota 1 apresenta "Primeira nota opcional" e a nota 2 apresenta "Segunda nota opcional". A imagem em si é um quadrado na cor preta.`}
+  />
+</Figure>
+
+Por isso, é prudente definir o parâmetro `sticky` da função `#describe_figure` como `true`.
+Isso faz com que a imagem e suas anotações fiquem **juntas** no mesmo bloco e, consequentemente, sejam deslocadas para a próxima página.
+
+```typst frame="code"
+#describe_figure(
+  sticky: true
+)
+```
+
+Portanto, o **código-fonte** completo da figura construída é o seguinte.
+
+```typst title="content/textual/main.typ" frame="code"
+#describe_figure(
+  source: [
+    #cite_prose(<dumont:1918:o_que_eu_vi_o_que_nos_veremos>).
+  ],
+  note: (
+    [
+    Primeira nota opcional.
+    ],
+    [
+    Segunda nota opcional.
+    ],
+  ),
+  placement: auto,
+  sticky: true
+)[
+  #figure(
+    caption: [
+      Quadrado preto
+    ],
+    image(
+      width: 5cm,
+      "./../../assets/images/black_square.png",
+    ),
+  ) <figura:quadrado_preto>
+]
+```
 
 ## Rodapé
 
