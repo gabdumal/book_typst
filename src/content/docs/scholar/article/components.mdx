@@ -1,0 +1,37 @@
+---
+title: Componentes
+author: Gabriel Malosto
+---
+
+Vamos continuar trabalhando no arquivo `main.typ`, que se encontra na pasta `textual` dentro de `content.`
+Agora, podemos entender como adicionar **componentes**, como ilustrações, código-fonte e equações.
+
+## Rodapé
+
+Para adicionar uma **nota de rodapé** a um trecho, utilize a função `#footnote`.
+O parâmetro principal dela é um bloco de texto aberto por colchetes (`[...]`).
+Depois de fechar os colchetes, o texto continua normalmente.
+Adicione o seguinte exemplo ao documento.
+
+```typst title="content/textual/main.typ" frame="code"
+O Typst é um projeto de código-aberto, cujo repositório
+#footnote[
+  Acesso em: #link("https://github.com/typst/typst").
+]
+está disponível on-line.
+```
+
+Caso você queira criar uma nota de rodapé, e fazer referência a ela mais de uma vez, você pode lhe atribuir um **rótulo**, usando os símbolos `<...>`.
+Então, use a função `#footnote` novamente, mas passando o rótulo como parâmetro em vez de abrir um novo bloco de texto.
+
+```typst title="content/textual/main.typ" frame="code"
+A Wikipédia
+#footnote[
+  Wikipédia é um projeto de enciclopédia multilíngue de licença livre,
+  baseado na web e escrito de maneira colaborativa.
+]<nota_de_rodapé:wikipédia>
+é a maior enciclopédia livre da internet.
+
+O projeto #footnote(<nota_de_rodapé:wikipédia>) foi lançado em 2001
+e é administrado pela Fundação Wikimedia.
+```

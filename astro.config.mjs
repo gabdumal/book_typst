@@ -152,8 +152,12 @@ export default defineConfig({
                   slug: "scholar/article/pre_textual",
                 },
                 {
-                  label: "Conteúdo",
-                  slug: "scholar/article/content",
+                  label: "Referências",
+                  slug: "scholar/article/references",
+                },
+                {
+                  label: "Componentes",
+                  slug: "scholar/article/components",
                 },
               ],
               label: "Artigo científico",
