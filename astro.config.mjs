@@ -159,6 +159,10 @@ export default defineConfig({
                   label: "Componentes",
                   slug: "scholar/article/components",
                 },
+                {
+                  label: "Pós-textual",
+                  slug: "scholar/article/post_textual",
+                },
               ],
               label: "Artigo científico",
             },

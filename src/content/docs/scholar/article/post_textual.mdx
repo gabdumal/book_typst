@@ -1,0 +1,58 @@
+---
+title: Pós-textual
+author: Gabriel Malosto
+---
+
+O arquivo `main` da pasta `textual` dentro de `content` apresenta exemplos e alguns outros componentes, mas vamos deixar para explorá-los no modelo de trabalhos acadêmicos.
+Por enquanto, vamos entender o último arquivo na pasta `data` e ver sobre os **elementos pós-textuais**.
+
+## Termos
+
+O glossário é uma ferramenta muito poderosa para explicar abreviações e conceitos complexos.
+Ele cria entradas para esses termos numa lista ao fim do documento e gera links de referência nos usos.
+
+Contudo, às vezes queremos apenas criar um atalho para um **termo** bastante usado, ou que requer uma formatação específica.
+Você pode inclui-los no arquivo **`terms.typ`** dentro da pasta `data`.
+
+Os termos são definidos em uma **lista de entradas** de forma similar à do glossário.
+Cada uma apresenta um atributo `key` que o identifica, e um atributo `short`, que guarda o termo completo. Você também pode definir como deve ser o termo no plural, e como são as formas iniciadas em letras maiúsculas.
+
+```typst title="data/terms.typ" frame="code"
+// ## Definition. Definição.
+#let terms_entries = (
+  (
+    key: "link",
+    short: foreign_text[link],
+    short_capitalized: foreign_text[Link],
+    plural: foreign_text[links],
+    plural_capitalized: foreign_text[Links],
+  ),
+  (
+    key: "script",
+    short: foreign_text[script],
+    plural: foreign_text[scripts],
+  ),
+  (
+    key: "software",
+    short: foreign_text[software],
+  ),
+  (
+    key: "web",
+    short: foreign_text[web],
+  ),
+)
+```
+
+Para **incluir** um termo no texto, o modelo disponibiliza a função customizada `#get_term`.
+Para usar a versão no plural, utilize o parâmetro `plural` com o valor `true`.
+Similarmente, para usar a forma com maiúsculas, use o parâmetro `capitalize` como `true`.
+
+```typst title="content/post_textual.typ" frame="code"
+#get_term("link")
+
+#get_term("link", plural: true)
+
+#get_term("link", capitalize: true)
+
+#get_term("link", plural: true, capitalize: true)
+```
