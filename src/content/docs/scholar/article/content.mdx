@@ -8,3 +8,56 @@ Acesse o arquivo `main.typ` dentro da pasta `textual`, que, por sua vez, está d
 
 Por enquanto, apenas o arquivo `main.typ` foi criado nessa pasta, mas a ideia é que você crie um **arquivo** para cada seção do artigo conforme elas ficam extensas.
 Então, você deve usar a expressão `#include` no arquivo `main.typ` para incluí-las.
+
+As primeiras linhas do arquivo `main.typ` fazem a **importação** dos componentes e dos pacotes listados nos arquivos `/components.typ` e `/packages.typ`.
+O símbolo de asterisco (`*`) representa que todos os componentes devem ser importados.
+
+```typst title="content/textual/main.typ" frame="code"
+#import "../../components.typ": *
+#import "../../packages.typ": *
+```
+
+## Rótulos
+
+Então, iniciamos a primeira **seção** com o símbolo de igual (`=`).
+Dessa vez, adicionamos um elemento a mais no final do título.
+O Typst permite atribuir um **rótulo** --- ou _label_, em inglês --- a títulos, figuras, e outros componentes.
+
+Um **rótulo** é especificado dentro dos símbolos de "menor que" (`<`) e de "maior que" (`>`), na forma (`<...>`).
+Você pode dar o nome que quiser para o rótulo.
+Nesse caso, eu gosto de usar o padrão de `<tipo:nome>`, mas essa é apenas uma decisão pessoal.
+
+```typst title="content/textual/main.typ" frame="code"
+= Introdução <seção:introdução>
+```
+
+Você também pode usar a função **`#label`**, que tem a mesma funcionalidade.
+O único detalhe é que você deve escrevê-la na linha abaixo do título.
+Você pode ler mais detalhes sobre isso na [referência](https://typst.app/docs/reference/foundations/label/).
+
+```typst frame="code"
+= Introdução
+#label("seção:introdução")
+```
+
+A utilidade de um rótulo é que você pode fazer uma **referência** à sua posição mais adiante no texto.
+Para fazer uma referência, use o símbolo de arroba (`@`) seguido do rótulo definido.
+
+```typst title="content/textual/main.typ" frame="code"
+Esta é a @seção:introdução, de introdução.
+```
+
+O Typst vai interpretar essa referência automaticamente, buscando qual é o tipo do elemento citado.
+Se for uma seção, ele **renderizará** como "Seção `N`", em que `N` representa o número da seção.
+Se for uma subseção, a renderização será como "Subseção `N.M`", em que `M` é o número da subseção dentro da seção `N`.
+
+Você também pode usar a função **`#ref`**, que tem a mesma funcionalidade.
+No caso, em vez de usar aspas (`"..."`), cerque o rótulo pelos símbolos `<...>`.
+Você pode ler mais detalhes sobre isso na [referência](https://typst.app/docs/reference/model/ref/).
+Inclusive, lá é explicado como mudar o estilo da referência e customizá-la.
+
+```typst frame="code"
+Esta é a #ref(<seção:introdução>), de introdução.
+```
+
+## Citação
