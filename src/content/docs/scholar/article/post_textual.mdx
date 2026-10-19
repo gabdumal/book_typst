@@ -47,7 +47,7 @@ Para **incluir** um termo no texto, o modelo disponibiliza a função customizad
 Para usar a versão no plural, utilize o parâmetro `plural` com o valor `true`.
 Similarmente, para usar a forma com maiúsculas, use o parâmetro `capitalize` como `true`.
 
-```typst title="content/post_textual.typ" frame="code"
+```typst title="content/textual/main.typ" frame="code"
 #get_term("link")
 
 #get_term("link", plural: true)
@@ -56,3 +56,30 @@ Similarmente, para usar a forma com maiúsculas, use o parâmetro `capitalize` c
 
 #get_term("link", plural: true, capitalize: true)
 ```
+
+## Anexos
+
+Agora, abra o arquivo **`post_content.typ`** da pasta `content`.
+Nele, estão inclusos exemplos de **apêndices** e **anexos**.
+
+```typst title="content/post_textual.typ" frame="code"
+// ## Appendixes. Apêndices.
+
+#counter(heading).update(0)
+
+#include_appendix(
+  title: [Quod idem licet transferre in voluptatem, ut],
+  label: <anexo:quod>,
+)[
+  #lorem(50)
+]
+```
+
+A linha com o comando `#counter` reinicia a **contagem** de títulos, para que os apêndices sejam numerados do início.
+Então, o comando `#include_appendix` inclui o **apêndice** no texto.
+Seu parâmetro `title` nomeia o apêndice, e o `label` permite definir seu rótulo.
+Finalmente, o conteúdo é colocado dentro do bloco entre colchetes (`[...]`).
+
+Você pode usar o componente `#include_appendix` quantas vezes for necessário.
+A mesma lógica se aplica para os **anexos**, com a função `#include_annex`.
+Finalmente, o comando `#include_acknowledgements` inclui um bloco de texto para fazer **agradecimentos**.
