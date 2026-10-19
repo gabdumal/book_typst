@@ -1,0 +1,525 @@
+---
+title: Textual
+author: Gabriel Malosto
+---
+
+Os **elementos textuais** também são formatados conforme as recomendações da ABNT.
+Para manter a organização, criamos os arquivos do corpo do texto dentro da pasta `textual`, que é inclusa na pasta `content`.
+
+Seu arquivo principal é o `main.typ`.
+Ele apenas faz a inclusão de cada um dos demais **arquivos**.
+A ideia é que cada capítulo seja escrito em um arquivo diferente.
+Por padrão, o modelo sugere a divisão nos seguintes **capítulos**: Introdução, Fundamentação teórica, Material e métodos, Resultados, e Considerações finais.
+Mas você pode remover ou acrescentar capítulos como preferir.
+
+```typst title="content/textual/main.typ" frame="code"
+#include "introduction.typ"
+
+#include "foundation.typ"
+
+#include "method.typ"
+
+#include "results.typ"
+
+#include "considerations.typ"
+```
+
+No capítulo de **Introdução**, apresentamos alguns componentes.
+O único que não vimos ainda é a **lista de termos**.
+Você pode ler sobre ela em sua [referência](https://typst.app/docs/reference/model/terms/).
+Ela pode ser aberta por meio da função `#terms` ou utilizando o símbolo de barra (`/`).
+
+```typst title="content/textual/introduction.typ" frame="code"
+#terms(
+  terms.item[
+    #nbr 6022:2018
+  ][
+    Informação e documentação — Artigo em publicação periódica técnica e/ou científica — Apresentação
+  ],
+)
+```
+
+## Notas de editor
+
+No capítulo de **Fundamentação teórica**, está explicado o uso das notas de editor.
+O comando básico é o `#editor_note`.
+Ele abre uma caixa de texto para escrever o conteúdo.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#editor_note[
+  Nota criada com o comando `editor_note`.
+]
+```
+
+O parâmetro `fill` permite definir a cor de **fundo** da nota, enquanto o parâmetro `stroke` define a cor da **borda**.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#editor_note(
+  fill: red.lighten(75%),
+  stroke: red,
+)[
+  Nota criada com o comando `editor_note`, definindo as cores de preenchimento e da borda.
+]
+```
+
+Você pode adicionar um **prefixo** a uma nota, que identifica a sua função.
+Faça isso por meio do parâmetro `prefixes`.
+Ele recebe um dicionário, cujo atributo principal é o `body`.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#editor_note(
+  prefixes: (body: [Prefixo]),
+)[
+  Nota prefixada.
+]
+```
+
+Outros **atributos** de um prefixo incluem o `fill` e `stroke`.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#editor_note(
+  fill: blue.lighten(80%),
+  stroke: blue.lighten(60%),
+  prefixes: (
+    body: [Prefixo],
+    fill: yellow,
+    stroke: yellow.darken(10%),
+  ),
+)[
+  Nota prefixada.
+  Ela define a cor da nota como azul claro, e a sua cor de borda como azul comum.
+  Já o prefixo é preenchido com amarelo, e sua borda é um amarelo um pouco escurecido.
+]
+```
+
+Além disso, você pode definir uma lista de dicionários como valor do parâmetro `prefixes`.
+Assim, **múltiplos** prefixos serão inseridos em ordem.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#editor_note(
+  prefixes: (
+    (body: [Primeiro]),
+    (body: [Segundo], fill: yellow),
+    (body: [Terceiro], stroke: blue),
+  ),
+)[
+  Nota colocada em linha.
+  Ela inclui três prefixos.
+]
+```
+
+O modelo já define algumas notas úteis para representar o **progresso** de escrita de alguma seção do trabalho.
+A função `#todo_note` indica uma seção que ainda deve ser escrita; já a `#progress_note` indica que a escrita teve início mas não foi finalizada; por sua vez, a função `#done_note` representa uma seção concluída.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#todo_note[
+  Tarefa a fazer.
+]
+
+#progress_note[
+  Tarefa em progresso.
+]
+
+#done_note[
+  Tarefa finalizada.
+]
+```
+
+Você pode criar **novas notas** de estado no arquivo `components.typ` e usá-las pelo texto.
+Nele, está definido um exemplo de nova de revisão.
+
+```typst title="components.typ" frame="code"
+#let review_note = (
+  prefixes: none,
+  it,
+) => {
+  let color = oklch(82.01%, 0.159, 323.15deg)
+  create_status_note(
+    fill: color,
+    prefixes: prefixes,
+    status: "REVISAR",
+    stroke: color.saturate(50%),
+    it,
+  )
+}
+```
+
+```typst title="content/textual/foundation.typ" frame="code"
+#review_note[
+  Conteúdo que precisa ser revisado.
+]
+```
+
+No mesmo arquivo `components.typ`, estão definidos exemplos de notas customizadas que identificam um **autor**.
+A ideia é criar um componente para cada autor, escolhendo cores diferentes.
+
+```typst title="components.typ" frame="code"
+#let note_from_gabriel = (
+  note: editor_note,
+  it,
+) => {
+  let color = oklch(80.43%, 0.1, 278.25deg)
+  note(
+    prefixes: (
+      (
+        body: "Gabriel",
+        fill: color,
+        stroke: color.saturate(25%),
+      ),
+    ),
+    it,
+  )
+}
+```
+
+```typst title="content/textual/foundation.typ" frame="code"
+#note_from_gabriel[
+  Nota do Gabriel.
+]
+```
+
+Você pode **combinar** notas dos autores e notas de estado.
+Para isso, utilize o parâmetro `note` na função da nota de autor.
+Passe como valor o nome da função da nota de estado.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#note_from_gabriel(
+  note: todo_note,
+)[
+  Nota de afazeres do Gabriel.
+]
+```
+
+Além disso, você pode encaixar uma nota no bloco de texto da outra.
+Veja a seguir um exemplo de notas **aninhadas**.
+Você pode usar todos os parâmetros sobre os quais tratamos.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#editor_note[
+  #todo_note[
+    Nota de afazeres.
+  ]
+  #note_from_alice[
+    Sugestão da Alice.
+  ]
+]
+```
+
+Nesse sentido, o modelo oferece outras duas notas, que têm o objetivo de especificar uma discussão entre os autores.
+A `open_discussion_note` representa uma conversa em andamento, enquanto a `closed_discussion_note` sinaliza que ela foi encerrada.
+Ambas têm o foco de serem usadas para aninhar outras notas.
+
+```typst title="content/textual/foundation.typ" frame="code"
+#open_discussion_note[
+  #note_from_gabriel[
+    Questionamento do Gabriel.
+  ]
+  #note_from_alice[
+    Questionamento da Alice.
+    #note_from_gabriel[
+      Resposta do Gabriel.
+    ]
+  ]
+]
+
+#closed_discussion_note[
+  #note_from_gabriel[
+    Comentário do Gabriel.
+    #note_from_alice[
+      Resposta da Alice.
+      #note_from_gabriel[
+        Réplica do Gabriel.
+        #note_from_gabriel(note: todo_note)[
+          Afazer do Gabriel baseado na discussão.
+        ]
+      ]
+    ]
+  ]
+]
+```
+
+## Figuras
+
+No capítulo de Material e métodos, o modelo elenca informações sobre o uso de **figuras**.
+A maior parte das instruções explica assuntos já tratados no guia do [artigo científico](../../article/components/#figuras).
+
+Dois **parâmetros** do componente `#figure` que não exploramos ainda são o `supplement` e o `kind`.
+Eles são úteis para quando criamos figuras que não são formadas por imagens.
+
+O **`supplement`** é o que descreve a imagem.
+Por exemplo, para um texto, preencheríamos como `"Texto"`.
+Já o **`kind`** é um identificador interno para o Typst fazer a contagem de imagens daquele tipo.
+Para seguir o padrão, usamos uma palavra em inglês, `"text"`.
+Em todas as figuras compostas por texto, você precisa preencher esses dois parâmetros da mesma forma.
+
+```typst title="content/textual/method.typ" frame="code"
+#figure(
+  caption: [
+    Ilustração composta de texto
+  ],
+  supplement: "Texto",
+  kind: "text",
+  par()[
+    Essa ilustração se trata de uma sequência de frases.\
+    Sim, uma ilustração pode ser composta de texto.\
+    Ela pode ser utilizada para ilustrar uma ideia ou conceito.
+  ],
+)
+```
+
+Nesse modelo, importamos o pacote **`subpar`** para criar figuras compostas por várias sub-figuras.
+Acesse sua página por [este link](https://typst.app/universe/package/subpar/).
+
+Um ambiente é aberto pela função **`#subpar.super`**.
+Ele recebe como parâmetros:
+`label`, que permite associar um rótulo à figura; e
+`caption`, que especifica a legenda da figura.
+
+Além disso, ela recebe como último parâmetro não-nomeado um componente `#grid`.
+Dentro dessa **grade**, utilize a função `#grid.cell` para definir o espaço para inserir cada sub-figura.
+
+```typst title="content/textual/method.typ" frame="code"
+#describe_figure(
+  source: [
+    #lorem(20)
+  ],
+  note: [
+    #lorem(40)
+  ],
+  placement: auto,
+
+  subpar.super(
+    label: <figura:três_sub-figuras>,
+    caption: [Uma figura composta de três sub-figuras],
+
+    block()[
+      #grid(
+        columns: (1fr, 1fr),
+
+        grid.cell()[
+          #figure(
+            caption: [
+              #lorem(5)
+            ],
+            image("./../../assets/images/black_square.png", width: 5cm),
+          )<figura:primeira_sub-figura>
+        ],
+
+        grid.cell()[
+          #figure(
+            caption: [
+              #lorem(10)
+            ],
+            image("./../../assets/images/black_square.png", width: 5cm),
+          )<figura:segunda_sub-figura>
+        ],
+
+        grid.cell(colspan: 2)[
+          #figure(
+            caption: [
+              #lorem(15)
+            ],
+            image("./../../assets/images/black_square.png", width: 10cm),
+          )<figura:terceira_sub-figura>
+        ],
+      )
+    ],
+  ),
+)
+```
+
+## Quadros e tabelas
+
+A ABNT diferencia os conceitos de **quadro** e de **tabela**.
+As tabelas são usadas para listar uma grande quantidade de informações de forma organizada.
+Já os quadros têm o objetivo de facilitarem a visualização de uma menor quantidade de informações.
+
+Um **quadro** é aberto pela função do Typst `#table`.
+Então, ele deve ser cercado pelo ambiente **`#figure`**.
+Utilize os parâmetros `supplement` como `"Quadro"`, e `kind` como `"board"`.
+Por fim, cerque a figura pela função customizada `#describe_figure`.
+
+```typst title="content/textual/method.typ" frame="code"
+#describe_figure(
+  [
+    #figure(
+      kind: "board",
+      supplement: "Quadro",
+      caption: [
+        Exemplo de quadro
+      ],
+
+      table(
+        columns: (1fr, 1fr, 1fr),
+        align: center + horizon,
+
+        table.header(
+          table.cell()[#strong("Cabeçalho 1")],
+          table.cell()[#strong("Cabeçalho 2")],
+          table.cell()[#strong("Cabeçalho 3")],
+        ),
+
+        table.cell(
+          rowspan: 2,
+        )[Linhas 1 e 2, Coluna 1],
+        table.cell()[Linha 1, Coluna 3],
+
+        table.cell()[Linha 2, Coluna 1],
+        table.cell()[Linha 2, Coluna 2],
+        table.cell()[Linha 2, Coluna 3],
+
+        table.cell()[Linha 3, Coluna 1],
+        table.cell(
+          colspan: 2,
+        )[Linha 3, Colunas 2 e 3],
+      ),
+    )<quadro:exemplo_de_quadro>
+  ],
+)
+```
+
+Uma **tabela** também é aberta pela função `#table`.
+Contudo, ela deve ser cercada pela função customizada **`#format_table`**.
+Por sua vez, essa deve ser cercada por `#figure` e, finalmente, cercada por `#describe_figure`.
+
+```typst title="content/textual/method.typ" frame="code"
+#describe_figure(
+  note: [Não testamos essa receita.],
+  [#figure(
+    caption: "Quantidades dos ingredientes para uma receita de bolo de chocolate",
+    block(
+      width: 50%,
+      format_table(
+        table(
+          columns: (5fr, 3fr),
+          table.header([Ingrediente], [Quantidade]),
+          [Farinha de trigo], [2 xícaras],
+          [Açúcar], [1 e 1/2 xícaras],
+          [Cacau em pó], [1/2 xícara],
+          [Ovos], [3 unidades],
+          [Leite], [1 xícara],
+          [Óleo], [1/2 xícara],
+          [Fermento em pó], [1 colher de sopa],
+        ),
+      ),
+    ),
+  )<tabela:ingredientes>],
+)
+```
+
+## Equações
+
+As equações são escritas dentro do ambiente de **matemática** do Typst.
+Ele é delimitado pelos símbolos de cifrão (`$ ... $`).
+Você também pode utilizar a função customizada **`#equation`** para definir uma largura máxima com o parâmetro `width`.
+
+```typst title="content/textual/method.typ" frame="code"
+#equation(
+  width: 41.82%,
+)[
+  $ 1 + X = 2 $
+  - X tem o valor de 1.
+]
+```
+
+Uma equação pode receber **rótulos**, abrindo-os logo após o fim do ambiente `$ ... $`.
+
+```typst title="content/textual/method.typ" frame="code"
+#equation(
+  width: 75%,
+)[
+  Sejam $a$, $b$ e $c$ o comprimento dos lados de um triângulo retângulo.
+  Então, sabemos que:
+  $ a^2 + b^2 = c^2 $ <equação:teorema_pitagórico>
+
+  Prove por indução:
+  $ sum_(k=1)^n k = (n(n+1)) / 2 $ <equação:número_triangular>
+]
+```
+
+Caso queira dar ainda mais destaque para uma equação, você pode criar um tipo de figura chamado **esquema**.
+Para isso, utilize o parâmetro `supplement` como `"Esquema"`, e o `kind` como `"scheme"`.
+
+```typst title="content/textual/method.typ" frame="code"
+#describe_figure(
+  // placement: auto,
+)[
+  #figure(
+    supplement: "Esquema",
+    kind: "scheme",
+    caption: [
+      Soma entre dois números.
+    ],
+  )[
+    #equation(
+      width: 41.82%,
+    )[
+      $ 1 + 1 = 2 $
+    ]
+  ] <esquema:soma>
+]
+```
+
+Finalmente, o pacote **`equate`** permite criar várias equações aninhadas.
+Acesse sua página por [este link](https://typst.app/universe/package/equate/).
+Abra um **ambiente** com a função `#equate.equate`.
+Então, para dividir uma equação em duas, simplesmente utilize o símbolo de contrabarra (`\`) ao final da linha da primeira.
+
+```typst title="content/textual/method.typ" frame="code"
+#equate.equate(
+  sub-numbering: true,
+)[
+  $
+    m^* = max(m in M(s)) = Q(s,m) + X(s,m)\
+    X(s,m) = C times
+    P(s,m) / (V(s,m) + 1)
+  $ <equação:uct_adaptada>
+]
+```
+
+Usando o conhecimento obtido até aqui, você entenderá o exemplo a seguir.
+Ele cria um **esquema** com duas equações, e lista as definições para cada termo.
+
+```typst title="content/textual/method.typ" frame="code"
+#describe_figure(
+  // placement: auto,
+  source: [
+    adaptado de
+    #cite_prose(
+      supplement: [p. 2505],
+      <swiechowski:2022:monte_carlo_tree_search>,
+    )
+    #cite_prose(supplement: [p. 486], <silver:2016:mastering_game_go>).
+  ],
+)[
+  #figure(
+    supplement: "Esquema",
+    kind: "scheme",
+    caption: [
+      Cálculo de @fitness da diretriz de @uct usada pela @mcts adaptada pelo @alphazero
+    ],
+  )[
+    #equation[
+      #equate.equate(
+        sub-numbering: true,
+      )[
+        $
+          m^* = max(m in M(s)) = Q(s,m) + X(s,m)\
+          X(s,m) = C times
+          P(s,m) / (V(s,m) + 1)
+        $ <equação:uct_adaptada>
+
+        Na qual:
+        - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
+        - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
+        - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
+        - $X(s,m)$ é o componente de @exploração (#glossarium.gls-custom("exploração")) calculado ao jogar o @movimento $m$ no @estado $s$;
+        - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
+        - $V(s,m)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
+        - $P(s,m)$ é a qualidade previamente atribuída pelo modelo de @resnet para jogar o @movimento $m$ no estado $s$;
+        - $C$ é o coeficiente que regula a relação entre @exploração e @aproveitamento.
+      ]
+    ]
+  ] <esquema:uct_adaptada>
+]
+```

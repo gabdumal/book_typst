@@ -176,6 +176,10 @@ export default defineConfig({
                   label: "Pré-textual",
                   slug: "scholar/academic_work/pre_textual",
                 },
+                {
+                  label: "Textual",
+                  slug: "scholar/academic_work/textual",
+                },
               ],
               label: "Trabalho acadêmico",
             },
