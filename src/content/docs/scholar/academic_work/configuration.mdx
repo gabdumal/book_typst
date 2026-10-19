@@ -1,0 +1,330 @@
+---
+title: Trabalho acadêmico
+author: Gabriel Malosto
+---
+
+Agora que entendemos os conceitos principais do pacote `quati-abnt` aplicados sobre um artigo científico, podemos explorar mais funcionalidades pelo modelo de **trabalho acadêmico**.
+
+O arquivo principal do trabalho acadêmico é o `main.typ` que fica dentro da pasta `academic_work`.
+Precisamos definir esse arquivo como o **principal** para que ele seja renderizado.
+
+Siga o mesmo procedimento explicado para a [receita de bolo](../../../recipe/files/#novo-arquivo).
+Abra o menu de **configurações** e procure a opção **_"Export and preview"_**, então selecione `academic_work/main.typ` na lista.
+
+Agora, **acesse** o arquivo `academic_work/main.typ` e clique em seu símbolo de olho no explorador de arquivos para renderizá-lo.
+
+## Importações
+
+As suas primeiras linhas fazem **importações** dos componentes, dos pacotes e das entradas no glossário, da mesma forma como no artigo científico.
+
+Uma diferença é que, dessa vez, importamos dois outros **pacotes** do Typst Universe.
+Acesse o arquivo `packages.typ` para ver suas importações.
+O pacote `subpar` é usado para criar subfiguras dentro de uma figura.
+Já o `equate` serve para incrementar as equações descritas.
+
+```typst title="packages.typ" frame="code"
+#import "@preview/quati-abnt:0.2.0" as quati-abnt
+#let glossarium = quati-abnt.common.packages.glossarium
+#import "@preview/subpar:0.2.2" as subpar
+#import "@preview/equate:0.3.3" as equate
+```
+
+Além disso, separamos o **glossário** em três listas diferentes, como a ABNT requer.
+A lista de abreviaturas e a lista de símbolos devem ser colocadas no início do documento, como parte dos elementos pré-textuais.
+Já o glossário de termos técnicos deve estar no final, com os elementos pós-textuais.
+
+```typst title="main.typ" frame="code"
+// ## Glossary. Glossário.
+#show: glossarium.make-glossary
+#glossarium.register-glossary(abbreviations_entries)
+#glossarium.register-glossary(symbols_entries)
+#glossarium.register-glossary(glossary_entries)
+```
+
+## Inicialização
+
+A inicialização das funções de **`#template`** do modelo segue a mesma lógica que aquela usada no [artigo científico](../../article/configuration/#inicialização).
+A única diferença é que se define um parâmetro adicional na inicialização do modelo de trabalho acadêmico.
+Ele é o `should_consider_only_odd_pages`, que define a formatação do **verso das folhas**.
+
+- Se você precisar **imprimir** o trabalho, seu documento precisa fazer uma diferenciação entre a frente e o verso; portanto, defina esse parâmetro como `false`.
+- Já se você for apenas exportar o documento de forma **digital** --- como no formato PDF ---, não há necessidade de fazer essa distinção; portanto, use o valor `false`.
+
+```typst title="main.typ" frame="code"
+#show: it => quati-abnt.academic_work.template(
+  it,
+  // ...
+  // Define whether to format for electronic file only (true), or to print (false).
+  // Defina se deve usar a formatação para apenas arquivos eletrônicos (true), ou para a impressão (false).
+  should_consider_only_odd_pages: true,
+  // ...
+)
+```
+
+## Dados
+
+Vamos definir os **dados** do trabalho acadêmico e de seus autores.
+Agora, temos um conjunto maior de campos a preencher.
+Acesse o **arquivo** `data.typ` dentro da pasta `data`.
+
+As definições de **título** (`title`), de **subtítulo** (`subtitle`) e da lista de **autores** (`authors`) são as mesmas configuradas para o [artigo científico](../../article/configuration/#dados), com o detalhe que não é mais necessário escrever os currículos dos autores.
+
+### Pessoas
+
+A primeira diferença é que agora devemos especificar exatamente quais são o **orientador** e os coorientadores do trabalho.
+Fazemos isso por meio do campo `advisors`.
+Ele é preenchido como uma lista de pessoas.
+A **primeira** pessoa listada será identificada como o orientador, enquanto as demais serão coorientadores.
+
+Os atributos de definição do **nome** e do **gênero** permanecem iguais.
+A primeira novidade é o **prefixo** do orientador.
+Em geral, ele será um professor universitário.
+Portanto, usamos o título `Prof.` ou `Prof.ª`.
+Além disso, especificamos seu título de formação acadêmica.
+Para doutores, utilizamos `Dr.` ou `Dr.ª`; já para mestres definimos `Me.` ou `Me.ª`.
+
+```typst title="data/data.typ" frame="code"
+#let advisors = (
+  (
+    first_name: [Maria],
+    middle_name: [de],
+    last_name: [Medeiros],
+    gender: "f",
+    prefix: [Prof.ª Dr.ª],
+    organization: (
+      name: [Universidade Federal de Juiz de Fora],
+      gender: "f",
+    ),
+  ),
+  // ...
+)
+```
+
+Em seguida, definimos a **organização** de que aquele orientador faz parte.
+Esse atributo é preenchido com um dicionário, cujo primeiro campo é o `name`, que define o nome da instituição.
+Também precisamos definir a flexão de gênero apropriada para a organização.
+Por exemplo, a palavra "Universidade" é do gênero gramatical feminino; portanto, definimos o valor `"f"`.
+Já a palavra "Instituto" é masculina, o que requer que definamos `"m"`.
+
+```typst frame="code"
+organization: (
+  name: [Universidade Federal de Juiz de Fora],
+  gender: "f",
+),
+```
+
+```typst frame="code"
+organization: (
+  name: [Instituto Federal de Educação, Ciência e Tecnologia do Sudeste de Minas Gerais],
+  gender: "m",
+),
+```
+
+Finalmente, precisamos definir a lista de pessoas convidadas a participar da **banca de avaliação** do trabalho.
+Essa informação é definida por meio do campo `examination_committee`, e segue a mesma estrutura que a lista de orientadores.
+
+### Programa
+
+Agora, vamos definir os dados referentes ao **programa** no qual o trabalho está sendo escrito.
+A primeira definição é sobre a **organização** a que o programa ou curso está vinculado.
+Este campo deve elencar uma universidade ou um instituto, e ajustar o gênero gramatical conforme o seu nome.
+
+```typst title="data/data.typ" frame="code"
+#let organization = (
+  name: [Universidade Federal de Juiz de Fora],
+  gender: "f",
+)
+```
+
+Então, no caso de sua universidade se organizar em vários institutos ou várias faculdades, você pode opcionalmente especificar o nome da **subdivisão** por meio do campo `institution`.
+
+```typst title="data/data.typ" frame="code"
+#let institution = (
+  name: [Instituto de Ciências Exatas],
+  gender: "m",
+)
+```
+
+Então, se houver um nível organizacional mais **específico**, você pode opcionalmente listá-lo por meio do parâmetro `department`,
+
+```typst title="data/data.typ" frame="code"
+#let department = (
+  name: [Departamento de Ciência da Computação],
+  gender: "m",
+)
+```
+
+Finalmente, você precisa especificar o nome do **curso** de graduação ou do **programa** de pós-graduação no qual o trabalho está sendo desenvolvido.
+Faça isso por meio do campo `program`.
+No exemplo a seguir deixamos ambas as opções para você escolher.
+
+```typst title="data/data.typ" frame="code"
+#let program = {
+  (
+    name: [Bacharelado em Sistemas de Informação],
+    // name: [Programa de Pós-Graduação em Ciência da Computação]
+    gender: "m",
+  )
+}
+```
+
+### Trabalho
+
+Agora, vamos delimitar o **tipo do trabalho**.
+Em geral, ele pode ser uma dentre três opções: TCC, dissertação, ou tese.
+Nesses casos, escolha uma dentre as opções inclusas no exemplo.
+Mas você também pode escrever um tipo diferente desses se quiser.
+
+```typst title="data/data.typ" frame="code"
+#let type_of_work = {
+  (
+    name: "trabalho de conclusão de curso",
+    gender: "m",
+  )
+  // (
+  //   name: "dissertação",
+  //   gender: "f",
+  // )
+  // (
+  //   name: "tese",
+  //   gender: "f",
+  // )
+}
+```
+
+Então, você precisa descrever qual é o **grau acadêmico** que você obterá ao concluir o trabalho.
+Os mais comuns foram deixados como exemplo.
+Em cada opção, é necessário especificar o nome do grau, e o nome do título nas versões masculinas e femininas.
+
+```typst title="data/data.typ" frame="code"
+#let degree = (
+  // Bacharelado
+  (
+    name: "bacharelado",
+    title: (
+      masculine: "bacharel",
+      feminine: "bacharela",
+    ),
+  )
+  // Especialização
+  // (
+  //   name: "especialização",
+  //   title: (
+  //     masculine: "especialista",
+  //     feminine: "especialista",
+  //   ),
+  // )
+  // Licenciatura
+  // (
+  //   name: "licenciatura",
+  //   title: (
+  //     masculine: "licenciado",
+  //     feminine: "licenciada",
+  //   ),
+  // )
+  // Mestrado
+  // (
+  //   name: "mestrado",
+  //   title: (
+  //     masculine: "mestre",
+  //     feminine: "mestra",
+  //   ),
+  // )
+  // Doutorado
+  // (
+  //   name: "doutorado",
+  //   title: (
+  //     masculine: "doutor",
+  //     feminine: "doutora",
+  //   ),
+  // )
+)
+```
+
+Então, você deve especificar qual é o **tópico do grau** que você obterá. Em geral, ele é derivado do nome do curso ou do programa.
+O modelo usará essa informação para construir um trecho como os seguintes: "título de bacharel em Sistemas de Informação" ou "título de mestre em Ciência da Computação".
+
+```typst title="data/data.typ" frame="code"
+#let degree_topic = {
+  [Sistemas de Informação]
+}
+```
+
+Caso seu curso tenha uma **área de concentração** mais específica, como é comum em bacharelados em engenharia, você pode opcionalmente defini-la por meio do campo `area_of_concentration`.
+
+```typst title="data/data.typ" frame="code"
+#let area_of_concentration = {
+  [Engenharia de Software]
+}
+```
+
+### Publicação
+
+Neste momento, podemos preencher os dados de **publicação** do trabalho.
+O primeiro é a **cidade** em que o trabalho será publicado.
+Defina-a por meio do campo `address`.
+
+```typst title="data/data.typ" frame="code"
+#let address = {
+  // If needed, add the state as in [Juiz de Fora, MG]
+  // Se necessário, adicione o estado como em [Juiz de Fora, MG]
+  [Juiz de Fora]
+}
+```
+
+Então, preencha o **ano** de publicação pelo campo `year`.
+
+```typst title="data/data.typ" frame="code"
+#let year = {
+  [2026]
+}
+```
+
+Opcionalmente, você pode especificar o número do **volume** do trabalho atual com o campo `volume_number`.
+
+```typst title="data/data.typ" frame="code"
+#let volume_number = {
+  [1]
+}
+```
+
+Finalmente, preencha a data para que está marcada a **defesa** do trabalho.
+Essa é a data de aprovação do trabalho, e é definida pelo campo `approval_date`.
+
+```typst title="data/data.typ" frame="code"
+#let approval_date = {
+  (
+    day: [01],
+    month: [janeiro],
+    year: [2026],
+  )
+}
+```
+
+### Natureza
+
+A **natureza** do trabalho é um bloco de texto que lista várias das informações que preenchemos.
+A ABNT exige que ela seja colocada na contracapa e na folha de aprovação.
+O modelo monta a natureza automaticamente por meio das definições preenchidas, como no exemplo a seguir.
+
+```txt
+Trabalho de conclusão de curso apresentado
+ao Bacharelado em Sistemas de Informação da
+Universidade Federal de Juiz de Fora como
+requisito parcial à obtenção do título de
+Bacharel em Sistemas de Informação.
+```
+
+Caso você queira escrever uma natureza **customizada**, com dados diversos dos listados até então, utilize o campo `custom_nature`.
+
+```typst title="data/data.typ" frame="code"
+#let custom_nature = {
+  [
+    Trabalho apresentado ao
+    Bacharelado em Sistemas de Informação
+    da Universidade Federal de Juiz de Fora
+    como requisito parcial para a aprovação
+    na disciplina de Sistemas de Apoio à Decisão.
+  ]
+}
+```

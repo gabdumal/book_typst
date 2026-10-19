@@ -166,6 +166,15 @@ export default defineConfig({
               ],
               label: "Artigo científico",
             },
+            {
+              items: [
+                {
+                  label: "Configuração",
+                  slug: "scholar/academic_work/configuration",
+                },
+              ],
+              label: "Trabalho acadêmico",
+            },
           ],
           label: "Trabalhos acadêmicos",
         },
