@@ -1,0 +1,170 @@
+---
+title: Pré-textual
+author: Gabriel Malosto
+---
+
+A ABNT determina que um trabalho acadêmico comece com os **elementos externos**.
+Essa categoria incluir a lombada de um livro impresso, e a capa do trabalho.
+No nosso caso, apenas a capa é relevante.
+
+Ela é **inclusa** por meio do arquivo `external.typ` que fica dentro da pasta `content`.
+Esse arquivo serve apenas para extrair os dados que definimos no arquivo `data.typ` e injetá-los no componente que monta a capa.
+Portanto, não precisamos fazer nenhuma alteração nele.
+
+Em seguida, a ABNT determina a ordem dos **elementos pré-textuais**.
+Esses são inclusos por meio do arquivo `pre_textual.typ`, que fica dentro da pasta `content`.
+O primeiro componente inserido é o da **folha de rosto**, ou _title page_, em inglês.
+
+## Ficha catalográfica
+
+Em seguida, incluímos a **ficha catalográfica**.
+O modelo tenta preenchê-la automaticamente da melhor forma.
+Contudo, pode ser que sua universidade tenha um modelo diferente de ficha.
+Portanto, você pode solicitar para eles a ficha em PDF, e fazer sua inclusão no documento.
+Para isso, faça upload do PDF para dentro da pasta `assets`, e a inclua com o comando a seguir.
+Então, remova o comando que monta a ficha automaticamente.
+
+```typst title="content/pre_textual.typ" frame="code"
+#include_custom_cataloging_in_publication(
+  image("../assets/documents/ficha_catalografica.pdf"),
+)
+```
+
+## Folhas opcionais
+
+O próximo elemento é a página de **errata**.
+Ela é usada para corrigir erros cometidos no corpo do documento.
+Sua inclusão é opcional.
+Portanto, se não houver erratas a fazer, remova o seu comando.
+
+```typst title="content/pre_textual.typ" frame="code"
+#include_errata_page()[
+  #lorem(50)
+]
+```
+
+Na sequência, é incluída a **folha de aprovação**, que também é montada automaticamente.
+
+O próximo elemento é a folha de **dedicatória**.
+A ABNT recomenda que seu texto fique destacado em um bloco do texto alinhado à direita e ao inferior da página.
+Seu uso é opcional, então você pode remover seu comando caso não queira fazer dedicatórias.
+
+```typst title="content/pre_textual.typ" frame="code"
+#include_dedication_page()[
+  Dedicamos este trabalho àqueles que contribuem com a organização
+  e com o compartilhamento da informação, sobretudo àqueles que o
+  fazem de forma livre e cooperativa.
+]
+```
+
+Da mesma forma, sucede-se a folha de **agradecimentos**, que é opcional e pode ser removida.
+
+```typst title="content/pre_textual.typ" frame="code"
+#include_acknowledgments_page()[
+  Agradecemos ao Grupo de Educação Tutorial em Sistemas de
+  Informação (GetSi) da Universidade Federal de Juiz de Fora (UFJF)
+  por prover bolsas de apoio na graduação que possibilitaram
+  a realização deste trabalho.
+]
+```
+
+A folha de **epígrafe** é utilizada para incluir uma citação a algum autor que tenha inspirado o trabalho.
+A ABNT recomenda que o trecho citado tenha sua autoria estabelecida por uma referência bibliográfica.
+As regras de formatação de citações diretas são, nesse caso, opcionais.
+
+No exemplo elencado, eu escolhi remover o **espaçamento** feito antes da primeira linha de cada parágrafo.
+Isso é feito por meio da regra `#set` sobre o componente `#par`.
+
+```typst title="content/pre_textual.typ" frame="code"
+#{
+  set par(first-line-indent: 0cm)
+  include_epigraph_page(
+    quote(
+      attribution: [@dumont:1918:o_que_eu_vi_o_que_nos_veremos[p. 15].],
+      block: true,
+    )[
+      --- Quero um balão de cem metros cúbicos.
+
+      Grande espanto!
+      Creio mesmo que pensaram que eu era doido.
+      Alguns meses depois, o "Brasil", com grande espanto de todos os entendidos, atravessava Paris, lindo na sua transparência, como uma grande bola de sabão
+    ],
+  )
+}
+```
+
+Além disso, o texto da citação está por padrão em uma fonte de **tamanho menor**, e **alinhado** à direita.
+Você pode fazer o texto ficar em tamanho comum por meio do parâmetro `smaller_text` definido como `false`.
+Similarmente, você pode remover o alinhamento à direita ao definir o parâmetro `indent` como `false`.
+
+```typst frame="code"
+#include_epigraph_page(
+  smaller_text: false,
+  indent: false,
+  // ...
+}
+```
+
+## Resumo
+
+Em seguida, a ABNT determina que seja escrito o **resumo** do trabalho e, opcionalmente, os resumos em língua estrangeira.
+O modelo separa os resumos em outro arquivo para melhorar a organização.
+Então, ele os posiciona no lugar correto por meio do comando `#include`.
+
+```typst title="content/pre_textual.typ" frame="code"
+#include "abstract.typ"
+```
+
+O **arquivo** em que os resumos são descritos é o `abstract.typ`, que fica dentro da pasta `content`.
+Seu conteúdo é estruturado da mesmo forma como foi feito para o [artigo científico](../../article/pre_textual/#resumo).
+A única diferença é que, ao final do arquivo, existe um código-fonte que inclui na página cada elemento da lista.
+
+```typst title="content/abstract.typ" frame="code"
+// ## Display. Exibição.
+#for abstract in abstracts {
+  include_abstract_page(
+    body: abstract.body,
+    keywords_title: abstract.keywords_title,
+    keywords: abstract.keywords,
+    title: abstract.title,
+  )
+}
+```
+
+## Listas
+
+Os próximos elementos são, em ordem, as **listas** de: figuras, tabelas, abreviaturas, e símbolos.
+Elas devem ser incluídas no documento apenas se, de fato, houver elementos de seus tipos pelo texto.
+Caso uma lista fique vazia, você deve remover seu comando de inclusão.
+
+```typst title="content/pre_textual.typ" frame="code"
+#context {
+  if counter(figure).final().first() > 0 {
+    include_list_of_figures_page()
+  }
+}
+
+#context {
+  if counter(table).final().first() > 0 {
+    include_list_of_tables_page()
+  }
+}
+
+#if (abbreviations_entries.len() > 0) {
+  include_list_of_abbreviations_page(
+    abbreviations_entries,
+  )
+}
+
+#if (symbols_entries.len() > 0) {
+  include_list_of_symbols_page(
+    symbols_entries,
+  )
+}
+```
+
+Por fim, é incluso o **sumário**.
+
+```typst title="content/pre_textual.typ" frame="code"
+#include_outline_page()
+```
