@@ -180,6 +180,10 @@ export default defineConfig({
                   label: "Textual",
                   slug: "scholar/academic_work/textual",
                 },
+                {
+                  label: "Pós-textual",
+                  slug: "scholar/academic_work/post_textual",
+                },
               ],
               label: "Trabalho acadêmico",
             },

@@ -1,0 +1,33 @@
+---
+title: Pós-textual
+author: Gabriel Malosto
+---
+
+Finalmente, a ABNT lista os **elementos pós-textuais** de um trabalho acadêmico.
+O primeiro elemento incluso no documento são as **referências bibliográficas**, que são automaticamente inseridas.
+
+Os demais elementos estão definidos no arquivo **`post_content.typ`**, que está dentro da pasta `content`.
+O primeiro elemento inserido é o **glossário** de termos técnicos.
+
+```typst title="content/post_textual.typ" frame="code"
+#include_glossary_page(
+  disable_back_references: true,
+  glossary_entries,
+)
+```
+
+Então, estão inclusos exemplos de **apêndices** e **anexos**.
+Eles funcionam da mesma forma como no modelo de [artigo científico](../../article/post_textual/#anexos).
+
+```typst title="content/post_textual.typ" frame="code"
+// ## Annexes. Anexos.
+
+#counter(heading).update(0)
+
+#include_annex(
+  title: [Quod idem licet transferre in voluptatem, ut],
+  label: <anexo:quod>,
+)[
+  #lorem(50)
+]
+```
