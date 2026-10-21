@@ -8,6 +8,10 @@ const fancyboxIntegration = {
   hooks: {
     "astro:config:setup"({ injectScript }) {
       injectScript(
+        "page-ssr",
+        'import "@fancyapps/ui/dist/fancybox/fancybox.css";',
+      );
+      injectScript(
         "page",
         `
           import { Fancybox } from "@fancyapps/ui/dist/fancybox/";
