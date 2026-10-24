@@ -70,3 +70,9 @@ picture {
 .f-caption {
   text-align: center;
 }
+
+/* Prevent Fancybox's zoomable image wrapper from collapsing. */
+.fancybox__slide .f-panzoom__wrapper.is-fullsize {
+  width: 100%;
+  height: auto;
+}

@@ -7,15 +7,17 @@ import starlightKbd from "starlight-kbd";
 const fancyboxIntegration = {
   hooks: {
     "astro:config:setup"({ injectScript }) {
+      // Load Fancybox CSS through Astro's CSS pipeline.
       injectScript(
         "page-ssr",
         'import "@fancyapps/ui/dist/fancybox/fancybox.css";',
       );
+
+      // Initialize Fancybox on the client.
       injectScript(
         "page",
         `
           import { Fancybox } from "@fancyapps/ui/dist/fancybox/";
-          import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
           function enhanceImages() {
             const images = document.querySelectorAll(
@@ -28,9 +30,27 @@ const fancyboxIntegration = {
 
               const link = document.createElement("a");
 
-              link.href = img.src;
+              link.href = img.currentSrc || img.src;
               link.dataset.fancybox = "book-images";
 
+              // Pass explicit dimensions to Fancybox.
+              const width =
+                Number(img.getAttribute("width")) ||
+                img.naturalWidth;
+
+              const height =
+                Number(img.getAttribute("height")) ||
+                img.naturalHeight;
+
+              if (width > 0) {
+                link.dataset.width = String(Math.round(width));
+              }
+
+              if (height > 0) {
+                link.dataset.height = String(Math.round(height));
+              }
+
+              // Use the image's alt text as its caption.
               if (img.alt) {
                 link.dataset.caption = img.alt;
               }
@@ -40,7 +60,7 @@ const fancyboxIntegration = {
             });
           }
 
-          // Set up the current page and subsequent navigations.
+          // Handle initial page load and subsequent Astro navigations.
           document.addEventListener(
             "astro:page-load",
             enhanceImages
@@ -48,7 +68,9 @@ const fancyboxIntegration = {
 
           enhanceImages();
 
-          Fancybox.bind('[data-fancybox="book-images"]');
+          Fancybox.bind('[data-fancybox="book-images"]', {
+            zoomEffect: false,
+          });
         `,
       );
     },
